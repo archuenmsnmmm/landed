@@ -83,7 +83,7 @@ function SocialProofCopy() {
   return (
     <div>
       <h2 className="text-[2rem] font-semibold leading-[1.15] tracking-[-0.03em] text-[#0a0a0a] md:text-[2.5rem]">
-        10,000+ candidates cracked job offers by using Landed
+        Hundreds of candidates cracked job offers by using Landed
       </h2>
       <p className="mt-5 max-w-[420px] text-[15px] leading-[1.65] text-[#71717a] md:text-[16px]">
         Invisible AI for technical interviews — see the problem, type the
