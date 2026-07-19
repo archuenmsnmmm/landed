@@ -1,0 +1,132 @@
+{
+  "name": "landed-desktop",
+  "version": "0.1.1",
+  "private": true,
+  "description": "Landed — invisible AI for technical interviews",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "node scripts/prepare-dev-app.mjs && node scripts/dev.mjs",
+    "dev:raw": "electron-vite dev",
+    "open-app": "node scripts/open-landed-app.mjs",
+    "open-app:dev": "node scripts/open-landed-app.mjs --dev",
+    "setup:blackhole": "node scripts/setup-blackhole.mjs",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "icons": "python3 scripts/generate-app-icon.py",
+    "package": "node scripts/ensure-icon.mjs && npm run build && electron-builder --mac --dir",
+    "package:mac": "node scripts/prepare-ci-build.mjs && node scripts/ensure-icon.mjs && npm run build && electron-builder --mac",
+    "package:mac:release": "node scripts/package-mac-release.mjs",
+    "package:win": "node scripts/prepare-ci-build.mjs && node scripts/ensure-icon.mjs && npm run build && electron-builder --win",
+    "fix:installed": "node scripts/sign-mac-app.mjs /Applications/Landed.app",
+    "test:audio": "node scripts/test-audio-suggestions.mjs",
+    "test:screen-assistant": "node scripts/test-screen-assistant.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.108.1",
+    "katex": "^0.16.11",
+    "pdfjs-dist": "^4.10.38",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.1",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  },
+  "build": {
+    "appId": "com.landed.app",
+    "productName": "Landed",
+    "afterPack": "./scripts/after-pack.mjs",
+    "mac": {
+      "artifactName": "Landed.${ext}",
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.png",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "notarize": true,
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Landed does not require a microphone for the screen assistant. Microphone access is only used if you enable optional audio features.",
+        "NSScreenCaptureDescription": "Landed uses Screen Recording to see what’s on your display when you ask a question, so it can answer with that context."
+      },
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "dmg": {
+      "title": "Landed",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 360,
+          "type": "file",
+          "path": "build/Install Landed.command"
+        },
+        {
+          "x": 410,
+          "y": 360,
+          "type": "file",
+          "path": "build/Open Landed.command"
+        }
+      ]
+    },
+    "win": {
+      "artifactName": "Landed-Setup.${ext}",
+      "icon": "build/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Landed"
+    },
+    "directories": {
+      "output": "release"
+    },
+    "extraResources": [
+      {
+        "from": ".env",
+        "to": ".env",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "build/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "files": [
+      "out/**/*"
+    ]
+  }
+}

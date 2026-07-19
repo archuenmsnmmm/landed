@@ -1,0 +1,45 @@
+{
+  "name": "landed",
+  "version": "0.1.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "desktop:dev": "node scripts/dev-desktop.mjs",
+    "desktop:open": "npm run open-app --prefix desktop",
+    "desktop:open:dev": "npm run open-app:dev --prefix desktop",
+    "desktop:build": "npm run build --prefix desktop",
+    "desktop:package": "npm run package:mac:release --prefix desktop && npm run sync-downloads && node scripts/sync-desktop-renderer.mjs",
+    "desktop:package:win": "npm run package:win --prefix desktop && npm run sync-downloads",
+    "desktop:update": "node scripts/update-everywhere.mjs",
+    "sync-downloads": "node scripts/sync-downloads.mjs",
+    "upload-download": "node scripts/upload-download.mjs",
+    "sync-renderer": "node scripts/sync-desktop-renderer.mjs",
+    "local:app": "npm run sync-downloads && npm run sync-renderer && npm run desktop:open",
+    "local:setup": "node scripts/update-everywhere.mjs",
+    "deploy:prod": "npm run sync-downloads && npm run upload-download && npm run build && npx vercel --prod --yes"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.108.1",
+    "@vercel/analytics": "^2.0.1",
+    "framer-motion": "^12.40.0",
+    "katex": "^0.16.47",
+    "next": "^15.1.0",
+    "openai": "^6.42.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "stripe": "^22.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.16.0",
+    "eslint-config-next": "^15.1.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.7.2"
+  }
+}

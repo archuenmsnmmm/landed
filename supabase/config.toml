@@ -1,0 +1,22 @@
+project_id = "epeitwkgbfabevxyznrh"
+
+[auth]
+site_url = "https://landed-ai.com"
+additional_redirect_urls = [
+  "landed://auth/callback",
+  "landed://**",
+  "http://127.0.0.1:42817/auth/callback",
+  "http://localhost:42817/auth/callback",
+  "http://localhost:3000/auth/callback",
+  "http://localhost:3000/**",
+  "https://landed-ai.com/auth/callback",
+  "https://landed-ai.com/**",
+]
+
+[auth.email]
+enable_confirmations = false
+
+[auth.external.google]
+enabled = true
+client_id = "821453006387-snrakrrq6n17m5pde2nfshmnf8nanmc6.apps.googleusercontent.com"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"

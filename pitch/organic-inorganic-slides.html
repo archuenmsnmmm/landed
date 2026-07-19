@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Landed — Platform Thesis Slides</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #e8e8e8;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .slide {
+      width: 1280px;
+      height: 720px;
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      padding: 56px 64px 48px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 32px;
+    }
+
+    h1 {
+      font-size: 42px;
+      font-weight: 700;
+      color: #111;
+      letter-spacing: -0.02em;
+      margin-bottom: 36px;
+      grid-column: 1 / -1;
+    }
+
+    .content { grid-column: 1; }
+
+    .section { margin-bottom: 28px; }
+
+    .section h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 10px;
+    }
+
+    .section ul {
+      list-style: disc;
+      padding-left: 22px;
+      color: #222;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .section ul li { margin-bottom: 4px; }
+
+    .section .lead {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 6px;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 40px;
+      left: 64px;
+      right: 64px;
+      text-align: center;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .footer strong { color: #111; font-weight: 700; }
+
+    .graphic {
+      grid-column: 2;
+      grid-row: 2 / span 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: center;
+    }
+
+    .graphic svg {
+      width: 300px;
+      height: 300px;
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+      max-width: 1280px;
+    }
+  </style>
+</head>
+<body>
+
+  <p class="hint">Open in browser · Screenshot each slide at 1280×720 or copy text into your deck</p>
+
+  <!-- PLATFORM THESIS -->
+  <section class="slide" id="platform-thesis">
+    <h1>Landed Is Not Another Sales Coaching Tool</h1>
+
+    <div class="content">
+      <div class="section">
+        <h2>The core breakthrough</h2>
+        <ul>
+          <li>Sub-100ms AI inference inside live human conversations</li>
+          <li>Most “real-time” AI products still operate at 2-5 second latency</li>
+          <li>Landed can intervene while the conversation is still happening</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Why it matters</h2>
+        <p class="lead">The product is the infrastructure layer for high-pressure conversations.</p>
+        <ul>
+          <li>Sales is the first wedge because ROI can be proven quickly</li>
+          <li>Contact centres are the larger market because compliance risk is massive</li>
+          <li>The same system applies anywhere humans speak under pressure</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>The investor framing</h2>
+        <ul>
+          <li>A sales coaching feature raises like a vertical SaaS tool</li>
+          <li>A real-time conversation intelligence platform raises like infrastructure</li>
+          <li>The company is built around latency, not generic coaching content</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="graphic" aria-hidden="true">
+      <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="150" cy="150" r="130" fill="#d4eef5" opacity="0.7"/>
+        <circle cx="150" cy="150" r="95" fill="#b8e4f0" opacity="0.5"/>
+        <path d="M150 220 C150 220 90 175 90 130 C90 95 118 70 150 70 C182 70 210 95 210 130 C210 175 150 220 150 220Z" fill="#7ec8dc" opacity="0.85"/>
+        <path d="M95 150 H205" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+        <path d="M150 95 V205" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+        <circle cx="150" cy="150" r="24" fill="#fff"/>
+        <circle cx="150" cy="150" r="12" fill="#5ab4cc"/>
+        <path d="M80 200 Q150 240 220 200" stroke="#5ab4cc" stroke-width="2" stroke-dasharray="6 8" fill="none" opacity="0.6"/>
+        <path d="M60 170 Q150 210 240 170" stroke="#5ab4cc" stroke-width="2" stroke-dasharray="6 8" fill="none" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <p class="footer"><strong>New framing:</strong> under-100ms live conversation AI · sales wedge · contact-centre platform</p>
+  </section>
+
+  <!-- TECHNICAL MOAT -->
+  <section class="slide" id="technical-moat">
+    <h1>Why Gong Or Microsoft Cannot Copy This Overnight</h1>
+
+    <div class="content">
+      <div class="section">
+        <h2>Proprietary real-time architecture</h2>
+        <ul>
+          <li>Built for sub-100ms inference, not post-call summarisation</li>
+          <li>Optimised audio pipeline, model routing, and response timing</li>
+          <li>Designed to operate before the user loses the conversational moment</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Data flywheel</h2>
+        <p class="lead">Every live conversation improves the system.</p>
+        <ul>
+          <li>Capture conversation patterns, interventions, and outcomes</li>
+          <li>Learn company-specific playbooks, objections, risks, and language</li>
+          <li>Switching costs grow as Landed becomes tuned to each team</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Enterprise barriers</h2>
+        <ul>
+          <li>SOC 2, ISO 27001, FCA-adjacent workflows, and regulated deployment paths</li>
+          <li>Compliance-focused datasets are harder to acquire than generic sales calls</li>
+          <li>Incumbents are optimised for recording and analysis, not live intervention</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="graphic" aria-hidden="true">
+      <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="150" cy="150" r="130" fill="#d4eef5" opacity="0.7"/>
+        <circle cx="150" cy="150" r="95" fill="#b8e4f0" opacity="0.5"/>
+        <rect x="78" y="90" width="144" height="120" rx="18" fill="#7ec8dc" opacity="0.9"/>
+        <path d="M105 128 H195 M105 150 H175 M105 172 H185" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+        <path d="M96 90 V70 H204 V90" stroke="#5ab4cc" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M96 210 V230 H204 V210" stroke="#5ab4cc" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M60 200 Q150 250 240 200" stroke="#5ab4cc" stroke-width="2" stroke-dasharray="6 8" fill="none" opacity="0.5"/>
+        <path d="M70 175 Q150 220 230 175" stroke="#5ab4cc" stroke-width="2" stroke-dasharray="6 8" fill="none" opacity="0.35"/>
+      </svg>
+    </div>
+
+    <p class="footer"><strong>Moat:</strong> architecture + live data + regulated certifications + customer-specific learning</p>
+  </section>
+
+  <!-- FIRST CUSTOMERS -->
+  <section class="slide" id="first-customers">
+    <h1>First 10 Customers: Sell To Budget Owners</h1>
+
+    <div class="content">
+      <div class="section">
+        <h2>Wrong entry point</h2>
+        <ul>
+          <li>Individual reps have low budget, high churn, and surveillance concerns</li>
+          <li>Rep-led adoption produces weak ACV and slow enterprise proof</li>
+          <li>“Sales coaching tool” positioning invites Gong comparisons immediately</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Right wedge buyer</h2>
+        <p class="lead">VP Sales or CRO at 50-500 person companies with 20-100 reps.</p>
+        <ul>
+          <li>Measured on quota attainment, win rate, ramp time, and forecast quality</li>
+          <li>Can justify £2k-£5k per month if Landed moves revenue outcomes</li>
+          <li>Target ACV: £24k-£60k; 10 customers creates £240k-£600k ARR</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>This month's proof plan</h2>
+        <ul>
+          <li>Run pilots with UK SaaS or financial-services sales teams</li>
+          <li>Measure objection handling, call conversion, win rate, and ramp speed</li>
+          <li>Turn 1-2 “devastated without us” customers into fundraising proof</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="graphic" aria-hidden="true">
+      <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="150" cy="150" r="130" fill="#d4eef5" opacity="0.7"/>
+        <circle cx="150" cy="150" r="95" fill="#b8e4f0" opacity="0.5"/>
+        <circle cx="150" cy="102" r="34" fill="#7ec8dc"/>
+        <path d="M92 216 C100 170 122 146 150 146 C178 146 200 170 208 216" fill="#5ab4cc" opacity="0.88"/>
+        <path d="M88 112 C72 112 60 124 60 140 C60 156 72 168 88 168" stroke="#7ec8dc" stroke-width="8" stroke-linecap="round"/>
+        <path d="M212 112 C228 112 240 124 240 140 C240 156 228 168 212 168" stroke="#7ec8dc" stroke-width="8" stroke-linecap="round"/>
+        <path d="M75 218 H225" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <p class="footer"><strong>Year 1 target:</strong> 10-20 VP Sales / CRO customers · £24k-£60k ACV · £500k ARR</p>
+  </section>
+
+  <!-- EXPANSION PATH -->
+  <section class="slide" id="expansion-path">
+    <h1>The Billion-Pound Path Runs Through Contact Centres</h1>
+
+    <div class="content">
+      <div class="section">
+        <h2>Why contact centres</h2>
+        <ul>
+          <li>15m agents in the US and 4m in the UK</li>
+          <li>Typical software spend: £800-£1,500 per agent per year</li>
+          <li>1% UK penetration implies £320m-£600m ARR potential</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Why sub-100ms changes the category</h2>
+        <p class="lead">Compliance value exists before the wrong sentence is spoken.</p>
+        <ul>
+          <li>Flag FCA-sensitive language while the agent is still speaking</li>
+          <li>Prevent mis-selling, policy breaches, and regulatory exposure in real time</li>
+          <li>One avoided fine can justify enterprise-wide deployment</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Milestones</h2>
+        <ul>
+          <li>Year 1: sales wedge, £500k ARR, measurable win-rate improvement</li>
+          <li>Year 2: regulated contact-centre pilots, £3m-£5m ARR</li>
+          <li>Year 3-4: compliance and performance layer, £20m-£50m ARR</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="graphic" aria-hidden="true">
+      <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="150" cy="150" r="130" fill="#d4eef5" opacity="0.7"/>
+        <circle cx="150" cy="150" r="95" fill="#b8e4f0" opacity="0.5"/>
+        <path d="M82 202 L150 72 L218 202 H82Z" fill="#7ec8dc" opacity="0.9"/>
+        <path d="M150 120 V158" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+        <circle cx="150" cy="180" r="7" fill="#fff"/>
+        <path d="M90 222 H210" stroke="#5ab4cc" stroke-width="8" stroke-linecap="round"/>
+        <path d="M116 238 H184" stroke="#5ab4cc" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+      </svg>
+    </div>
+
+    <p class="footer"><strong>Exit path:</strong> £50m ARR in regulated real-time conversation AI · strategic buyers at 20-30x revenue</p>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,163 @@
+name: Desktop Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v0.1.0)"
+        required: true
+        default: "v0.1.1"
+      platform:
+        description: "Which installers to build"
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - mac
+          - windows
+
+permissions:
+  contents: write
+
+env:
+  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+  BUILD_PLATFORM: ${{ github.event_name == 'workflow_dispatch' && inputs.platform || 'all' }}
+
+jobs:
+  build-mac:
+    if: github.event_name == 'push' || inputs.platform == 'all' || inputs.platform == 'mac'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Install desktop dependencies
+        run: npm ci
+        working-directory: desktop
+
+      - name: Configure desktop env
+        working-directory: desktop
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_LEGAL_BASE_URL: ${{ secrets.VITE_LEGAL_BASE_URL }}
+        run: node scripts/write-ci-env.mjs
+
+      - name: Build Mac installer
+        working-directory: desktop
+        env:
+          MAC_CERT_P12_BASE64: ${{ secrets.MAC_CERT_P12_BASE64 }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERT_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          if [ -n "$MAC_CERT_P12_BASE64" ]; then
+            echo "Developer ID cert present — building signed + notarized DMG."
+            echo "$MAC_CERT_P12_BASE64" | base64 --decode > "$RUNNER_TEMP/DeveloperID.p12"
+            export CSC_LINK="$RUNNER_TEMP/DeveloperID.p12"
+            export LANDED_RELEASE_SIGN=1
+            npm run package:mac
+          else
+            echo "::warning::No MAC_CERT_P12_BASE64 secret — building UNSIGNED DMG (Gatekeeper will block it)."
+            export CSC_IDENTITY_AUTO_DISCOVERY=false
+            npm run package:mac
+          fi
+
+      - name: Verify Mac artifact
+        run: test -f desktop/release/Landed.dmg
+
+      - name: Upload Mac artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-installer
+          path: desktop/release/Landed.dmg
+          if-no-files-found: error
+
+  build-windows:
+    if: github.event_name == 'push' || inputs.platform == 'all' || inputs.platform == 'windows'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Install desktop dependencies
+        run: npm ci
+        working-directory: desktop
+
+      - name: Configure desktop env
+        working-directory: desktop
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_LEGAL_BASE_URL: ${{ secrets.VITE_LEGAL_BASE_URL }}
+        run: node scripts/write-ci-env.mjs
+
+      - name: Build Windows installer
+        working-directory: desktop
+        run: npm run package:win
+
+      - name: Verify Windows artifact
+        shell: bash
+        run: test -f desktop/release/Landed-Setup.exe
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: desktop/release/Landed-Setup.exe
+          if-no-files-found: error
+
+  release:
+    needs: [build-mac, build-windows]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled') &&
+      (needs.build-mac.result == 'success' || needs.build-windows.result == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release-assets
+          if [ -f artifacts/mac-installer/Landed.dmg ]; then
+            cp artifacts/mac-installer/Landed.dmg release-assets/
+          fi
+          if [ -f artifacts/windows-installer/Landed-Setup.exe ]; then
+            cp artifacts/windows-installer/Landed-Setup.exe release-assets/
+          fi
+          ls -la release-assets/
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: Landed ${{ env.RELEASE_TAG }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          overwrite: true
+          files: release-assets/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
