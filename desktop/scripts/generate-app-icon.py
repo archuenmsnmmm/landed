@@ -33,12 +33,10 @@ def make_macos_icon(src: Image.Image) -> Image.Image:
 
     shaped = Image.new("RGBA", (SHAPE, SHAPE), (0, 0, 0, 0))
     shaped.paste(content, (0, 0), mask)
-    # Preserve source transparency inside the squircle.
     src_alpha = content.split()[3]
     shaped_alpha = Image.composite(src_alpha, Image.new("L", (SHAPE, SHAPE), 0), mask)
     shaped.putalpha(shaped_alpha)
 
-    # Subtle drop shadow like native app icons
     shadow = Image.new("RGBA", (CANVAS, CANVAS), (0, 0, 0, 0))
     shadow_mask = Image.new("L", (SHAPE, SHAPE), 0)
     ImageDraw.Draw(shadow_mask).rounded_rectangle(
@@ -62,34 +60,43 @@ def make_opaque_square(src: Image.Image, size: int) -> Image.Image:
 
 
 def write_web_favicons(src: Image.Image) -> None:
-    # Opaque PNGs only — Safari often rejects SVG favicons that embed PNG data URIs
-    # and falls back to a letter glyph.
-    for stale in (APP / "icon.svg", PUBLIC / "favicon.svg"):
+    # Prefer static public/ files. Next.js app/icon.* routes are flaky in Safari.
+    for stale in (
+        APP / "icon.png",
+        APP / "icon.svg",
+        APP / "apple-icon.png",
+        APP / "favicon.ico",
+        PUBLIC / "favicon.svg",
+    ):
         if stale.exists():
             stale.unlink()
 
-    make_opaque_square(src, 32).save(APP / "icon.png", "PNG", optimize=True)
-    make_opaque_square(src, 180).convert("RGB").save(
-        APP / "apple-icon.png", "PNG", optimize=True
-    )
-
-    ico_dims = [16, 32, 48]
-    ico_images = [make_opaque_square(src, d) for d in ico_dims]
-    ico_images[-1].save(
-        PUBLIC / "favicon.ico",
-        format="ICO",
-        sizes=[(d, d) for d in ico_dims],
-        append_images=ico_images[:-1],
-    )
     make_opaque_square(src, 16).convert("RGB").save(
         PUBLIC / "favicon-16x16.png", "PNG", optimize=True
     )
     make_opaque_square(src, 32).convert("RGB").save(
         PUBLIC / "favicon-32x32.png", "PNG", optimize=True
     )
+    make_opaque_square(src, 32).convert("RGB").save(
+        PUBLIC / "icon-32.png", "PNG", optimize=True
+    )
     make_opaque_square(src, 180).convert("RGB").save(
         PUBLIC / "apple-touch-icon.png", "PNG", optimize=True
     )
+
+    ico_dims = [16, 32, 48]
+    ico_images = [make_opaque_square(src, d).convert("RGBA") for d in ico_dims]
+    save_kwargs = {
+        "format": "ICO",
+        "sizes": [(d, d) for d in ico_dims],
+        "append_images": ico_images[:-1],
+        "bitmap_format": "bmp",
+    }
+    try:
+        ico_images[-1].save(PUBLIC / "favicon.ico", **save_kwargs)
+    except TypeError:
+        save_kwargs.pop("bitmap_format", None)
+        ico_images[-1].save(PUBLIC / "favicon.ico", **save_kwargs)
 
 
 def main() -> None:
@@ -124,7 +131,7 @@ def main() -> None:
 
     print(f"[landed] Generated app icon from {source}")
     print(f"  canvas={icon.width}x{icon.height}")
-    print("  web: app/icon.png, apple-icon.png + public/favicon.ico")
+    print("  web: public/favicon.ico (BMP), favicon-32, apple-touch-icon")
 
 
 if __name__ == "__main__":

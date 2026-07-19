@@ -28,9 +28,17 @@ export const metadata: Metadata = {
   title,
   description,
   manifest: "/manifest.json",
-  // Icons: src/app/icon.png + apple-icon.png (file conventions). Do not set
-  // metadata.icons — it replaces those tags. Never use /app-icon.png as a
-  // favicon (transparent dock padding → Safari letter glyph).
+  // Static public/ favicons only (Safari is unreliable with app/icon.* routes).
+  // ?v= busts Safari's aggressive favicon cache after updates.
+  icons: {
+    icon: [
+      { url: "/favicon.ico?v=3", sizes: "any" },
+      { url: "/favicon-32x32.png?v=3", sizes: "32x32", type: "image/png" },
+      { url: "/icon-32.png?v=3", sizes: "32x32", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico?v=3",
+    apple: [{ url: "/apple-touch-icon.png?v=3", sizes: "180x180", type: "image/png" }],
+  },
   appleWebApp: {
     capable: true,
     title: "Landed",
