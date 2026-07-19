@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { MeetingHelp } from "@/components/MeetingHelp";
 import { Comparison } from "@/components/Comparison";
 import { RealTimeTranscription } from "@/components/RealTimeTranscription";
+import { LandingPricing } from "@/components/LandingPricing";
 import { FAQ } from "@/components/FAQ";
 import { CTA } from "@/components/CTA";
 import { Footer } from "@/components/Footer";
@@ -21,6 +22,7 @@ export default function Home() {
         <MeetingHelp />
         <Comparison />
         <RealTimeTranscription />
+        <LandingPricing />
         <FAQ />
         <CTA />
       </main>
