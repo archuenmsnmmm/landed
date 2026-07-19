@@ -3,8 +3,6 @@
 
 from __future__ import annotations
 
-import base64
-import io
 import os
 from pathlib import Path
 
@@ -63,30 +61,17 @@ def make_opaque_square(src: Image.Image, size: int) -> Image.Image:
     return Image.alpha_composite(bg, resized)
 
 
-def write_svg_favicon(src: Image.Image) -> str:
-    buf = io.BytesIO()
-    make_opaque_square(src, 128).save(buf, format="PNG", optimize=True)
-    b64 = base64.b64encode(buf.getvalue()).decode("ascii")
-    svg = (
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">\n'
-        f'  <image href="data:image/png;base64,{b64}" width="128" height="128"/>\n'
-        "</svg>\n"
-    )
-    (PUBLIC / "favicon.svg").write_text(svg)
-    (APP / "icon.svg").write_text(svg)
-    return svg
-
-
 def write_web_favicons(src: Image.Image) -> None:
-    # Next.js App Router file conventions — hashed URLs help Safari pick up changes.
-    # Prefer icon.svg for Safari tabs. Keep favicon.ico only in public/ (not app/)
-    # so Next doesn't emit sizes="16x16".
-    if (APP / "icon.png").exists():
-        (APP / "icon.png").unlink()
+    # Opaque PNGs only — Safari often rejects SVG favicons that embed PNG data URIs
+    # and falls back to a letter glyph.
+    for stale in (APP / "icon.svg", PUBLIC / "favicon.svg"):
+        if stale.exists():
+            stale.unlink()
+
+    make_opaque_square(src, 32).save(APP / "icon.png", "PNG", optimize=True)
     make_opaque_square(src, 180).convert("RGB").save(
         APP / "apple-icon.png", "PNG", optimize=True
     )
-    write_svg_favicon(src)
 
     ico_dims = [16, 32, 48]
     ico_images = [make_opaque_square(src, d) for d in ico_dims]
@@ -139,7 +124,7 @@ def main() -> None:
 
     print(f"[landed] Generated app icon from {source}")
     print(f"  canvas={icon.width}x{icon.height}")
-    print("  web: app/icon.svg, icon.png, apple-icon.png + public favicons")
+    print("  web: app/icon.png, apple-icon.png + public/favicon.ico")
 
 
 if __name__ == "__main__":
