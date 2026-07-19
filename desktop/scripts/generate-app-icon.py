@@ -63,7 +63,7 @@ def make_opaque_square(src: Image.Image, size: int) -> Image.Image:
     return Image.alpha_composite(bg, resized)
 
 
-def write_svg_favicon(src: Image.Image) -> None:
+def write_svg_favicon(src: Image.Image) -> str:
     buf = io.BytesIO()
     make_opaque_square(src, 128).save(buf, format="PNG", optimize=True)
     b64 = base64.b64encode(buf.getvalue()).decode("ascii")
@@ -73,26 +73,28 @@ def write_svg_favicon(src: Image.Image) -> None:
         "</svg>\n"
     )
     (PUBLIC / "favicon.svg").write_text(svg)
+    (APP / "icon.svg").write_text(svg)
+    return svg
 
 
 def write_web_favicons(src: Image.Image) -> None:
     # Next.js App Router file conventions — hashed URLs help Safari pick up changes.
+    # Prefer icon.svg for Safari tabs; icon.png as raster fallback. Keep favicon.ico
+    # only in public/ (not app/) so Next doesn't emit sizes="16x16".
     make_opaque_square(src, 32).save(APP / "icon.png", "PNG", optimize=True)
     make_opaque_square(src, 180).convert("RGB").save(
         APP / "apple-icon.png", "PNG", optimize=True
     )
+    write_svg_favicon(src)
 
     ico_dims = [16, 32, 48]
     ico_images = [make_opaque_square(src, d) for d in ico_dims]
     ico_images[-1].save(
-        APP / "favicon.ico",
+        PUBLIC / "favicon.ico",
         format="ICO",
         sizes=[(d, d) for d in ico_dims],
         append_images=ico_images[:-1],
     )
-
-    # Public copies for direct path requests / older clients.
-    (PUBLIC / "favicon.ico").write_bytes((APP / "favicon.ico").read_bytes())
     make_opaque_square(src, 16).convert("RGB").save(
         PUBLIC / "favicon-16x16.png", "PNG", optimize=True
     )
@@ -102,7 +104,6 @@ def write_web_favicons(src: Image.Image) -> None:
     make_opaque_square(src, 180).convert("RGB").save(
         PUBLIC / "apple-touch-icon.png", "PNG", optimize=True
     )
-    write_svg_favicon(src)
 
 
 def main() -> None:
@@ -137,7 +138,7 @@ def main() -> None:
 
     print(f"[landed] Generated app icon from {source}")
     print(f"  canvas={icon.width}x{icon.height}")
-    print("  web: app/favicon.ico, icon.png, apple-icon.png, favicon.svg")
+    print("  web: app/icon.svg, icon.png, apple-icon.png + public favicons")
 
 
 if __name__ == "__main__":

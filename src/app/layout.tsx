@@ -28,13 +28,9 @@ export const metadata: Metadata = {
   title,
   description,
   manifest: "/manifest.json",
-  // File conventions also emit favicon.ico / icon.png / apple-icon.png.
-  // Never list /app-icon.png here — transparent dock padding makes Safari
-  // fall back to a letter glyph in the tab/address bar.
-  icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-  },
+  // Icons: src/app/icon.svg, icon.png, apple-icon.png (file conventions).
+  // public/favicon.ico remains for legacy clients. Never list /app-icon.png —
+  // its transparent dock padding makes Safari fall back to a letter glyph.
   appleWebApp: {
     capable: true,
     title: "Landed",
