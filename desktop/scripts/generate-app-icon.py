@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import base64
+import io
 import os
 from pathlib import Path
 
@@ -13,12 +15,14 @@ SRC = ROOT / "build" / "icon-source.png"
 ICON_OUT = ROOT / "build" / "icon.png"
 ASSETS = ROOT / "src" / "renderer" / "src" / "assets"
 PUBLIC = ROOT.parent / "public"
+APP = ROOT.parent / "src" / "app"
 
 CANVAS = 1024
 # Native macOS electron apps (Discord, etc.) inset ~100px on a 1024 canvas.
 SHAPE = 824
 PADDING = (CANVAS - SHAPE) // 2
 CORNER_RADIUS = int(SHAPE * 0.223)  # ~184px, matches common macOS template
+WEB_BG = (0, 18, 51, 255)
 
 
 def make_macos_icon(src: Image.Image) -> Image.Image:
@@ -55,30 +59,50 @@ def make_macos_icon(src: Image.Image) -> Image.Image:
 def make_opaque_square(src: Image.Image, size: int) -> Image.Image:
     """Full-bleed opaque PNG for browser/Safari favicons (no dock padding)."""
     resized = src.convert("RGBA").resize((size, size), Image.Resampling.LANCZOS)
-    # Flatten onto the icon's navy so Safari never falls back to a letter glyph.
-    bg = Image.new("RGBA", (size, size), (0, 18, 51, 255))
-    return Image.alpha_composite(bg, resized).convert("RGB")
+    bg = Image.new("RGBA", (size, size), WEB_BG)
+    return Image.alpha_composite(bg, resized)
+
+
+def write_svg_favicon(src: Image.Image) -> None:
+    buf = io.BytesIO()
+    make_opaque_square(src, 128).save(buf, format="PNG", optimize=True)
+    b64 = base64.b64encode(buf.getvalue()).decode("ascii")
+    svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">\n'
+        f'  <image href="data:image/png;base64,{b64}" width="128" height="128"/>\n'
+        "</svg>\n"
+    )
+    (PUBLIC / "favicon.svg").write_text(svg)
 
 
 def write_web_favicons(src: Image.Image) -> None:
-    apple = make_opaque_square(src, 180)
-    apple.save(PUBLIC / "apple-touch-icon.png", "PNG", optimize=True)
+    # Next.js App Router file conventions — hashed URLs help Safari pick up changes.
+    make_opaque_square(src, 32).save(APP / "icon.png", "PNG", optimize=True)
+    make_opaque_square(src, 180).convert("RGB").save(
+        APP / "apple-icon.png", "PNG", optimize=True
+    )
 
-    fav32 = make_opaque_square(src, 32)
-    fav16 = make_opaque_square(src, 16)
-    fav32.save(PUBLIC / "favicon-32x32.png", "PNG", optimize=True)
-    fav16.save(PUBLIC / "favicon-16x16.png", "PNG", optimize=True)
-
-    # Multi-size ICO — what Safari/Chrome request at /favicon.ico by default.
-    # Pillow expects the largest image as the primary, with smaller ones appended.
     ico_dims = [16, 32, 48]
-    ico_images = [make_opaque_square(src, d).convert("RGBA") for d in ico_dims]
+    ico_images = [make_opaque_square(src, d) for d in ico_dims]
     ico_images[-1].save(
-        PUBLIC / "favicon.ico",
+        APP / "favicon.ico",
         format="ICO",
         sizes=[(d, d) for d in ico_dims],
         append_images=ico_images[:-1],
     )
+
+    # Public copies for direct path requests / older clients.
+    (PUBLIC / "favicon.ico").write_bytes((APP / "favicon.ico").read_bytes())
+    make_opaque_square(src, 16).convert("RGB").save(
+        PUBLIC / "favicon-16x16.png", "PNG", optimize=True
+    )
+    make_opaque_square(src, 32).convert("RGB").save(
+        PUBLIC / "favicon-32x32.png", "PNG", optimize=True
+    )
+    make_opaque_square(src, 180).convert("RGB").save(
+        PUBLIC / "apple-touch-icon.png", "PNG", optimize=True
+    )
+    write_svg_favicon(src)
 
 
 def main() -> None:
@@ -113,7 +137,7 @@ def main() -> None:
 
     print(f"[landed] Generated app icon from {source}")
     print(f"  canvas={icon.width}x{icon.height}")
-    print("  web: favicon.ico, favicon-16/32, apple-touch-icon.png")
+    print("  web: app/favicon.ico, icon.png, apple-icon.png, favicon.svg")
 
 
 if __name__ == "__main__":
