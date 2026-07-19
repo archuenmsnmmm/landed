@@ -30,11 +30,11 @@ function CheckIcon({ accent }: { accent?: boolean }) {
   return (
     <span
       className={`mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border ${
-        accent ? "border-[#F5C518]/50" : "border-white/20"
+        accent ? "border-[#F5C518]/60" : "border-zinc-300"
       }`}
     >
       <svg
-        className={`h-2.5 w-2.5 ${accent ? "text-[#F5C518]" : "text-white/45"}`}
+        className={`h-2.5 w-2.5 ${accent ? "text-[#F5C518]" : "text-zinc-400"}`}
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -47,9 +47,13 @@ function CheckIcon({ accent }: { accent?: boolean }) {
   );
 }
 
-function ChevronDownIcon() {
+function ChevronDownIcon({ onDark }: { onDark?: boolean }) {
   return (
-    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-black/15">
+    <span
+      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
+        onDark ? "bg-white/20" : "bg-black/10"
+      }`}
+    >
       <svg
         className="h-3 w-3"
         viewBox="0 0 24 24"
@@ -101,7 +105,7 @@ function FeatureList({
   return (
     <ul className="mt-8 space-y-3.5">
       {features.map((feature) => (
-        <li key={feature} className="flex items-start gap-3 text-[13px] leading-snug text-white/70">
+        <li key={feature} className="flex items-start gap-3 text-[13px] leading-snug text-zinc-600">
           <CheckIcon accent={accent} />
           <span>{feature}</span>
         </li>
@@ -113,6 +117,9 @@ function FeatureList({
 const ctaBase =
   "mt-6 inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full text-[14px] font-semibold transition-opacity hover:opacity-90";
 
+const cardBase =
+  "flex flex-col rounded-[22px] border border-zinc-200/80 bg-white p-7 shadow-[0_8px_30px_rgba(15,23,42,0.06)] md:p-8";
+
 export function LandingPricing() {
   const currency = useRegionalPricing();
   const { current: monthlyPrice } = priceForInterval("pro", "monthly", currency);
@@ -120,33 +127,33 @@ export function LandingPricing() {
   const freePrice = formatPrice(0, currency);
 
   return (
-    <section id="pricing" className="bg-black text-white">
+    <section id="pricing" className="border-t border-[#f0f0f2] bg-[#f7f8fa] text-[#0a0a0a]">
       <div className="mx-auto max-w-[1200px] px-6 py-24 md:py-32">
-        <h2 className="max-w-[640px] text-[2rem] font-semibold leading-[1.15] tracking-[-0.03em] text-white md:text-[2.75rem]">
+        <h2 className="max-w-[640px] text-[2rem] font-semibold leading-[1.15] tracking-[-0.03em] text-[#0a0a0a] md:text-[2.75rem]">
           Simple and transparent pricing that works for you
         </h2>
 
         <div className="mt-14 grid gap-5 lg:grid-cols-3">
-          <div className="flex flex-col rounded-[22px] border border-white/[0.08] bg-[#141414] p-7 md:p-8">
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/45">
+          <div className={cardBase}>
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-500">
               Free download
             </p>
             <div className="mt-5 flex items-baseline gap-1.5">
-              <span className="text-[42px] font-semibold leading-none tracking-[-0.03em] text-white">
+              <span className="text-[42px] font-semibold leading-none tracking-[-0.03em] text-[#0a0a0a]">
                 {freePrice}
               </span>
-              <span className="font-mono text-[12px] uppercase tracking-[0.08em] text-white/55">
+              <span className="font-mono text-[12px] uppercase tracking-[0.08em] text-zinc-500">
                 /forever
               </span>
             </div>
-            <p className="mt-3 text-[13px] text-white/50">Get started today</p>
+            <p className="mt-3 text-[13px] text-zinc-500">Get started today</p>
 
-            <DownloadLink hideIcon className={`${ctaBase} bg-white text-black`}>
-              <ChevronDownIcon />
+            <DownloadLink hideIcon className={`${ctaBase} bg-zinc-900 text-white`}>
+              <ChevronDownIcon onDark />
               Get Started
             </DownloadLink>
 
-            <p className="mt-4 flex items-center justify-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-white/35">
+            <p className="mt-4 flex items-center justify-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-400">
               <CardIcon />
               No credit card required
             </p>
@@ -154,31 +161,31 @@ export function LandingPricing() {
             <FeatureList features={FREE_FEATURES} />
           </div>
 
-          <div className="flex flex-col rounded-[22px] border border-white/[0.08] bg-[#141414] p-7 md:p-8">
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/45">
+          <div className={cardBase}>
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-500">
               Monthly Pro
             </p>
             <div className="mt-5 flex items-baseline gap-1.5">
-              <span className="text-[42px] font-semibold leading-none tracking-[-0.03em] text-white">
+              <span className="text-[42px] font-semibold leading-none tracking-[-0.03em] text-[#0a0a0a]">
                 {monthlyPrice}
               </span>
-              <span className="font-mono text-[12px] uppercase tracking-[0.08em] text-white/55">
+              <span className="font-mono text-[12px] uppercase tracking-[0.08em] text-zinc-500">
                 /month
               </span>
             </div>
-            <p className="mt-3 text-[13px] text-white/40">Unlimited technical interview assist</p>
+            <p className="mt-3 text-[13px] text-zinc-500">Unlimited technical interview assist</p>
 
             <DownloadLink hideIcon className={`${ctaBase} bg-[#F5C518] text-black`}>
               <ChevronDownIcon />
               Subscribe
             </DownloadLink>
 
-            <p className="mt-4 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-[0.12em] text-white/35">
+            <p className="mt-4 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-400">
               <span className="inline-flex items-center gap-1.5">
                 <LockIcon />
                 Secure checkout
               </span>
-              <span className="text-white/20">|</span>
+              <span className="text-zinc-300">|</span>
               <span className="inline-flex items-center gap-1.5">
                 <CalendarIcon />
                 Cancel anytime
@@ -188,24 +195,24 @@ export function LandingPricing() {
             <FeatureList features={PRO_FEATURES} accent />
           </div>
 
-          <div className="flex flex-col rounded-[22px] border border-[#F5C518] bg-[#141414] p-7 md:p-8">
-            <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[#F5C518]">
+          <div className={`${cardBase} border-[#F5C518] shadow-[0_8px_30px_rgba(245,197,24,0.12)]`}>
+            <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[#C9A012]">
               <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full border border-[#F5C518]">
-                <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} aria-hidden>
+                <svg className="h-2.5 w-2.5 text-[#F5C518]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
               </span>
               Lifetime Pro
             </p>
             <div className="mt-5 flex items-baseline gap-1.5">
-              <span className="text-[42px] font-semibold leading-none tracking-[-0.03em] text-[#F5C518]">
+              <span className="text-[42px] font-semibold leading-none tracking-[-0.03em] text-[#C9A012]">
                 {lifetime.current}
               </span>
-              <span className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#F5C518]">
+              <span className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#C9A012]">
                 /one-time
               </span>
             </div>
-            <p className="mt-3 text-[13px] text-white/40">
+            <p className="mt-3 text-[13px] text-zinc-500">
               Original price: {lifetime.original}
             </p>
 
@@ -214,12 +221,12 @@ export function LandingPricing() {
               Buy now
             </DownloadLink>
 
-            <p className="mt-4 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-[0.12em] text-white/35">
+            <p className="mt-4 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-400">
               <span className="inline-flex items-center gap-1.5">
                 <LockIcon />
                 Secure checkout
               </span>
-              <span className="text-white/20">|</span>
+              <span className="text-zinc-300">|</span>
               <span className="inline-flex items-center gap-1.5">
                 <CalendarIcon />
                 Pay once
