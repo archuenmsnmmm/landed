@@ -27,6 +27,18 @@ create table if not exists public.meetings (
   updated_at timestamptz not null default now()
 );
 
+-- Existing installs may have meetings without deal_outcome; backfill before indexing.
+alter table public.meetings add column if not exists deal_outcome text not null default 'open';
+alter table public.meetings add column if not exists deal_outcome_at timestamptz;
+alter table public.meetings add column if not exists deal_outcome_notes text;
+alter table public.meetings add column if not exists deal_link jsonb;
+alter table public.meetings add column if not exists manager_notes text;
+alter table public.meetings add column if not exists summary_sections jsonb;
+alter table public.meetings add column if not exists status text default 'ready';
+alter table public.meetings add column if not exists next_steps jsonb not null default '[]'::jsonb;
+alter table public.meetings add column if not exists objections jsonb not null default '[]'::jsonb;
+alter table public.meetings add column if not exists suggestions jsonb not null default '[]'::jsonb;
+
 create index if not exists meetings_user_id_idx on public.meetings (user_id);
 create index if not exists meetings_deal_outcome_idx on public.meetings (deal_outcome);
 create index if not exists meetings_call_date_idx on public.meetings (call_date desc);
