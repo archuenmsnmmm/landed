@@ -1,14 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { DownloadLink } from "@/components/DownloadLink";
-import {
-  getDownloadInfo,
-  isWindowsDownloadAvailable,
-} from "@/lib/download";
+import { getDownloadInfo } from "@/lib/download";
 import { priceForInterval, priceForLifetime } from "@/lib/pricing";
 import { useRegionalPricing } from "@/hooks/useRegionalPricing";
-import { detectDownloadPlatform, type DownloadPlatform } from "@/lib/platform";
 
 const STARTER_FEATURES = [
   "15 AI questions",
@@ -104,16 +99,9 @@ function FeatureList({
 
 export function LandingPricing() {
   const currency = useRegionalPricing();
-  const [platform, setPlatform] = useState<DownloadPlatform>("mac");
   const { current } = priceForInterval("pro", "monthly", currency);
   const lifetime = priceForLifetime(currency);
-  const effectivePlatform =
-    platform === "windows" && !isWindowsDownloadAvailable() ? "mac" : platform;
-  const downloadLabel = getDownloadInfo(effectivePlatform).label;
-
-  useEffect(() => {
-    setPlatform(detectDownloadPlatform());
-  }, []);
+  const downloadLabel = getDownloadInfo("mac").label;
 
   return (
     <section id="pricing" className="border-t border-[#f0f0f2] bg-[#f5f7fa]">

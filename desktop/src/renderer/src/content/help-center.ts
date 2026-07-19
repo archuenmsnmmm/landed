@@ -16,7 +16,7 @@ export const HELP_CATEGORIES: HelpCategory[] = [
     articles: [
       {
         q: "How do I download and install Landed?",
-        a: "Download Landed for Mac from https://landed-ai.com/download. On Mac, open the DMG and drag Landed to Applications. Windows builds are also available from the same page. Sign in with email or Google to get started.",
+        a: "Download Landed for Mac from https://landed-ai.com/download. Open the DMG and drag Landed to Applications. Sign in with email or Google to get started.",
       },
       {
         q: "Who is Landed for?",

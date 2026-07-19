@@ -93,18 +93,18 @@ Windows installers ship from Desktop Release (`Landed-Setup.exe`) or local `npm 
 
 - [x] `https://landed-ai.com` on Vercel
 - [x] Landed rebrand on `archuenmsnmmm/landed`
-- [x] Mac + Windows Blob installers (`Landed.dmg`, `Landed-Setup.exe`)
-- [x] `NEXT_PUBLIC_WINDOWS_AVAILABLE=true`
+- [x] Mac Blob installer (`Landed.dmg`) — macOS-only launch
+- [ ] Windows download (disabled until installer + permission parity are ready)
 - [x] Free-question Supabase RPC + `free_questions_used`
 - [x] AI disclaimer (“AI-powered… not human”) on site + Terms
-- [x] Pricing API (`$24.99` / `$797`)
+- [x] Pricing API GBP-only (`£24.99` / `£797`)
 
 **Before each desktop ship**
 
 - [ ] Bump `package.json` + `desktop/package.json` version
 - [ ] Signed Mac DMG → `npm run upload-download`
-- [ ] Tag release (e.g. `v0.1.3`) with `Landed.dmg` + `Landed-Setup.exe`
-- [ ] Confirm `/api/download?platform=mac|windows` redirects to Blob
+- [ ] Tag release (e.g. `v0.1.3`) with `Landed.dmg`
+- [ ] Confirm `/api/download?platform=mac` redirects to Blob
 
 **Smoke test**
 

@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         : "monthly";
     const requestedCurrency = body.currency?.trim().toLowerCase();
     const currency = !REGIONAL_PRICING_ENABLED
-      ? "usd"
+      ? "gbp"
       : requestedCurrency && isBillingCurrency(requestedCurrency)
         ? requestedCurrency
         : currencyFromRequestHeaders(request.headers);

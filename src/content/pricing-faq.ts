@@ -20,7 +20,7 @@ export const PRICING_FAQS = [
   },
   {
     q: "How does annual billing work?",
-    a: "Pay annually and save about 30% compared to monthly billing. Prices are shown in your local currency when you subscribe in the Landed desktop app. Choose monthly or annual billing for Pro at checkout. Lifetime is always a one-time purchase.",
+    a: "Pay annually and save about 30% compared to monthly billing. Prices are shown in GBP (£). Choose monthly or annual billing for Pro at checkout. Lifetime is always a one-time purchase.",
   },
   {
     q: "Can I upgrade or downgrade my plan?",
@@ -28,7 +28,7 @@ export const PRICING_FAQS = [
   },
   {
     q: "What payment methods do you accept?",
-    a: "We accept all major credit and debit cards through Stripe.",
+    a: "We accept all major credit and debit cards through Stripe. All prices are in GBP (£).",
   },
   {
     q: "Do you offer refunds?",
@@ -36,17 +36,20 @@ export const PRICING_FAQS = [
   },
 ] as const;
 
-/** Example USD pricing strings for static marketing copy. */
-export function usdPricingExamples() {
-  const pricing = paidPlanPricing("usd");
-  const lifetime = priceForLifetime("usd");
+/** Example GBP pricing strings for static marketing copy. */
+export function gbpPricingExamples() {
+  const pricing = paidPlanPricing("gbp");
+  const lifetime = priceForLifetime("gbp");
   return {
-    proMonthly: formatPrice(pricing.monthly, "usd"),
-    proAnnualMonthly: formatPrice(pricing.annualYearly / 12, "usd"),
-    proAnnualYearly: formatPrice(pricing.annualYearly, "usd"),
-    annualDiscountPercent: getAnnualDiscountPercent("usd"),
+    proMonthly: formatPrice(pricing.monthly, "gbp"),
+    proAnnualMonthly: formatPrice(pricing.annualYearly / 12, "gbp"),
+    proAnnualYearly: formatPrice(pricing.annualYearly, "gbp"),
+    annualDiscountPercent: getAnnualDiscountPercent("gbp"),
     lifetime: lifetime.current,
     lifetimeOriginal: lifetime.original,
     lifetimeDiscountPercent: lifetime.discountPercent,
   };
 }
+
+/** @deprecated Use gbpPricingExamples */
+export const usdPricingExamples = gbpPricingExamples;

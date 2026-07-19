@@ -144,7 +144,7 @@ export function DownloadLink(props: DownloadLinkProps) {
   );
 }
 
-/** Single download CTA for the visitor's detected OS (Mac or Windows). */
+/** macOS download CTA (launch is Mac-only). */
 export function DetectedDownloadButton({
   className,
   size = "default",
@@ -162,6 +162,7 @@ export function DetectedDownloadButton({
   return (
     <>
       <DownloadLink
+        platform="mac"
         size={size}
         className={resolvedClassName}
         onDownloadClick={showInstallGuide ? setGuidePlatform : undefined}
@@ -177,7 +178,7 @@ export function DetectedDownloadButton({
   );
 }
 
-/** Side-by-side Mac + Windows download CTAs (always both, regardless of OS). */
+/** macOS download CTA for launch (Windows unpublished). */
 export function DownloadButtons({
   className,
   buttonClassName,
@@ -199,12 +200,6 @@ export function DownloadButtons({
       <div className={className ?? "flex flex-wrap items-center gap-3"}>
         <DownloadLink
           platform="mac"
-          size={size}
-          className={resolvedButtonClassName}
-          onDownloadClick={showInstallGuide ? setGuidePlatform : undefined}
-        />
-        <DownloadLink
-          platform="windows"
           size={size}
           className={resolvedButtonClassName}
           onDownloadClick={showInstallGuide ? setGuidePlatform : undefined}

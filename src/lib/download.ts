@@ -31,15 +31,12 @@ export const MAC_DOWNLOAD_FILENAME = "Landed.dmg";
 export const WINDOWS_DOWNLOAD_FILENAME = "Landed-Setup.exe";
 
 /**
- * Soft-launch: Windows stays off until a Landed Windows build is published.
- * Set NEXT_PUBLIC_WINDOWS_AVAILABLE=true after uploading Landed-Setup.exe
- * (Blob URL and/or GitHub Release asset).
+ * Windows downloads are disabled until installer + permission parity are ready.
+ * Re-enable later with NEXT_PUBLIC_WINDOWS_AVAILABLE=true after Landed-Setup.exe
+ * is published (Blob URL and/or GitHub Release asset).
  */
 export function isWindowsDownloadAvailable(): boolean {
-  const flag = process.env.NEXT_PUBLIC_WINDOWS_AVAILABLE?.trim().toLowerCase();
-  if (flag === "true" || flag === "1") return true;
-  if (flag === "false" || flag === "0") return false;
-  return Boolean(process.env.NEXT_PUBLIC_WINDOWS_DOWNLOAD_URL?.trim());
+  return false;
 }
 
 /** @deprecated Use DOWNLOAD_RELEASE_TAG */
@@ -105,8 +102,8 @@ export function getDownloadInfo(platform: DownloadPlatform) {
     externalUrl,
     filename: MAC_DOWNLOAD_FILENAME,
     isAvailable: true,
-    label: "Get for Mac",
-    longLabel: "Download Landed for Mac",
+    label: "Download for macOS",
+    longLabel: "Download Landed for macOS",
     unavailableMessage: null,
   } as const;
 }

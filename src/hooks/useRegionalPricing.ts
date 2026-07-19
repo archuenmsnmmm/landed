@@ -8,12 +8,12 @@ import {
 } from "@/lib/regional-pricing";
 
 function detectClientCurrency(): BillingCurrency {
-  if (!REGIONAL_PRICING_ENABLED) return "usd";
-  if (typeof navigator === "undefined") return "usd";
+  if (!REGIONAL_PRICING_ENABLED) return "gbp";
+  if (typeof navigator === "undefined") return "gbp";
   const locales = navigator.languages?.length ? navigator.languages : [navigator.language];
   for (const locale of locales) {
     const currency = currencyFromLocale(locale);
-    if (currency !== "usd") return currency;
+    if (currency !== "gbp") return currency;
   }
   return currencyFromLocale(navigator.language);
 }
@@ -24,7 +24,7 @@ export function useRegionalPricing() {
 
   useEffect(() => {
     if (!REGIONAL_PRICING_ENABLED) {
-      setCurrency("usd");
+      setCurrency("gbp");
       return;
     }
 

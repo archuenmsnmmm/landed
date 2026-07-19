@@ -13,7 +13,7 @@ export function useRegionalPricing() {
 
   useEffect(() => {
     if (!REGIONAL_PRICING_ENABLED) {
-      setCurrency("usd");
+      setCurrency("gbp");
       return;
     }
 

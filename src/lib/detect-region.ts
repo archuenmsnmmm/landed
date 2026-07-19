@@ -22,5 +22,5 @@ export function currencyFromRequestHeaders(headers: Headers): BillingCurrency {
     const primary = acceptLanguage.split(",")[0]?.trim();
     if (primary) return currencyFromLocale(primary);
   }
-  return "usd";
+  return "gbp";
 }

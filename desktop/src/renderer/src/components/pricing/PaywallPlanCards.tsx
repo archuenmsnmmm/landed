@@ -34,7 +34,7 @@ function PlusIcon({ className }: { className?: string }) {
 export function BillingToggle({
   interval,
   onChange,
-  currency = "usd",
+  currency = "gbp",
   compact = false,
   tone = "light",
 }: {
@@ -262,7 +262,7 @@ export function ProPlanCard({
   interval,
   loading,
   isCurrent = false,
-  currency = "usd",
+  currency = "gbp",
   onSelect,
   onManageBilling,
   portalLoading = false,
@@ -493,7 +493,7 @@ export function ProPlanCard({
 export function LifetimePlanCard({
   loading,
   isCurrent = false,
-  currency = "usd",
+  currency = "gbp",
   onSelect,
   compact = false,
   tone = "light",

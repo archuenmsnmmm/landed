@@ -11,7 +11,7 @@ const categories = [
     articles: [
       {
         q: "How do I download and install Landed?",
-        a: "Download Landed for Mac or Windows from https://landed-ai.com/download. On Mac, open the DMG and drag Landed to Applications. On Windows, run Landed-Setup.exe. Sign in with email or Google to get started.",
+        a: "Download Landed for Mac from https://landed-ai.com/download. Open the DMG and drag Landed to Applications. Sign in with email or Google to get started.",
       },
       {
         q: "Who is Landed for?",
@@ -91,7 +91,7 @@ const categories = [
     articles: [
       {
         q: "What platforms are supported?",
-        a: "Landed is a desktop overlay for macOS and Windows. It works over technical interview apps on your screen — coding pads, browsers, Zoom, Meet, and more.",
+        a: "Landed is a desktop overlay for macOS. It works over technical interview apps on your screen — coding pads, browsers, Zoom, Meet, and more.",
       },
       {
         q: "Answers don’t mention what’s on my screen",

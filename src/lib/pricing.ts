@@ -18,7 +18,7 @@ export interface PaidPlanPricing {
   annualYearly: number;
 }
 
-export const DEFAULT_BILLING_CURRENCY: BillingCurrency = "usd";
+export const DEFAULT_BILLING_CURRENCY: BillingCurrency = "gbp";
 
 export function paidPlanPricing(currency: BillingCurrency = DEFAULT_BILLING_CURRENCY): PaidPlanPricing {
   return REGIONAL_PRO_PRICING[currency];
@@ -26,7 +26,7 @@ export function paidPlanPricing(currency: BillingCurrency = DEFAULT_BILLING_CURR
 
 /** @deprecated Use paidPlanPricing(currency) for regional amounts. */
 export const PAID_PLAN_PRICING: Record<"pro", PaidPlanPricing> = {
-  pro: REGIONAL_PRO_PRICING.usd,
+  pro: REGIONAL_PRO_PRICING.gbp,
 };
 
 export function getAnnualDiscountPercent(currency: BillingCurrency = DEFAULT_BILLING_CURRENCY): number {
@@ -34,7 +34,7 @@ export function getAnnualDiscountPercent(currency: BillingCurrency = DEFAULT_BIL
 }
 
 /** @deprecated Use getAnnualDiscountPercent(currency). */
-export const ANNUAL_DISCOUNT_PERCENT = getAnnualDiscountPercent("usd");
+export const ANNUAL_DISCOUNT_PERCENT = getAnnualDiscountPercent("gbp");
 
 export function formatPrice(
   amount: number,

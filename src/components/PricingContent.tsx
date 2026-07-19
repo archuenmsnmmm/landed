@@ -1,18 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DownloadLink } from "@/components/DownloadLink";
-import {
-  getDownloadInfo,
-  isWindowsDownloadAvailable,
-} from "@/lib/download";
+import { getDownloadInfo } from "@/lib/download";
 import {
   priceForInterval,
   priceForLifetime,
   type BillingInterval,
 } from "@/lib/pricing";
 import { useRegionalPricing } from "@/hooks/useRegionalPricing";
-import { detectDownloadPlatform, type DownloadPlatform } from "@/lib/platform";
 
 const STARTER_FEATURES = [
   "15 AI questions",
@@ -157,16 +153,9 @@ function BillingToggle({
 export function PricingContent() {
   const [interval, setInterval] = useState<BillingInterval>("monthly");
   const currency = useRegionalPricing();
-  const [platform, setPlatform] = useState<DownloadPlatform>("mac");
   const { current, original } = priceForInterval("pro", interval, currency);
   const lifetime = priceForLifetime(currency);
-  const effectivePlatform =
-    platform === "windows" && !isWindowsDownloadAvailable() ? "mac" : platform;
-  const downloadLabel = getDownloadInfo(effectivePlatform).label;
-
-  useEffect(() => {
-    setPlatform(detectDownloadPlatform());
-  }, []);
+  const downloadLabel = getDownloadInfo("mac").label;
 
   return (
     <div className="flex w-full flex-col items-center">

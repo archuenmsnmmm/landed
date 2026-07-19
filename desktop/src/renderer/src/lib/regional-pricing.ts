@@ -84,9 +84,10 @@ const LOCALE_CURRENCY_HINTS: Record<string, BillingCurrency> = {
   "pt-pt": "eur",
 };
 
-const DEFAULT_CURRENCY: BillingCurrency = "usd";
+/** Launch standard — all display + checkout use GBP until regional pricing is re-enabled. */
+export const DEFAULT_CURRENCY: BillingCurrency = "gbp";
 
-/** Temporary: paywalls / pricing / checkout are USD-only. Set true to restore regional currencies. */
+/** Temporary: paywalls / pricing / checkout are GBP-only. Set true to restore regional currencies. */
 export const REGIONAL_PRICING_ENABLED = false;
 
 export function isBillingCurrency(value: string): value is BillingCurrency {

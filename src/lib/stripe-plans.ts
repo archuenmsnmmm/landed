@@ -33,13 +33,13 @@ function allLifetimePriceIds(): string[] {
 export function stripePriceIdForPlan(
   plan: StripePlanId,
   interval: StripeBillingInterval = "monthly",
-  currency: BillingCurrency = "usd",
+  currency: BillingCurrency = "gbp",
 ): string | undefined {
   if (plan === "lifetime" || interval === "lifetime") {
     const priceId = stripeLifetimePriceId(currency);
     if (priceId) return priceId;
-    if (currency !== "usd") {
-      return stripePriceIdForPlan("lifetime", "lifetime", "usd");
+    if (currency !== "gbp") {
+      return stripePriceIdForPlan("lifetime", "lifetime", "gbp");
     }
     return undefined;
   }
@@ -52,8 +52,8 @@ export function stripePriceIdForPlan(
   };
   const priceId = map.pro[interval];
   if (priceId) return priceId;
-  if (currency !== "usd") {
-    return stripePriceIdForPlan(plan, interval, "usd");
+  if (currency !== "gbp") {
+    return stripePriceIdForPlan(plan, interval, "gbp");
   }
   return undefined;
 }

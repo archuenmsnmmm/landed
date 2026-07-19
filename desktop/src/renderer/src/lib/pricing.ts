@@ -22,7 +22,7 @@ export interface PaidPlanPricing {
   annualYearly: number;
 }
 
-export const DEFAULT_BILLING_CURRENCY: BillingCurrency = "usd";
+export const DEFAULT_BILLING_CURRENCY: BillingCurrency = "gbp";
 
 export function paidPlanPricing(currency: BillingCurrency = DEFAULT_BILLING_CURRENCY): PaidPlanPricing {
   return REGIONAL_PRO_PRICING[currency];
@@ -32,7 +32,7 @@ export function getAnnualDiscountPercent(currency: BillingCurrency = DEFAULT_BIL
   return annualDiscountPercent(currency);
 }
 
-export const ANNUAL_DISCOUNT_PERCENT = getAnnualDiscountPercent("usd");
+export const ANNUAL_DISCOUNT_PERCENT = getAnnualDiscountPercent("gbp");
 
 export function formatPrice(
   amount: number,
