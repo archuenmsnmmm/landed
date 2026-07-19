@@ -28,12 +28,10 @@ export const metadata: Metadata = {
   title,
   description,
   manifest: "/manifest.json",
-  // Icons: src/app/icon.svg + apple-icon.png (file conventions; hashed URLs).
-  // Also expose legacy favicon.ico. Never list /app-icon.png — dock padding
-  // transparency makes Safari fall back to a letter glyph.
-  icons: {
-    icon: [{ url: "/favicon.ico", sizes: "any" }],
-  },
+  // Icons come only from src/app/icon.svg + apple-icon.png (file conventions).
+  // Do not set metadata.icons — it replaces those tags. public/favicon.ico
+  // remains for legacy /favicon.ico requests. Never use /app-icon.png as a
+  // favicon (transparent dock padding → Safari letter glyph).
   appleWebApp: {
     capable: true,
     title: "Landed",
