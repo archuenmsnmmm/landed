@@ -1,6 +1,6 @@
 {
   "name": "landed-desktop",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "description": "Landed — invisible AI for technical interviews",
   "main": "./out/main/index.js",

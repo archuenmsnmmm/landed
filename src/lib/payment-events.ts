@@ -140,7 +140,7 @@ export async function backfillPaymentEventsFromStripe(
       userId: charge.metadata?.userId ?? null,
       plan: charge.metadata?.plan ?? null,
       amountCents,
-      currency: charge.currency ?? "usd",
+      currency: charge.currency ?? "gbp",
       paidAt: new Date(charge.created * 1000),
       source: "stripe-backfill:charge",
       stripeChargeId: charge.id,
@@ -193,7 +193,7 @@ export async function recordPaymentEvent(input: RecordPaymentInput): Promise<voi
       user_id: input.userId ?? null,
       plan: input.plan ?? null,
       amount_cents: input.amountCents,
-      currency: (input.currency ?? "usd").toLowerCase(),
+      currency: (input.currency ?? "gbp").toLowerCase(),
       paid_at: input.paidAt.toISOString(),
       source: input.source,
       stripe_event_id: input.stripeEventId ?? null,
@@ -279,7 +279,7 @@ export async function recordCheckoutSessionPayment(
     userId,
     plan,
     amountCents,
-    currency: session.currency ?? "usd",
+    currency: session.currency ?? "gbp",
     paidAt,
     source,
     stripeEventId: stripeEventId ?? null,
@@ -337,7 +337,7 @@ export async function recordInvoicePayment(
     userId: userId ?? invoice.metadata?.userId ?? null,
     plan: plan ?? invoice.metadata?.plan ?? "pro",
     amountCents,
-    currency: invoice.currency ?? "usd",
+    currency: invoice.currency ?? "gbp",
     paidAt,
     source,
     stripeEventId: stripeEventId ?? null,
@@ -450,7 +450,7 @@ export function buildMetricsFromRecordedEvents(
   periodDays: number,
 ): StripeAdminMetrics {
   const bounds = periodBounds(periodDays);
-  const currency = events[0]?.currency ?? "usd";
+  const currency = events[0]?.currency ?? "gbp";
 
   const periodEvents = events.filter((event) => {
     const t = new Date(event.paid_at).getTime();

@@ -1,4 +1,4 @@
-import { currencyFromCountry, currencyFromLocale, type BillingCurrency } from "./regional-pricing";
+import { DEFAULT_CURRENCY, type BillingCurrency } from "./regional-pricing";
 
 /** Extract ISO country from common CDN / edge headers. */
 export function countryFromRequestHeaders(headers: Headers): string | null {
@@ -14,13 +14,7 @@ export function countryFromRequestHeaders(headers: Headers): string | null {
   return null;
 }
 
-export function currencyFromRequestHeaders(headers: Headers): BillingCurrency {
-  const country = countryFromRequestHeaders(headers);
-  if (country) return currencyFromCountry(country);
-  const acceptLanguage = headers.get("accept-language");
-  if (acceptLanguage) {
-    const primary = acceptLanguage.split(",")[0]?.trim();
-    if (primary) return currencyFromLocale(primary);
-  }
-  return "gbp";
+/** Always GBP — catalog and Stripe are pounds-only. */
+export function currencyFromRequestHeaders(_headers: Headers): BillingCurrency {
+  return DEFAULT_CURRENCY;
 }

@@ -7,7 +7,6 @@ import { authHeaders } from "../lib/api-auth";
 import { clearApiBaseCache, DEFAULT_API_BASE, resolveApiBase } from "../lib/billing-api-base";
 import type { Plan } from "../store/types";
 import type { BillingInterval, PricingTierId } from "../lib/pricing";
-import type { BillingCurrency } from "../lib/regional-pricing";
 import { pricingTierToPlan } from "../lib/pricing";
 import { isPaidPlan } from "../store/types";
 import { syncPlanLimitsToMain, useAppStore } from "../store/useAppStore";
@@ -46,14 +45,13 @@ export type CheckoutResult =
   | { ok: true; url: string }
   | { ok: false; error: string };
 
-/** Open Stripe Checkout for a paid plan. */
+/** Open Stripe Checkout for a paid plan (GBP only). */
 export async function startStripeCheckout(
   plan: Plan,
   userId: string,
   email: string,
   interval: BillingInterval = "monthly",
   returnTo: PurchaseReturnTo = "dashboard",
-  currency?: BillingCurrency,
 ): Promise<CheckoutResult> {
   if (!PAID.includes(plan)) {
     return { ok: false, error: "Invalid plan" };
@@ -64,7 +62,6 @@ export async function startStripeCheckout(
     JSON.stringify({
       plan,
       interval,
-      currency,
       userId,
       email,
       successUrl: billingSuccessWebUrl(apiBase, plan, returnTo),
@@ -195,14 +192,13 @@ export async function openStripeBillingPortal(userId: string): Promise<PortalRes
   return { ok: true, url: data.url };
 }
 
-/** Start checkout for a public pricing tier. */
+/** Start checkout for a public pricing tier (GBP only). */
 export async function startPricingCheckout(
   tier: PricingTierId,
   userId: string,
   email: string,
   interval: BillingInterval = "monthly",
   returnTo: PurchaseReturnTo = "dashboard",
-  currency?: BillingCurrency,
 ): Promise<CheckoutResult> {
   return startStripeCheckout(
     pricingTierToPlan(tier),
@@ -210,7 +206,6 @@ export async function startPricingCheckout(
     email,
     interval,
     returnTo,
-    currency,
   );
 }
 

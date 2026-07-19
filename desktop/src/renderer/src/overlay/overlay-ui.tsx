@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import landedMark from "../assets/landed-mark.png";
 import {
@@ -433,6 +433,20 @@ export function SuggestionPill({
 
 // ─── Overlay bars — top controls + content panel underneath ──────────────────
 
+/** Compact short-reply height (user pill + one-line answer + disclaimer). */
+const REPLY_BOX_MIN_HEIGHT = 140;
+/** Upper bound for the reply panel before it scrolls. */
+const REPLY_BOX_MAX_HEIGHT_VH = 0.62;
+const REPLY_BOX_MAX_HEIGHT_PX = 560;
+
+function replyBoxMaxHeight(): number {
+  if (typeof window === "undefined") return REPLY_BOX_MAX_HEIGHT_PX;
+  return Math.min(
+    Math.round(window.innerHeight * REPLY_BOX_MAX_HEIGHT_VH),
+    REPLY_BOX_MAX_HEIGHT_PX,
+  );
+}
+
 const COMMAND_BAR_GLASS: CSSProperties = {
   backdropFilter: "blur(28px) saturate(160%)",
   WebkitBackdropFilter: "blur(28px) saturate(160%)",
@@ -829,6 +843,13 @@ export function AskCommandBar({
   const scrollRef = useRef<HTMLDivElement>(null);
   const latestTurnRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  /** User-set reply height; null = grow with content (capped). */
+  const [replyHeight, setReplyHeight] = useState<number | null>(null);
+  const resizeDragRef = useRef<{
+    pointerId: number;
+    startY: number;
+    startHeight: number;
+  } | null>(null);
   const canSubmit = !!value.trim() && !loading;
   const hasPending = !!pendingQuestion.trim() || loading || !!pendingAnswer.trim();
   const showThread = chatTurns.length > 0 || hasPending;
@@ -839,6 +860,11 @@ export function AskCommandBar({
   const boxWidth = hasCoding
     ? "w-[min(640px,calc(100vw-48px))]"
     : "w-[min(560px,calc(100vw-48px))]";
+
+  // Reset manual height when the thread goes away.
+  useEffect(() => {
+    if (!showThread) setReplyHeight(null);
+  }, [showThread]);
 
   // Pin to the top of the latest turn when a new ask starts — not the bottom while streaming.
   useEffect(() => {
@@ -861,6 +887,46 @@ export function AskCommandBar({
     const id = window.setTimeout(() => inputRef.current?.focus(), 40);
     return () => window.clearTimeout(id);
   }, [interviewOpen]);
+
+  const clampReplyHeight = (h: number) =>
+    Math.round(
+      Math.min(replyBoxMaxHeight(), Math.max(REPLY_BOX_MIN_HEIGHT, h)),
+    );
+
+  const onReplyResizePointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const el = scrollRef.current;
+    if (!el) return;
+    const startHeight = replyHeight ?? el.offsetHeight;
+    resizeDragRef.current = {
+      pointerId: e.pointerId,
+      startY: e.clientY,
+      startHeight,
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+    // Lock current size before dragging so content doesn't jump.
+    setReplyHeight(clampReplyHeight(startHeight));
+  };
+
+  const onReplyResizePointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = resizeDragRef.current;
+    if (!drag || drag.pointerId !== e.pointerId) return;
+    // Bottom-edge resize: drag up → smaller, drag down → taller.
+    const next = clampReplyHeight(drag.startHeight + (e.clientY - drag.startY));
+    setReplyHeight(next);
+  };
+
+  const endReplyResize = (e: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = resizeDragRef.current;
+    if (!drag || drag.pointerId !== e.pointerId) return;
+    resizeDragRef.current = null;
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      /* already released */
+    }
+  };
 
   if (!interviewOpen) return null;
 
@@ -946,13 +1012,18 @@ export function AskCommandBar({
       {/* Answer reply box — same width as ask */}
       {showThread ? (
         <div
-          className={`overlay-glass ${boxWidth} overflow-hidden rounded-[20px]`}
+          className={`overlay-glass relative ${boxWidth} overflow-hidden rounded-[20px]`}
           style={{ ...REPLY_BOX_GLASS, color: ASK_TEXT }}
         >
           <div
             ref={scrollRef}
             data-no-drag
-            className="overlay-pill-text relative max-h-[min(62vh,560px)] cursor-default overflow-y-auto px-5 py-4"
+            className="overlay-pill-text relative cursor-default overflow-y-auto px-5 py-4"
+            style={{
+              minHeight: REPLY_BOX_MIN_HEIGHT,
+              height: replyHeight ?? undefined,
+              maxHeight: replyHeight ?? replyBoxMaxHeight(),
+            }}
           >
             {chatTurns.map((turn, i) => {
               const isLatest = !hasPending && i === chatTurns.length - 1;
@@ -986,6 +1057,19 @@ export function AskCommandBar({
               </div>
             ) : null}
           </div>
+          {/* Bottom-edge resize only — cannot shrink below REPLY_BOX_MIN_HEIGHT */}
+          <div
+            data-no-drag
+            role="separator"
+            aria-orientation="horizontal"
+            aria-label="Resize reply panel"
+            title="Drag to resize"
+            className="absolute inset-x-0 bottom-0 z-10 h-3 cursor-ns-resize touch-none"
+            onPointerDown={onReplyResizePointerDown}
+            onPointerMove={onReplyResizePointerMove}
+            onPointerUp={endReplyResize}
+            onPointerCancel={endReplyResize}
+          />
         </div>
       ) : null}
 

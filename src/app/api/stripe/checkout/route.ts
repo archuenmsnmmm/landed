@@ -3,9 +3,7 @@ import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { resolveBillingOrigin } from "@/lib/billing-api-base";
 import { normalizeBillingReturnUrl } from "@/lib/billing-return-urls";
-import { currencyFromRequestHeaders } from "@/lib/detect-region";
 import { requireAuth } from "@/lib/require-auth";
-import { isBillingCurrency, REGIONAL_PRICING_ENABLED } from "@/lib/regional-pricing";
 import {
   stripePriceIdForPlan,
   type StripeBillingInterval,
@@ -13,6 +11,7 @@ import {
 } from "@/lib/stripe-plans";
 
 const PAID_PLANS = new Set<StripePlanId>(["pro", "lifetime"]);
+const BILLING_CURRENCY = "gbp";
 
 export async function POST(request: Request) {
   try {
@@ -22,7 +21,6 @@ export async function POST(request: Request) {
     const body = (await request.json()) as {
       plan?: string;
       interval?: string;
-      currency?: string;
       userId?: string;
       email?: string;
       successUrl?: string;
@@ -40,12 +38,6 @@ export async function POST(request: Request) {
       : body.interval === "annual"
         ? "annual"
         : "monthly";
-    const requestedCurrency = body.currency?.trim().toLowerCase();
-    const currency = !REGIONAL_PRICING_ENABLED
-      ? "gbp"
-      : requestedCurrency && isBillingCurrency(requestedCurrency)
-        ? requestedCurrency
-        : currencyFromRequestHeaders(request.headers);
 
     const userId = body.userId?.trim() || auth.userId;
     if (userId !== auth.userId) {
@@ -53,7 +45,7 @@ export async function POST(request: Request) {
     }
 
     const stripe = getStripe();
-    const priceId = stripePriceIdForPlan(plan, interval, currency);
+    const priceId = stripePriceIdForPlan(plan, interval);
     if (!stripe || !priceId) {
       return NextResponse.json(
         { error: "Stripe is not configured on the server" },
@@ -67,7 +59,7 @@ export async function POST(request: Request) {
       userId,
       plan,
       interval,
-      currency,
+      currency: BILLING_CURRENCY,
     };
 
     const sessionParams: Stripe.Checkout.SessionCreateParams = {

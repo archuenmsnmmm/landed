@@ -158,7 +158,7 @@ export async function POST(request: Request) {
           userId: charge.metadata?.userId ?? null,
           plan: charge.metadata?.plan ?? null,
           amountCents,
-          currency: charge.currency ?? "usd",
+          currency: charge.currency ?? "gbp",
           paidAt: new Date(charge.created * 1000),
           source: event.type,
           stripeEventId: event.id,

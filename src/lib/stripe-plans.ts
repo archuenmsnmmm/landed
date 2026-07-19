@@ -1,4 +1,3 @@
-import type { BillingCurrency } from "@/lib/regional-pricing";
 import {
   stripeLifetimePriceId,
   stripeProAnnualPriceId,
@@ -8,54 +7,34 @@ import {
 export type StripePlanId = "pro" | "lifetime";
 export type StripeBillingInterval = "monthly" | "annual" | "lifetime";
 
-const CURRENCIES: BillingCurrency[] = ["usd", "gbp", "eur", "aud", "cad"];
-
 function allProPriceIds(): string[] {
   const ids = new Set<string>();
-  for (const currency of CURRENCIES) {
-    const monthly = stripeProMonthlyPriceId(currency);
-    const annual = stripeProAnnualPriceId(currency);
-    if (monthly) ids.add(monthly);
-    if (annual) ids.add(annual);
-  }
+  const monthly = stripeProMonthlyPriceId();
+  const annual = stripeProAnnualPriceId();
+  if (monthly) ids.add(monthly);
+  if (annual) ids.add(annual);
   return [...ids];
 }
 
 function allLifetimePriceIds(): string[] {
-  const ids = new Set<string>();
-  for (const currency of CURRENCIES) {
-    const lifetime = stripeLifetimePriceId(currency);
-    if (lifetime) ids.add(lifetime);
-  }
-  return [...ids];
+  const lifetime = stripeLifetimePriceId();
+  return lifetime ? [lifetime] : [];
 }
 
+/** Resolve the GBP Stripe Price ID for a plan. */
 export function stripePriceIdForPlan(
   plan: StripePlanId,
   interval: StripeBillingInterval = "monthly",
-  currency: BillingCurrency = "gbp",
 ): string | undefined {
   if (plan === "lifetime" || interval === "lifetime") {
-    const priceId = stripeLifetimePriceId(currency);
-    if (priceId) return priceId;
-    if (currency !== "gbp") {
-      return stripePriceIdForPlan("lifetime", "lifetime", "gbp");
-    }
-    return undefined;
+    return stripeLifetimePriceId() || undefined;
   }
 
-  const map: Record<"pro", Record<"monthly" | "annual", string>> = {
-    pro: {
-      monthly: stripeProMonthlyPriceId(currency),
-      annual: stripeProAnnualPriceId(currency),
-    },
-  };
-  const priceId = map.pro[interval];
-  if (priceId) return priceId;
-  if (currency !== "gbp") {
-    return stripePriceIdForPlan(plan, interval, "gbp");
+  if (interval === "annual") {
+    return stripeProAnnualPriceId() || undefined;
   }
-  return undefined;
+
+  return stripeProMonthlyPriceId() || undefined;
 }
 
 export function planFromStripePriceId(priceId: string): StripePlanId | "free" {

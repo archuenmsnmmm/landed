@@ -7,7 +7,6 @@ import {
   startPricingCheckout,
   syncBillingState,
 } from "../services/billing";
-import { useRegionalPricing } from "./useRegionalPricing";
 import { useAppStore } from "../store/useAppStore";
 
 export function usePricingCheckout({
@@ -19,7 +18,6 @@ export function usePricingCheckout({
 } = {}) {
   const { user } = useAppStore();
   const navigate = useNavigate();
-  const currency = useRegionalPricing();
   const [loadingTier, setLoadingTier] = useState<PricingTierId | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,7 +44,6 @@ export function usePricingCheckout({
         user.email,
         interval,
         returnToAfterPurchase,
-        currency,
       );
       if (!result.ok) {
         setError(result.error);

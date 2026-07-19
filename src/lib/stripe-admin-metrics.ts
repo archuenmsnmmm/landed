@@ -482,7 +482,7 @@ export async function fetchStripeAdminMetrics(
 
   const available = balance.available.reduce((sum, b) => sum + b.amount, 0);
   const pending = balance.pending.reduce((sum, b) => sum + b.amount, 0);
-  const currency = balance.available[0]?.currency ?? balance.pending[0]?.currency ?? "usd";
+  const currency = balance.available[0]?.currency ?? balance.pending[0]?.currency ?? "gbp";
   const recentPayout = recentPaidPayouts.data[0] ?? null;
   const pendingPayoutTotal = payouts.data.reduce((sum, p) => sum + p.amount, 0);
 
