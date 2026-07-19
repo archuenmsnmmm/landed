@@ -8,10 +8,11 @@ export const LEGAL = {
     "Landed is operated by its founder as a sole trader. Landed is not a limited company (Ltd), partnership, or corporation.",
   website: "https://landed-ai.com",
   effectiveDate: "June 18, 2026",
-  lastUpdated: "July 15, 2026",
+  lastUpdated: "July 19, 2026",
   termsVersion: TERMS_VERSION,
   aiDisclaimerShort:
-    "AI can make mistakes. Always review suggestions before you use or repeat them.",
+    "This is an AI-powered conversation, not human. It may make mistakes.",
+  aiDisclaimerLearnMorePath: "/legal/terms#ai-disclaimer",
   contact: {
     legal: "landed.support@gmail.com",
     privacy: "landed.support@gmail.com",

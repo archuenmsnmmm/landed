@@ -59,9 +59,13 @@ export function TermsAgreement({
         >
           Acceptable Use Policy
         </button>
-        . I confirm I am at least 18 years old and understand that{" "}
-        <span className="font-medium text-zinc-800">AI can make mistakes</span>{" "}
-        and I will review all suggestions before use.
+        . I confirm I am at least 18 years old and understand that Landed is an{" "}
+        <span className="font-medium text-zinc-800">
+          AI-powered conversation, not a human
+        </span>
+        , that it{" "}
+        <span className="font-medium text-zinc-800">may make mistakes</span>, and
+        that I will review all suggestions before use.
       </span>
     </label>
   );

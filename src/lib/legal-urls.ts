@@ -19,6 +19,7 @@ export function legalUrl(path: string) {
 
 export const legalLinks = {
   terms: legalUrl(LEGAL_ROUTES.terms),
+  aiDisclaimer: legalUrl(LEGAL.aiDisclaimerLearnMorePath),
   privacy: legalUrl(LEGAL_ROUTES.privacy),
   acceptableUse: legalUrl(LEGAL_ROUTES.acceptableUse),
   cookies: legalUrl(LEGAL_ROUTES.cookies),

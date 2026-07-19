@@ -19,6 +19,8 @@ const baseUrl = resolveLegalBase();
 
 export const legalLinks = {
   terms: `${baseUrl}/legal/terms`,
+  /** Anchors the AI outputs section in Terms. */
+  aiDisclaimer: `${baseUrl}/legal/terms#ai-disclaimer`,
   privacy: `${baseUrl}/legal/privacy`,
   acceptableUse: `${baseUrl}/legal/acceptable-use`,
   cookies: `${baseUrl}/legal/cookies`,

@@ -327,6 +327,16 @@ function AboutPanel() {
         title="About"
         subtitle="Release notes, support, and app information."
       />
+      <div className="mb-4 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-[12px] leading-relaxed text-zinc-600">
+        This is an AI-powered conversation, not human. It may make mistakes.{" "}
+        <button
+          type="button"
+          onClick={() => openLegalLink(legalLinks.aiDisclaimer)}
+          className="font-medium text-[#4A90E2] underline decoration-[#4A90E2]/40 underline-offset-2 hover:decoration-[#4A90E2]"
+        >
+          Learn More
+        </button>
+      </div>
       <div className="divide-y divide-zinc-200/80">
         <SettingsRow
           icon={

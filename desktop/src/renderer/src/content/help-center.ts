@@ -49,6 +49,10 @@ export const HELP_CATEGORIES: HelpCategory[] = [
         a: "Type into the top ask bar and press Enter. Landed reads the technical interview problem on screen and streams an answer below the bar.",
       },
       {
+        q: "Is Landed a human coach?",
+        a: "No. This is an AI-powered conversation, not a human. It may make mistakes — always review suggestions before you use or repeat them. See Terms → AI Outputs for details.",
+      },
+      {
         q: "How do I move or hide the overlay?",
         a: "Use Cmd/Ctrl + arrow keys to move the overlay. Press Cmd/Ctrl + \\ to hide or show it. See Settings > Keybinds for the full list.",
       },

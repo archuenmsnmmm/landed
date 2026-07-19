@@ -121,7 +121,13 @@ export function Footer({ className = "bg-[#f7f8fa]" }: { className?: string }) {
       <div className="border-t border-[#e8ebf0]">
         <div className="mx-auto max-w-[1200px] px-6 py-4">
           <p className="text-center text-[12px] leading-relaxed text-[#8b95a5] sm:text-left">
-            {LEGAL.aiDisclaimerShort}
+            {LEGAL.aiDisclaimerShort}{" "}
+            <a
+              href={LEGAL.aiDisclaimerLearnMorePath}
+              className="font-medium text-[#4A90E2] underline decoration-[#4A90E2]/40 underline-offset-2 transition-colors hover:decoration-[#4A90E2]"
+            >
+              Learn More
+            </a>
           </p>
         </div>
         <div className="mx-auto flex max-w-[1200px] flex-col gap-2 border-t border-[#e8ebf0] px-6 py-5 sm:flex-row sm:items-center sm:justify-between">

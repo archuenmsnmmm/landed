@@ -36,6 +36,10 @@ const categories = [
         a: "No. Landed is text-first so you can stay silent on the call. Type into the overlay and press Enter to ask. Screen Recording permission is what you need.",
       },
       {
+        q: "Is Landed a human coach?",
+        a: "No. This is an AI-powered conversation, not a human. It may make mistakes — always review suggestions before you use or repeat them. Learn more in Terms → AI Outputs and No Professional Advice.",
+      },
+      {
         q: "How does Landed see my screen?",
         a: "When you ask a question, Landed captures what’s on your display (coding pad, prompt, or docs) and uses that context to answer. Frames are only sent when you ask — not continuously recorded.",
       },

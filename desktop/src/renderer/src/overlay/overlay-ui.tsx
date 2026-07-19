@@ -1,7 +1,11 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import landedMark from "../assets/landed-mark.png";
-import { AI_DISCLAIMER_OVERLAY } from "../lib/ai-disclaimer";
+import {
+  AI_DISCLAIMER_LEARN_MORE_LABEL,
+  AI_DISCLAIMER_OVERLAY,
+} from "../lib/ai-disclaimer";
+import { legalLinks, openLegalLink } from "../lib/legal-urls";
 import { copyToClipboard } from "../lib/clipboard";
 import { parseCodingAnswer, type CodingSection } from "../lib/coding-answer";
 import type { QuickAction } from "../services/ai";
@@ -29,6 +33,32 @@ export const QUICK_ACTIONS: {
   { id: "followup", label: "Follow-up", shortLabel: "Follow-up", icon: "chat" },
   { id: "recap", label: "Recap", shortLabel: "Recap", icon: "recap" },
 ];
+
+function AiDisclaimerLine({
+  className,
+  style,
+}: {
+  className: string;
+  style?: CSSProperties;
+}) {
+  return (
+    <p className={className} style={style}>
+      {AI_DISCLAIMER_OVERLAY}{" "}
+      <button
+        type="button"
+        data-no-drag
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openLegalLink(legalLinks.aiDisclaimer);
+        }}
+        className="font-medium text-[#4A90E2] underline decoration-[#4A90E2]/40 underline-offset-2 hover:decoration-[#4A90E2]"
+      >
+        {AI_DISCLAIMER_LEARN_MORE_LABEL}
+      </button>
+    </p>
+  );
+}
 
 export function ActionIcon({ type }: { type: (typeof QUICK_ACTIONS)[number]["icon"] }) {
   if (type === "sparkle") {
@@ -377,9 +407,9 @@ export function SuggestionPill({
               </div>
             ) : null}
 
-            <p className={`overlay-pill-copy text-[10px] leading-snug ${pillTheme.transcriptMuted}`}>
-              {AI_DISCLAIMER_OVERLAY}
-            </p>
+            <AiDisclaimerLine
+              className={`overlay-pill-copy text-[10px] leading-snug ${pillTheme.transcriptMuted}`}
+            />
           </div>
         ) : (
           <>
@@ -390,9 +420,9 @@ export function SuggestionPill({
               ) : null}
             </p>
             {!loading && main ? (
-              <p className={`overlay-pill-copy mt-2 text-[10px] leading-snug ${pillTheme.transcriptMuted}`}>
-                {AI_DISCLAIMER_OVERLAY}
-              </p>
+              <AiDisclaimerLine
+                className={`overlay-pill-copy mt-2 text-[10px] leading-snug ${pillTheme.transcriptMuted}`}
+              />
             ) : null}
           </>
         )}
@@ -741,6 +771,13 @@ function ChatTurnView({
         <CodingAnswerView sections={codingSections} loading={loading} />
       ) : trimmedAnswer ? (
         <PlainAnswerView text={trimmedAnswer} loading={loading} />
+      ) : null}
+
+      {!loading && trimmedAnswer ? (
+        <AiDisclaimerLine
+          className="overlay-pill-copy pt-1 text-[10px] leading-snug"
+          style={{ color: ASK_MUTED, WebkitTextFillColor: ASK_MUTED }}
+        />
       ) : null}
     </div>
   );

@@ -146,12 +146,14 @@ export const termsSections: LegalSection[] = [
       <>
         <LegalP>
           <LegalStrong>
-            AI CAN MAKE MISTAKES. THE SERVICE USES ARTIFICIAL INTELLIGENCE.
+            THIS IS AN AI-POWERED CONVERSATION / ASSISTANT, NOT A HUMAN.
+            THE SERVICE USES ARTIFICIAL INTELLIGENCE. AI CAN MAKE MISTAKES.
             AI-GENERATED OUTPUTS MAY BE INACCURATE, INCOMPLETE, BIASED, OUTDATED,
             OR INAPPROPRIATE.
           </LegalStrong>{" "}
-          You must independently review, verify, and approve all suggestions
-          before relying on or communicating them to any person.
+          Nothing in the Service is a live human coach, interviewer, lawyer, or
+          other professional. You must independently review, verify, and approve
+          all suggestions before relying on or communicating them to any person.
         </LegalP>
         <LegalP>
           Landed does not provide legal, financial, tax, medical, compliance,

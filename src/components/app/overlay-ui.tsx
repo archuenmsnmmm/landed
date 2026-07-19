@@ -142,6 +142,17 @@ export function SuggestionPill({
             </div>
           </div>
         ) : null}
+        {!loading && suggestion ? (
+          <p className={`mt-2 text-[10px] leading-snug ${theme.label}`}>
+            This is an AI-powered conversation, not human. It may make mistakes.{" "}
+            <a
+              href="/legal/terms#ai-disclaimer"
+              className="font-medium text-[#4A90E2] underline decoration-[#4A90E2]/40 underline-offset-2 hover:decoration-[#4A90E2]"
+            >
+              Learn More
+            </a>
+          </p>
+        ) : null}
       </div>
     </div>
   );
