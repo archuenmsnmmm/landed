@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const highlights = [
   {
     value: "Any app",
@@ -17,12 +19,6 @@ const highlights = [
     description:
       "A snapshot is captured when you send a question — not a continuous recording of the technical interview.",
   },
-];
-
-const askLines = [
-  { label: "You", text: "What’s the optimal approach for merge intervals?" },
-  { label: "Landed", text: "Sort by start time, then merge overlapping ranges in one pass — O(n log n)." },
-  { label: "You", text: "How do I explain that out loud?" },
 ];
 
 export function RealTimeTranscription() {
@@ -66,30 +62,15 @@ export function RealTimeTranscription() {
 
 function AskMockup() {
   return (
-    <div className="rounded-[28px] bg-[#eef2f7] p-5 md:p-7">
-      <div className="overflow-hidden rounded-[22px] border border-[#e4e4e7] bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
-        <div className="border-b border-[#f0f0f2] px-5 py-4 md:px-6">
-          <p className="text-[12px] font-medium text-[#a1a1aa]">Ask during the technical interview</p>
-          <p className="mt-2 text-[13px] text-[#71717a]">
-            Landed reads the problem on screen, then answers in the overlay.
-          </p>
-        </div>
-
-        <div className="space-y-4 px-5 py-5 md:px-6 md:py-6">
-          {askLines.map((line) => (
-            <div key={line.text}>
-              <p
-                className={`text-[11px] font-semibold uppercase tracking-wider ${
-                  line.label === "Landed" ? "text-[#4b8bf5]" : "text-[#a1a1aa]"
-                }`}
-              >
-                {line.label}
-              </p>
-              <p className="mt-1 text-[13px] leading-[1.65] text-[#52525b]">{line.text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div className="overflow-hidden rounded-[28px]">
+      <Image
+        src="/image.png"
+        alt="Landed overlay showing problem statement, thoughts, and solution during a technical interview"
+        width={1504}
+        height={1416}
+        draggable={false}
+        className="h-auto w-full"
+      />
     </div>
   );
 }
