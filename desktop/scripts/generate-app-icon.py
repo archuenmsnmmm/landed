@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate macOS Dock/Launchpad icons with inset squircle (matches Discord etc.)."""
+"""Generate macOS Dock icons and web favicons from the Landed mark."""
 
 from __future__ import annotations
 
@@ -52,6 +52,35 @@ def make_macos_icon(src: Image.Image) -> Image.Image:
     return canvas
 
 
+def make_opaque_square(src: Image.Image, size: int) -> Image.Image:
+    """Full-bleed opaque PNG for browser/Safari favicons (no dock padding)."""
+    resized = src.convert("RGBA").resize((size, size), Image.Resampling.LANCZOS)
+    # Flatten onto the icon's navy so Safari never falls back to a letter glyph.
+    bg = Image.new("RGBA", (size, size), (0, 18, 51, 255))
+    return Image.alpha_composite(bg, resized).convert("RGB")
+
+
+def write_web_favicons(src: Image.Image) -> None:
+    apple = make_opaque_square(src, 180)
+    apple.save(PUBLIC / "apple-touch-icon.png", "PNG", optimize=True)
+
+    fav32 = make_opaque_square(src, 32)
+    fav16 = make_opaque_square(src, 16)
+    fav32.save(PUBLIC / "favicon-32x32.png", "PNG", optimize=True)
+    fav16.save(PUBLIC / "favicon-16x16.png", "PNG", optimize=True)
+
+    # Multi-size ICO — what Safari/Chrome request at /favicon.ico by default.
+    # Pillow expects the largest image as the primary, with smaller ones appended.
+    ico_dims = [16, 32, 48]
+    ico_images = [make_opaque_square(src, d).convert("RGBA") for d in ico_dims]
+    ico_images[-1].save(
+        PUBLIC / "favicon.ico",
+        format="ICO",
+        sizes=[(d, d) for d in ico_dims],
+        append_images=ico_images[:-1],
+    )
+
+
 def main() -> None:
     source_candidates = [
         SRC,
@@ -80,10 +109,11 @@ def main() -> None:
     icon.save(ICON_OUT, "PNG", optimize=True)
     icon.save(ASSETS / "landed-icon.png", "PNG", optimize=True)
     icon.save(PUBLIC / "app-icon.png", "PNG", optimize=True)
-    icon.save(PUBLIC / "apple-touch-icon.png", "PNG", optimize=True)
+    write_web_favicons(raw)
 
     print(f"[landed] Generated app icon from {source}")
     print(f"  canvas={icon.width}x{icon.height}")
+    print("  web: favicon.ico, favicon-16/32, apple-touch-icon.png")
 
 
 if __name__ == "__main__":
