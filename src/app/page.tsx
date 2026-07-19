@@ -20,8 +20,8 @@ export default function Home() {
       </div>
       <main>
         <MeetingHelp />
-        <Comparison />
         <RealTimeTranscription />
+        <Comparison />
         <LandingPricing />
         <FAQ />
         <CTA />
