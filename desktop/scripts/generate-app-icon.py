@@ -79,9 +79,10 @@ def write_svg_favicon(src: Image.Image) -> str:
 
 def write_web_favicons(src: Image.Image) -> None:
     # Next.js App Router file conventions — hashed URLs help Safari pick up changes.
-    # Prefer icon.svg for Safari tabs; icon.png as raster fallback. Keep favicon.ico
-    # only in public/ (not app/) so Next doesn't emit sizes="16x16".
-    make_opaque_square(src, 32).save(APP / "icon.png", "PNG", optimize=True)
+    # Prefer icon.svg for Safari tabs. Keep favicon.ico only in public/ (not app/)
+    # so Next doesn't emit sizes="16x16".
+    if (APP / "icon.png").exists():
+        (APP / "icon.png").unlink()
     make_opaque_square(src, 180).convert("RGB").save(
         APP / "apple-icon.png", "PNG", optimize=True
     )
