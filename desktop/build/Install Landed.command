@@ -16,6 +16,20 @@ rm -rf "$DEST"
 ditto "$APP" "$DEST"
 xattr -cr "$DEST" 2>/dev/null || true
 
+# Unsigned CI builds ship with a broken linker signature; ad-hoc sign so Gatekeeper can open them.
+if ! codesign --verify --deep --strict "$DEST" >/dev/null 2>&1; then
+  if ! codesign -dvv "$DEST" 2>&1 | grep -q "Authority=Developer ID Application"; then
+    echo "Applying ad-hoc signature..."
+    FRAMEWORK="$DEST/Contents/Frameworks/Electron Framework.framework"
+    [ -d "$FRAMEWORK" ] && codesign --force --sign - "$FRAMEWORK" 2>/dev/null || true
+    for HELPER in "Electron Helper.app" "Landed Helper.app"; do
+      HELPER_PATH="$DEST/Contents/Frameworks/$HELPER"
+      [ -d "$HELPER_PATH" ] && codesign --force --sign - "$HELPER_PATH" 2>/dev/null || true
+    done
+    codesign --force --deep --sign - "$DEST"
+  fi
+fi
+
 LAUNCHER="$HOME/Desktop/Open Landed.command"
 cp "$DIR/Open Landed.command" "$LAUNCHER" 2>/dev/null || cp "$DIR/Install Landed.command" "$LAUNCHER"
 chmod +x "$LAUNCHER" 2>/dev/null || true

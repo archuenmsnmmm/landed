@@ -157,8 +157,8 @@ export function buildCoachingInsightsContext(
 
   const lines = top.map(
     (t) =>
-      `${t.label} suggestions (${Math.round(t.winRate * 100)}% on successful technical interviews, n=${t.count})`,
+      `${t.label} suggestions (${Math.round(t.winRate * 100)}% on successful sessions, n=${t.count})`,
   );
 
-  return `Coaching patterns from your completed technical interviews: ${lines.join("; ")}. Prefer approaches aligned with these winning patterns when relevant.`;
+  return `Coaching patterns from your completed sessions: ${lines.join("; ")}. Prefer approaches aligned with these winning patterns when relevant.`;
 }

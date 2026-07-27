@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
+import { cancelUserStripeSubscriptions } from "@/lib/cancel-user-subscriptions";
 import { requireAuth } from "@/lib/require-auth";
 import { getStripe } from "@/lib/stripe";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 /**
  * Permanently delete the authenticated user's auth account and profile data.
- * Cancels an active Stripe subscription when one exists (best effort).
+ * Cancels active Stripe subscriptions before deletion.
  */
 export async function POST(request: Request) {
   try {
@@ -22,20 +23,32 @@ export async function POST(request: Request) {
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("stripe_subscription_id")
+      .select("stripe_customer_id, stripe_subscription_id")
       .eq("id", auth.userId)
       .maybeSingle();
 
     const subscriptionId = profile?.stripe_subscription_id?.trim() || null;
-    if (subscriptionId) {
+    const customerId = profile?.stripe_customer_id?.trim() || null;
+
+    if (subscriptionId || customerId) {
       const stripe = getStripe();
-      if (stripe) {
-        try {
-          await stripe.subscriptions.cancel(subscriptionId);
-        } catch (err) {
-          // Subscription may already be canceled or missing — continue deleting.
-          console.warn("[account/delete] stripe cancel skipped:", err);
-        }
+      if (!stripe) {
+        return NextResponse.json(
+          {
+            error:
+              "Could not cancel billing before deletion. Contact support to delete your account.",
+          },
+          { status: 503 },
+        );
+      }
+
+      const cancelResult = await cancelUserStripeSubscriptions(stripe, {
+        subscriptionId,
+        customerId,
+      });
+      if (!cancelResult.ok) {
+        console.error("[account/delete] stripe cancel failed:", cancelResult.failedIds);
+        return NextResponse.json({ error: cancelResult.error }, { status: 502 });
       }
     }
 

@@ -43,7 +43,7 @@ export function SettingsPage() {
     <div className="max-w-xl">
       <PageHeader
         title="Settings"
-        description="Configure Landed for technical interviews — shortcuts, languages, and overlay display."
+        description="Configure Landed — shortcuts, languages, and overlay display."
       />
 
       <section className="space-y-3">

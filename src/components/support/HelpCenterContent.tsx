@@ -15,11 +15,11 @@ const categories = [
       },
       {
         q: "Who is Landed for?",
-        a: "Candidates in technical interviews — coding rounds, system design, take-homes, and live problem-solving — who want invisible, screen-aware help without switching windows or using a mic.",
+        a: "Anyone who wants to stop getting stuck debugging — screen-aware help while coding, fixing bugs, or working on docs, without switching windows or using a mic.",
       },
       {
         q: "Is Landed free?",
-        a: "Landed offers a free starter tier with 15 AI questions on gpt-4o-mini. Pro and Lifetime unlock unlimited questions, a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
+        a: "Landed offers a free starter tier with 10 screen asks on gpt-4o-mini. Pro and Lifetime unlock unlimited questions, a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
       },
     ],
   },
@@ -33,7 +33,7 @@ const categories = [
       },
       {
         q: "Do I need a microphone?",
-        a: "No. Landed is text-first so you can stay silent on the call. Type into the overlay and press Enter to ask. Screen Recording permission is what you need.",
+        a: "No. Landed is text-first so you can stay focused. Type into the overlay and press Enter to ask. Screen Recording permission is what you need.",
       },
       {
         q: "Is Landed a human coach?",
@@ -44,7 +44,7 @@ const categories = [
         a: "When you ask a question, Landed captures what’s on your display (coding pad, prompt, or docs) and uses that context to answer. Frames are only sent when you ask — not continuously recorded.",
       },
       {
-        q: "Can the interviewer see the overlay if I share my screen?",
+        q: "Can other people see the overlay if I share my screen?",
         a: "On Pro and Lifetime, you can hide the Landed overlay from screen share so only you see it — that’s the invisible part.",
       },
     ],
@@ -59,7 +59,7 @@ const categories = [
       },
       {
         q: "Does Landed sell or train on my data?",
-        a: "No. Landed does not sell your data or use your content to train public third-party AI models.",
+        a: "No. Landed does not sell your Personal Information and does not use your content to train Landed models or public third-party foundation models. AI providers process content to generate outputs under their terms — see Subprocessors.",
       },
       {
         q: "Where is my data stored?",
@@ -77,11 +77,11 @@ const categories = [
       },
       {
         q: "What's the difference between Pro and Lifetime?",
-        a: "Pro is a subscription (monthly or annual) with unlimited technical interview overlay, invisible on screen share, and 24/7 support. Lifetime includes the same Pro features for a one-time payment — no renewals.",
+        a: "Pro is a subscription (monthly or annual) with unlimited overlay asks, invisible on screen share, and 24/7 support. Lifetime includes the same Pro features for a one-time payment — no renewals.",
       },
       {
         q: "How do I cancel my subscription?",
-        a: "You can cancel a Pro subscription anytime from Settings → Billing or the Stripe customer portal. Lifetime is a one-time purchase and does not renew.",
+        a: "You can cancel a Pro subscription anytime from Settings → Billing or the Stripe customer portal. You keep Pro until the end of the current billing period, then free plan limits apply. Lifetime is a one-time purchase and does not renew.",
       },
     ],
   },
@@ -91,7 +91,7 @@ const categories = [
     articles: [
       {
         q: "What platforms are supported?",
-        a: "Landed is a desktop overlay for macOS. It works over technical interview apps on your screen — coding pads, browsers, Zoom, Meet, and more.",
+        a: "Landed is a desktop overlay for macOS. It works over apps on your screen — coding pads, browsers, Zoom, Meet, and more.",
       },
       {
         q: "Answers don’t mention what’s on my screen",
@@ -136,7 +136,7 @@ export function HelpCenterContent() {
           Help Center
         </h1>
         <p className="mt-4 text-[16px] leading-relaxed text-[#71717a]">
-          Find answers about setup, technical interviews, billing, and troubleshooting.
+          Find answers about setup, screen-aware assist, billing, and troubleshooting.
         </p>
 
         <div className="mt-8">

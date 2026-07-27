@@ -14,10 +14,9 @@ import {
   ListeningPill,
   MeetingBackground,
   SuggestionPill,
-  TabSharePrompt,
 } from "@/components/app/overlay-ui";
 import { useLandedAI } from "@/hooks/useLandedAI";
-import { useLandedSession, type SessionMode } from "@/hooks/useLandedSession";
+import { useLandedSession } from "@/hooks/useLandedSession";
 import { lightPillTheme } from "@/lib/pill-theme";
 import { isDirectQuestion } from "@/lib/text-utils";
 import type { TranscriptLine } from "@/types/landed";
@@ -36,8 +35,6 @@ export function LandedApp() {
   const platform = useDownloadPlatform();
   const { filename } = getDownloadInfo(platform);
   const [phase, setPhase] = useState<AppPhase>("welcome");
-  const [sessionMode, setSessionMode] = useState<SessionMode>("live");
-  const [listening, setListening] = useState(true);
   const [suggestionVisible, setSuggestionVisible] = useState(false);
   const [suggestionMounted, setSuggestionMounted] = useState(false);
   const [activeSuggestion, setActiveSuggestion] = useState("");
@@ -45,8 +42,7 @@ export function LandedApp() {
   const [showFollowUps, setShowFollowUps] = useState(false);
   const [sessionLines, setSessionLines] = useState<TranscriptLine[]>([]);
 
-  const audioActive = phase === "active" && listening;
-  const session = useLandedSession(audioActive, sessionMode);
+  const session = useLandedSession(phase === "active");
   const {
     suggestion,
     followUps,
@@ -85,7 +81,7 @@ export function LandedApp() {
   }, []);
 
   useEffect(() => {
-    if (phase !== "active" || !listening) return;
+    if (phase !== "active") return;
 
     const last = session.lines[session.lines.length - 1];
     if (!last || last.speaker !== "Prospect") return;
@@ -99,21 +95,18 @@ export function LandedApp() {
         });
       }
     });
-  }, [phase, listening, session.lines, fetchSuggestion, showSuggestion]);
+  }, [phase, session.lines, fetchSuggestion, showSuggestion]);
 
-  const startSession = (mode: SessionMode) => {
+  const startDemo = () => {
     session.clear();
     clearSuggestion();
-    setSessionMode(mode);
     setSessionLines([]);
     setShowFollowUps(false);
     lastProspectRef.current = null;
     setPhase("active");
-    setListening(true);
   };
 
   const endSession = () => {
-    setListening(false);
     setSessionLines([...linesRef.current]);
     setPhase("recap");
   };
@@ -159,14 +152,14 @@ export function LandedApp() {
   if (phase === "welcome") {
     return (
       <div className="relative min-h-screen overflow-hidden">
-        <MeetingBackground mode="live" />
+        <MeetingBackground />
         <div className="relative z-10 flex min-h-screen flex-col">
           <header className="flex items-center justify-between px-6 py-4">
             <Link href="/" className="flex items-center">
               <LandedLogo variant="wordmark" tone="light" className="h-7 w-auto" />
             </Link>
             <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs text-white/50 backdrop-blur-sm">
-              Screen · text · GPT
+              Web demo · no audio
             </span>
           </header>
 
@@ -177,31 +170,23 @@ export function LandedApp() {
               className="w-full max-w-md rounded-2xl border border-white/10 bg-black/40 p-8 backdrop-blur-xl"
             >
               <h1 className="text-center text-2xl font-semibold tracking-tight text-white md:text-3xl">
-                Landed — technical interview AI
+                Landed — never have to debug again
               </h1>
               <p className="mt-3 text-center text-[14px] leading-relaxed text-white/55">
-                For the full experience — see your screen and ask in text — download the
-                desktop app. The web demo is a lighter preview.
+                This preview uses a scripted conversation — no microphone or call audio.
+                Download the desktop app to ask about what&apos;s on your screen.
               </p>
 
               <button
                 type="button"
-                onClick={() => startSession("live")}
+                onClick={startDemo}
                 className="mt-8 w-full rounded-full bg-white py-3 text-[15px] font-medium text-zinc-900 transition hover:bg-zinc-100"
-              >
-                Start session
-              </button>
-
-              <button
-                type="button"
-                onClick={() => startSession("demo")}
-                className="mt-3 w-full rounded-full border border-white/20 py-3 text-[15px] font-medium text-white/80 transition hover:bg-white/10"
               >
                 Try demo
               </button>
 
               <p className="mt-6 text-center text-[12px] text-white/40">
-                Native desktop app →{" "}
+                Full app →{" "}
                 <Link href="/download" className="text-landed-300 hover:text-landed-200">
                   Download {filename}
                 </Link>
@@ -219,7 +204,7 @@ export function LandedApp() {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
-      <MeetingBackground mode={sessionMode} />
+      <MeetingBackground />
 
       <div className="relative z-10 flex h-full flex-col">
         <motion.div
@@ -227,22 +212,7 @@ export function LandedApp() {
           animate={{ opacity: 1, x: 0 }}
           className="absolute left-5 top-5 flex max-w-[520px] flex-col gap-2"
         >
-          {sessionMode === "live" && !session.tabSharing && (
-            <TabSharePrompt
-              onShare={() => void session.startTabShare()}
-              error={session.tabError}
-              theme={pillTheme}
-            />
-          )}
-
-          <ListeningPill
-            listening={listening}
-            isDemo={sessionMode === "demo"}
-            tabSharing={session.tabSharing}
-            hasMic={session.hasMic}
-            micError={session.micError}
-            theme={pillTheme}
-          />
+          <ListeningPill statusText="Demo preview" theme={pillTheme} />
 
           <AnimatePresence>
             {showPill && (
@@ -279,8 +249,6 @@ export function LandedApp() {
             onAssist={handleAssist}
             onFollowUp={handleFollowUp}
             onEndSession={endSession}
-            listening={listening}
-            onToggleListening={() => setListening((v) => !v)}
             followUpLoading={followUpLoading}
             theme={pillTheme}
           />

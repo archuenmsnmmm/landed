@@ -114,7 +114,15 @@ export function PaywallPricing({
 
       <p className={`text-center text-[11px] leading-relaxed text-zinc-400 ${embedded ? "mt-4" : "mt-5"}`}>
         Pro subscriptions renew automatically until cancelled. Lifetime is billed once.
-        By upgrading you agree to our{" "}
+        New Pro and Lifetime purchases include a 14-day refund guarantee (
+        <button
+          type="button"
+          onClick={() => openLegalLink(legalLinks.refund)}
+          className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-600"
+        >
+          Refund Policy
+        </button>
+        ). By upgrading you agree to our{" "}
         <button
           type="button"
           onClick={() => openLegalLink(legalLinks.terms)}

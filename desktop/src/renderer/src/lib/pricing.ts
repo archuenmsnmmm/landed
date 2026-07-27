@@ -72,10 +72,10 @@ export function proPriceLabel(currency: BillingCurrency = DEFAULT_BILLING_CURREN
 }
 
 export const STARTER_FEATURES = [
-  "15 AI questions",
-  "Ask about the problem on your screen",
-  "No microphone required",
-  "Works over any technical interview app",
+  "10 screen asks",
+  "Ask about the bug on your screen",
+  "Type-first (mic optional for transcription)",
+  "Works over any app on your screen",
 ] as const;
 
 export const PRO_FEATURES = [
@@ -99,10 +99,10 @@ export type ProFeatureIcon = "infinity" | "check";
 
 /** Starter plan card — icon mapping for the free billing card. */
 export const STARTER_CARD_FEATURES: { icon: "check"; label: string }[] = [
-  { icon: "check", label: "15 AI questions" },
-  { icon: "check", label: "Ask about the problem on your screen" },
-  { icon: "check", label: "No microphone required" },
-  { icon: "check", label: "Works over any technical interview app" },
+  { icon: "check", label: "10 screen asks" },
+  { icon: "check", label: "Ask about the bug on your screen" },
+  { icon: "check", label: "Type-first (mic optional for transcription)" },
+  { icon: "check", label: "Works over any app on your screen" },
 ];
 
 /** Pro plan card — icon mapping for the highlighted billing card. */
@@ -142,7 +142,7 @@ export function buildPricingTiers(currency: BillingCurrency = DEFAULT_BILLING_CU
       id: "free",
       name: "Starter",
       priceLabel: "Free",
-      tagline: "Try asking about a problem on your screen.",
+      tagline: "Try asking about a bug on your screen.",
       cta: "Continue free",
       features: [...STARTER_FEATURES],
     },
@@ -151,7 +151,7 @@ export function buildPricingTiers(currency: BillingCurrency = DEFAULT_BILLING_CU
       name: "Pro",
       priceLabel: proPriceLabel(currency),
       priceSuffix: "/ month",
-      tagline: "Unlimited technical interview asks + invisible on screen share.",
+      tagline: "Unlimited debug asks + invisible on screen share.",
       cta: "Subscribe",
       includesLabel: "Everything in Starter, plus...",
       features: [...PRO_FEATURES],
@@ -160,7 +160,7 @@ export function buildPricingTiers(currency: BillingCurrency = DEFAULT_BILLING_CU
       id: "lifetime",
       name: "Lifetime",
       priceLabel: lifetime.current,
-      tagline: "Pay once. Unlimited technical interview AI forever.",
+      tagline: "Pay once. Never debug alone again.",
       cta: "Get Lifetime",
       includesLabel: "Everything in Pro, plus...",
       features: [...LIFETIME_FEATURES],

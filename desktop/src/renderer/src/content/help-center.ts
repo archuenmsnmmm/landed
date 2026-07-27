@@ -20,11 +20,11 @@ export const HELP_CATEGORIES: HelpCategory[] = [
       },
       {
         q: "Who is Landed for?",
-        a: "Candidates in technical interviews — coding rounds, system design, take-homes, and live problem-solving — who want invisible, screen-aware help without switching windows or using a mic.",
+        a: "Anyone who wants to stop getting stuck debugging — screen-aware help while coding, fixing bugs, or working on docs, without switching windows or using a mic.",
       },
       {
         q: "Is Landed free?",
-        a: "Landed offers a free starter tier with 15 AI questions on gpt-4o-mini. Pro and Lifetime unlock unlimited questions, a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
+        a: "Landed offers a free starter tier with 10 screen asks on gpt-4o-mini. Pro and Lifetime unlock unlimited questions, a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
       },
       {
         q: "How do I start my first session?",
@@ -42,11 +42,11 @@ export const HELP_CATEGORIES: HelpCategory[] = [
       },
       {
         q: "Do I need a microphone?",
-        a: "No. Landed is text-first so you can stay silent in the technical interview. Type into the overlay and press Enter (or Cmd/Ctrl + Enter) to ask.",
+        a: "No. Landed is text-first so you can stay focused. Type into the overlay and press Enter (or Cmd/Ctrl + Enter) to ask.",
       },
       {
         q: "How do I get an answer?",
-        a: "Type into the top ask bar and press Enter. Landed reads the technical interview problem on screen and streams an answer below the bar.",
+        a: "Type into the top ask bar and press Enter. Landed reads what’s on screen and streams an answer below the bar.",
       },
       {
         q: "Is Landed a human coach?",
@@ -68,14 +68,14 @@ export const HELP_CATEGORIES: HelpCategory[] = [
       },
       {
         q: "Does Landed sell or train on my data?",
-        a: "No. Landed does not sell your data or use your content to train public third-party AI models.",
+        a: "No. Landed does not sell your Personal Information and does not use your content to train Landed models or public third-party foundation models. AI providers process content to generate outputs under their terms.",
       },
       {
         q: "Where is my data stored?",
         a: "Account and session data sync to your Landed cloud workspace.",
       },
       {
-        q: "Can the interviewer see the overlay if I share my screen?",
+        q: "Can other people see the overlay if I share my screen?",
         a: "On Pro and Lifetime, enable hide-from-screen-share in Settings so only you see Landed — that’s the invisible part.",
       },
     ],
@@ -96,7 +96,7 @@ export const HELP_CATEGORIES: HelpCategory[] = [
     articles: [
       {
         q: "Answers don’t mention what’s on my screen",
-        a: "Confirm Screen Recording is enabled for Landed in System Settings → Privacy & Security, then ask again. Packaged builds use the Landed API — make sure you’re signed in. Local dev also needs OPENAI_API_KEY on the site server (or VITE_OPENAI_API_KEY for offline desktop-only testing).",
+        a: "Confirm Screen Recording is enabled for Landed in System Settings → Privacy & Security, then ask again. Make sure you’re signed in so Landed can reach the AI service.",
       },
       {
         q: "The overlay isn't appearing",
@@ -108,12 +108,12 @@ export const HELP_CATEGORIES: HelpCategory[] = [
 
 export const HELP_QUICK_TIPS = [
   {
-    title: "Ask during the technical interview",
-    body: "Type a question in the overlay and press Enter — Landed uses the coding problem on screen to answer.",
+    title: "Ask about what’s on screen",
+    body: "Type a question in the overlay and press Enter — Landed uses what’s on screen to answer.",
   },
   {
-    title: "Start before the round",
-    body: "Allow Screen Recording, then ask from the overlay — no mic needed.",
+    title: "Start Landed first",
+    body: "Allow Screen Recording. Microphone or call audio is optional for live transcription.",
   },
   {
     title: "Stay invisible on share",

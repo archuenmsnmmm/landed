@@ -8,10 +8,10 @@ import { DownloadInstallGuide } from "@/components/DownloadInstallGuide";
 const SCREENS = [
   "Login & signup (email + Google)",
   "Dashboard — sessions & activity",
-  "Technical interview overlay — ask about the problem on screen",
+  "Ask overlay — ask about the problem on screen",
   "Settings — overlay display, languages, shortcuts",
   "Billing — Free, Pro, and Lifetime plans",
-  "Invisible assist — type questions, no mic, hide from share",
+  "Invisible assist — type questions, optional mic, hide from share",
 ];
 
 export default function DownloadPage() {
@@ -21,7 +21,7 @@ export default function DownloadPage() {
       <main className="pt-14">
         <div className="mx-auto max-w-2xl px-6 py-24 md:py-32">
           <p className="text-[13px] font-medium text-landed-600">
-            Desktop app · Invisible AI for technical interviews
+            Desktop app · Never have to debug again
           </p>
           <Suspense fallback={null}>
             <DownloadPageHero />

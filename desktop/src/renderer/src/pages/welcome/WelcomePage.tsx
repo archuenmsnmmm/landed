@@ -43,7 +43,7 @@ export function WelcomePage() {
                 Welcome to Landed
               </h1>
               <p className="mt-3 min-w-0 break-words text-[15px] leading-relaxed text-zinc-500">
-                Invisible AI for technical interviews
+                Never have to debug again
               </p>
 
               <button
@@ -60,21 +60,45 @@ export function WelcomePage() {
           </SplitScreenLeftBody>
 
           <p className="min-w-0 break-words text-center text-[11px] leading-relaxed text-zinc-400">
-            By signing up, you agree to our{" "}
+            By continuing, you agree to our{" "}
             <button
               type="button"
               onClick={() => openLegalLink(legalLinks.terms)}
               className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-700"
             >
-              Terms of Service
-            </button>{" "}
-            and{" "}
+              Terms
+            </button>
+            ,{" "}
+            <button
+              type="button"
+              onClick={() => openLegalLink(legalLinks.eula)}
+              className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-700"
+            >
+              EULA
+            </button>
+            ,{" "}
             <button
               type="button"
               onClick={() => openLegalLink(legalLinks.privacy)}
               className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-700"
             >
               Privacy Policy
+            </button>
+            ,{" "}
+            <button
+              type="button"
+              onClick={() => openLegalLink(legalLinks.acceptableUse)}
+              className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-700"
+            >
+              Acceptable Use
+            </button>
+            , and{" "}
+            <button
+              type="button"
+              onClick={() => openLegalLink(legalLinks.refund)}
+              className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-700"
+            >
+              Refund Policy
             </button>
             .
           </p>

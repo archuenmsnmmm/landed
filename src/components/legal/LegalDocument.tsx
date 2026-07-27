@@ -30,7 +30,8 @@ export function LegalDocument({
               {title}
             </h1>
             <p className="mt-4 text-[14px] text-[#a1a1aa]">
-              Last updated on {LEGAL.lastUpdated}
+              Effective {LEGAL.effectiveDate} · Last updated {LEGAL.lastUpdated}{" "}
+              · Version {LEGAL.termsVersion}
             </p>
             <div className="mt-6 space-y-4 text-[15px] leading-[1.75] text-[#52525b]">
               {description}
@@ -61,8 +62,7 @@ export function LegalDocument({
                 Related policies
               </p>
               <p className="mt-2 text-[14px] text-[#71717a]">
-                Learn about our privacy practices, refund policy, and cancellation
-                terms.
+                Related Landed legal policies and disclosures.
               </p>
               <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-3">
                 {relatedLinks.map((link) => (

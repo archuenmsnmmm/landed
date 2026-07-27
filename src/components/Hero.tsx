@@ -22,7 +22,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            Give yourself an unfair advantage
+            Gain an unfair advantage
             <span
               className="mb-[0.18em] ml-[0.12em] inline-block h-[0.22em] w-[0.22em] align-baseline"
               style={{ backgroundColor: BRAND_BLUE }}
@@ -30,20 +30,11 @@ export function Hero() {
             />
           </motion.h1>
 
-          <motion.p
-            className="mt-5 max-w-[520px] text-[15px] leading-relaxed text-[#5c6b7a] sm:text-[17px] md:mt-6"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
-          >
-            The No. 1 Undetectable AI For Technical Interviews
-          </motion.p>
-
           <motion.div
             className="mt-8 flex flex-wrap items-center gap-3 md:mt-10"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.5, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
           >
             <DetectedDownloadButton className={primaryButtonClassName} />
           </motion.div>

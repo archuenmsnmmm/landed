@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
-import { LEGAL } from "@/content/legal/config";
 import { rateLimit } from "@/lib/api-rate-limit";
 import { apiErrorResponse } from "@/lib/api-errors";
+import { getContactSmtpConfig, sendContactEmail } from "@/lib/send-contact-email";
 
 const TOPICS = new Set([
   "General support",
@@ -29,8 +28,7 @@ export async function POST(request: Request) {
     });
     if (limited) return limited;
 
-    const apiKey = process.env.RESEND_API_KEY?.trim();
-    if (!apiKey) {
+    if (!getContactSmtpConfig()) {
       return NextResponse.json(
         { error: "Contact form is not configured. Please email us directly." },
         { status: 503 },
@@ -65,28 +63,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const to = process.env.CONTACT_TO_EMAIL?.trim() || LEGAL.contact.support;
-    const from =
-      process.env.CONTACT_FROM_EMAIL?.trim() ||
-      "Landed <onboarding@resend.dev>";
-
-    const resend = new Resend(apiKey);
-    const { error } = await resend.emails.send({
-      from,
-      to: [to],
-      replyTo: email,
-      subject: `[Landed] ${topic} — ${name}`,
-      text: [
-        `Name: ${name}`,
-        `Email: ${email}`,
-        `Topic: ${topic}`,
-        "",
-        message,
-      ].join("\n"),
-    });
-
-    if (error) {
-      console.error("[contact] Resend error:", error.message);
+    try {
+      await sendContactEmail({ name, email, topic, message });
+    } catch (err) {
+      console.error("[contact] SMTP error:", err);
       return NextResponse.json(
         { error: "Couldn't send your message. Please try again or email us directly." },
         { status: 502 },

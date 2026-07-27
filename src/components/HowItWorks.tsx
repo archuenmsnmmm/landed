@@ -1,18 +1,18 @@
 const steps = [
   {
-    title: "Start Landed before the round",
+    title: "Start Landed",
     description:
-      "Open the desktop app and click Start Landed. Allow Screen Recording so Landed can see the problem when you ask.",
+      "Open the desktop app and click Start Landed. Allow Screen Recording so Landed can see what’s on screen when you ask.",
   },
   {
-    title: "Ask about what’s on screen",
+    title: "Ask about what’s stuck",
     description:
-      "Type a question in the overlay — approach, edge cases, bugs, what to say next. Press Enter to send.",
+      "Type a question in the overlay — root cause, the patch, what to try next. Press Enter to send.",
   },
   {
-    title: "Stay invisible on the call",
+    title: "Stay invisible on screen share",
     description:
-      "Landed streams the answer in the overlay. On Pro, hide it from screen share so only you see it. No mic needed.",
+      "Landed streams the answer in the overlay. On Pro, hide it from screen share so only you see it. Microphone or call audio is optional for live transcription.",
   },
 ];
 
@@ -21,7 +21,7 @@ export function HowItWorks() {
     <section id="how-it-works" className="bg-white">
       <div className="mx-auto max-w-[720px] px-6 py-24 md:py-32">
         <h2 className="text-center text-[2rem] font-semibold leading-[1.15] tracking-[-0.03em] text-[#0a0a0a] md:text-[2.5rem]">
-          How Landed works in a technical interview
+          How Landed works
         </h2>
 
         <ol className="mt-16 space-y-10">

@@ -23,7 +23,7 @@ export const privacySections: LegalSection[] = [
           that we process Personal Information in the role of a processor (or a
           comparable role such as a &ldquo;service provider&rdquo; in certain
           jurisdictions) on behalf of our Customers, including where we collect
-          Customer Data on behalf of our Customers, or where our Customers
+          User Content on behalf of our Customers, or where our Customers
           otherwise collect, use, share or process Personal Information via our
           Services.
         </LegalP>
@@ -78,13 +78,17 @@ export const privacySections: LegalSection[] = [
             information.
           </LegalLi>
           <LegalLi>
-            <LegalStrong>Recordings and Other Customer Data.</LegalStrong> In
-            using our Services, our customers may submit or upload, or instruct
-            Landed to collect, audio recordings, transcriptions, screen captures,
-            seek customer support, or provide other Customer Data (defined in
-            our Terms of Service) to us. Our use of and processing of Customer
-            Data is governed by our Terms of Service or other services agreement
-            with the Customer.
+            <LegalStrong>Recordings and Other User Content.</LegalStrong> In
+            using our Services, you or our Customers may submit or upload, or
+            instruct Landed to collect, screen captures, microphone or call
+            audio, transcriptions, session history, knowledge documents, support
+            messages, or other{" "}
+            <LegalLink href={`${LEGAL_ROUTES.terms}#user-content`}>
+              User Content
+            </LegalLink>{" "}
+            (as defined in our Terms of Service). Our use and processing of User
+            Content is governed by our Terms of Service or other services
+            agreement with the Customer.
           </LegalLi>
           <LegalLi>
             <LegalStrong>Business Contact Information.</LegalStrong> If you are a
@@ -96,9 +100,8 @@ export const privacySections: LegalSection[] = [
           </LegalLi>
           <LegalLi>
             <LegalStrong>Other Information You Provide.</LegalStrong> We receive
-            other information from you when you choose to interact with us in
-            other ways, such as if you sign up for one of our webinars or
-            newsletters, participate in a research study or event, or otherwise
+            other information from you when you choose to interact with us, such
+            as when you email support, submit a contact form, or otherwise
             communicate with us.
           </LegalLi>
         </LegalUl>
@@ -151,23 +154,9 @@ export const privacySections: LegalSection[] = [
             provider to allow you to log in.
           </LegalLi>
           <LegalLi>
-            <LegalStrong>Marketing Information.</LegalStrong> We may receive
-            marketing or demographic information about you from third parties or
-            partners, for example, data about your organization or industry or
-            other public information from sources like social media or online
-            professional profiles.
-          </LegalLi>
-          <LegalLi>
             <LegalStrong>Service Providers.</LegalStrong> We may receive
-            information from our service providers, who help us operate our
-            business.
-          </LegalLi>
-          <LegalLi>
-            <LegalStrong>Information from Other Sources.</LegalStrong> We may
-            obtain information from other sources, including publicly available
-            sources, third-party data providers, brand partnerships, and
-            third-party integrations you consent to, or through transactions
-            such as mergers and acquisitions.
+            information from our service providers (such as Stripe or analytics
+            vendors) who help us operate our business.
           </LegalLi>
         </LegalUl>
       </>
@@ -247,7 +236,11 @@ export const privacySections: LegalSection[] = [
           circumstances:
         </LegalP>
         <LegalUl>
-          <LegalLi>With our corporate affiliates and subsidiaries</LegalLi>
+          <LegalLi>
+            With contractors and service providers who help us operate the
+            Service (for example hosting, authentication, payments, analytics,
+            and AI inference)
+          </LegalLi>
           <LegalLi>
             With the applicable Customer to provide Services on their behalf. Our
             Customers are independent entities and their processing of information
@@ -255,11 +248,10 @@ export const privacySections: LegalSection[] = [
           </LegalLi>
           <LegalLi>
             With third parties that perform services to support our core business
-            functions and internal operations, which may include database
-            administrators, cloud computing services, hosting providers, payment
-            processors, advertising service providers, support and customer
-            service providers, security and fraud prevention service providers,
-            analytics providers, and audio transcription providers
+            functions and internal operations, which may include cloud hosting
+            providers, payment processors, support providers, security and fraud
+            prevention providers, analytics providers, and AI / transcription
+            providers
           </LegalLi>
           <LegalLi>To support our audit, compliance, and corporate governance functions</LegalLi>
           <LegalLi>
@@ -295,11 +287,10 @@ export const privacySections: LegalSection[] = [
         <LegalP>
           Some of the features on the Services may require the use of
           &ldquo;cookies&rdquo; — small text files that are stored on your
-          device&apos;s hard drive. We use Cookies to enable our servers to
+          device&apos;s hard drive. We use cookies to enable our servers to
           recognize your web browser and tell us how and when you visit and use
-          our Services, to remember your preferences, analyze trends, learn about
-          our user base, provide relevant advertising, and operate and improve our
-          Services.
+          our Services, to remember your preferences, measure site performance,
+          and operate and improve our Services.
         </LegalP>
         <LegalP>
           You may delete and block all cookies from our Services, but parts of the
@@ -325,9 +316,9 @@ export const privacySections: LegalSection[] = [
               "To learn how to opt out of functionality cookies using your browser settings, visit aboutcookies.org.",
             ],
             [
-              "Marketing and advertising cookies",
-              "Used to deliver targeted advertising, measure ad campaign effectiveness, and build audience profiles across platforms. These cookies may collect information about your browsing activity across different websites and services.",
-              "You can manage your marketing cookie preferences through our cookie consent banner or browser settings.",
+              "Marketing cookies",
+              "Used only with your consent to measure how visitors reach our own website (for example campaign or referral performance on landed-ai.com). We do not use these cookies to build cross-site advertising profiles or sell Personal Information.",
+              "You can manage marketing cookie preferences through our cookie consent banner or browser settings.",
             ],
           ]}
         />
@@ -349,7 +340,7 @@ export const privacySections: LegalSection[] = [
         </LegalP>
         <LegalP>
           If you have an account with us, you are responsible for keeping your
-          membership details confidential. Your account is protected by your
+          account credentials confidential. Your account is protected by your
           account password and we urge you to take steps to keep your Personal
           Information safe by not disclosing your password and by logging out of
           your account after each use. We further protect your Personal
@@ -406,12 +397,10 @@ export const privacySections: LegalSection[] = [
         </LegalP>
         <LegalP>
           We may use some of the information we collect for marketing purposes,
-          including to send you promotional communications about new Landed
-          features, products, events, or other opportunities. If you wish to stop
-          receiving these communications or to opt out of use of your information
-          for these purposes, please follow the opt-out instructions, such as
-          clicking &ldquo;Unsubscribe&rdquo; in those communications. You may
-          also change your marketing email preferences via your account settings.
+          including to send you promotional emails about new Landed features or
+          products. If you wish to stop receiving these communications, follow
+          the unsubscribe link in those emails or contact us at{" "}
+          {LEGAL.contact.privacy}.
         </LegalP>
       </>
     ),
@@ -462,11 +451,38 @@ export const privacySections: LegalSection[] = [
     title: "Region-Specific Disclosures",
     content: (
       <>
-        <LegalH3>A Note to California Residents</LegalH3>
+        <LegalH3>A Note to California Residents (CCPA / CPRA)</LegalH3>
+        <LegalP>
+          If you are a California resident, the California Consumer Privacy Act
+          (as amended by the CPRA) may provide you with rights to know, access,
+          correct, and delete Personal Information, and to opt out of &ldquo;sale&rdquo;
+          or &ldquo;sharing&rdquo; of Personal Information for cross-context
+          behavioral advertising.
+        </LegalP>
+        <LegalP>
+          <LegalStrong>We do not sell your Personal Information</LegalStrong> for
+          money. We do not share Personal Information for cross-context
+          behavioral advertising in a way that constitutes a &ldquo;sale&rdquo;
+          or &ldquo;share&rdquo; under the CCPA/CPRA. We do not use or disclose
+          sensitive Personal Information for purposes that require a right to
+          limit under the CPRA, beyond what is necessary to provide the Service.
+        </LegalP>
         <LegalP>
           We currently do not share Personal Information with third parties for
           their direct marketing purposes, as contemplated by California Civil Code
           Section 1798.83, without your consent.
+        </LegalP>
+        <LegalP>
+          To exercise California privacy rights, email {LEGAL.contact.privacy}
+          with the subject line &ldquo;California Privacy Request&rdquo; and
+          describe your request. We will verify your identity using information
+          associated with your account. We will not discriminate against you for
+          exercising your rights. If we recognize a legally required Global
+          Privacy Control (GPC) or similar opt-out signal on our website, we will
+          treat it as a valid opt-out of sale/sharing for that browser where
+          applicable; because we do not sell or share as defined above, this
+          typically results in no change to data practices beyond existing
+          cookie controls.
         </LegalP>
 
         <LegalH3>A Note to Nevada Residents</LegalH3>

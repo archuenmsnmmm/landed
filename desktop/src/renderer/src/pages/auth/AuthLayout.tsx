@@ -8,14 +8,15 @@ export function AuthLayout() {
         <LandedLogo variant="wordmark" tone="light" className="h-8 w-auto" />
         <div>
           <h2 className="text-3xl font-semibold leading-tight text-white">
-            Invisible AI for technical interviews
+            Never have to debug again
           </h2>
           <p className="mt-4 max-w-md text-[15px] leading-relaxed text-zinc-400">
-            Sees the problem on your screen. Answers when you type. Stays
-            hidden from screen share — no mic needed.
+            Sees the bug on your screen. Answers when you type. Stays
+            hidden from screen share. Optional mic or call audio for live
+            transcription.
           </p>
         </div>
-        <p className="text-[12px] text-zinc-600">© Landed · Built for technical interviews</p>
+        <p className="text-[12px] text-zinc-600">© Landed · Never have to debug alone</p>
       </div>
 
       <div className="flex flex-1 items-center justify-center p-8">

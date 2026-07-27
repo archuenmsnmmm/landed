@@ -57,7 +57,7 @@ function ControlBar() {
 function ResponsePanel() {
   return (
     <div
-      className="w-full max-w-[680px] rounded-[20px] p-5 text-left"
+      className="w-full max-w-[680px] rounded-[8px] p-5 text-left"
       style={{
         ...lightPillTheme.glass,
         background: "rgba(255, 255, 255, 0.72)",
@@ -76,15 +76,16 @@ function ResponsePanel() {
       <div className="space-y-3 text-[13px] leading-[1.65] text-[#3f3f46]">
         <p>
           I can see you&apos;re currently viewing the Landed website homepage.
-          This page introduces Landed as invisible AI for technical interviews —
+          This page introduces Landed as AI that helps you never have to debug alone —
           screen-aware answers when you type, hidden from screen share.
         </p>
 
         <div>
           <p className="font-semibold text-[#0a0a0a]">What is Landed?</p>
           <p className="mt-1">
-            Landed is a desktop overlay for technical interviews that captures
-            screen context when you ask, then answers in place — no microphone required.
+            Landed is a desktop overlay that captures screen context when you
+            ask, then answers in place. Type to ask; microphone is optional for
+            live transcription.
           </p>
         </div>
 
@@ -92,7 +93,7 @@ function ResponsePanel() {
           <p className="font-semibold text-[#0a0a0a]">Features:</p>
           <ol className="mt-1 list-decimal space-y-1 pl-4">
             <li>Sees the problem on your screen when you ask</li>
-            <li>Type silently — no mic needed</li>
+            <li>Type to ask about what’s on screen</li>
             <li>Invisible on screen share (Pro)</li>
           </ol>
         </div>

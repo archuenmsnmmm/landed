@@ -3,21 +3,21 @@ import Image from "next/image";
 const askHighlights = [
   {
     value: "Any app",
-    title: "Technical interview overlay",
+    title: "Screen-aware overlay",
     description:
-      "Floats over LeetCode, CoderPad, Zoom, Meet, or Docs — stay in the round without tab-switching.",
+      "Floats over coding pads, browsers, Zoom, Meet, or Docs — stay in flow without tab-switching.",
   },
   {
     value: "0",
     title: "Mic required",
     description:
-      "Type silently. Landed uses your screen for context, not your microphone — so you stay invisible on the call.",
+      "Type silently. Landed uses your screen for context, not your microphone — so you can debug without leaving your flow.",
   },
   {
     value: "On ask",
     title: "Screen context",
     description:
-      "A snapshot is captured when you send a question — not a continuous recording of the technical interview.",
+      "A snapshot is captured when you send a question — not a continuous recording of your screen.",
   },
 ];
 
@@ -28,7 +28,7 @@ export function RealTimeTranscription() {
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <AskMockup />
           <HighlightCopy
-            headline="Ask about the problem. Get the answer in place."
+            headline="Ask about the bug. Get the fix in place."
             highlights={askHighlights}
           />
         </div>
@@ -86,8 +86,8 @@ function SocialProofCopy() {
         Hundreds of candidates cracked job offers by using Landed
       </h2>
       <p className="mt-5 max-w-[420px] text-[15px] leading-[1.65] text-[#71717a] md:text-[16px]">
-        Invisible AI for technical interviews — see the problem, type the
-        question, and stay off screen share while you land the offer.
+        See the problem, type the question, and stay off screen share while you
+        land the offer.
       </p>
     </div>
   );
@@ -98,7 +98,7 @@ function AskMockup() {
     <div className="overflow-hidden rounded-[28px]">
       <Image
         src="/image.png"
-        alt="Landed overlay showing problem statement, thoughts, and solution during a technical interview"
+        alt="Landed overlay showing problem statement, thoughts, and solution from what’s on screen"
         width={1504}
         height={1416}
         draggable={false}
@@ -113,7 +113,7 @@ function OverlayInContextMockup() {
     <div className="overflow-hidden rounded-[28px]">
       <Image
         src="/image-offer.png"
-        alt="Redacted job offer letter — candidates landing offers with Landed"
+        alt="Landed helping a developer ship — never have to debug alone"
         width={1254}
         height={1254}
         draggable={false}

@@ -120,12 +120,6 @@ async function resolvePlatformDownload(
     configuredUrl.includes("github.com") ? "" : configuredUrl,
   ].filter(Boolean) as string[];
 
-  for (const candidate of blobCandidates) {
-    if (await isDownloadUrlReachable(candidate)) {
-      return redirectToDownload(candidate, fallbackFilename, "public, max-age=3600");
-    }
-  }
-
   const githubAsset = await resolveGitHubAssetUrl(platform);
   if (githubAsset) {
     return redirectToDownload(
@@ -133,6 +127,12 @@ async function resolvePlatformDownload(
       githubAsset.filename,
       "public, max-age=300",
     );
+  }
+
+  for (const candidate of blobCandidates) {
+    if (await isDownloadUrlReachable(candidate)) {
+      return redirectToDownload(candidate, fallbackFilename, "public, max-age=3600");
+    }
   }
 
   if (local) {

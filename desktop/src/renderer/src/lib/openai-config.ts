@@ -6,7 +6,7 @@ export const OPENAI_MODELS = {
   vision: "gpt-4o-mini",
   /**
    * Coding answers (Pro/Lifetime only). Free plan always uses `chat` (gpt-4o-mini).
-   * Cheapest model that still writes solid interview solutions.
+   * Cheapest model that still writes solid coding solutions.
    */
   coding: "gpt-4.1-mini",
   whisper: "whisper-1",

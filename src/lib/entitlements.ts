@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
-/** Free tier hard cap on AI questions / responses. */
-export const FREE_QUESTION_LIMIT = 15;
+/** Free tier hard cap on screen asks / AI responses. */
+export const FREE_QUESTION_LIMIT = 10;
 
 /** Legacy overlay-minute cap — used only to migrate exhausted free trials. */
 export const FREE_OVERLAY_LIMIT_SECONDS = 10 * 60;
@@ -153,7 +153,7 @@ export async function checkAiEntitlement(userId: string): Promise<EntitlementRes
   return {
     ok: false,
     status: 402,
-    error: "Free question limit reached. Upgrade to continue.",
+    error: "Free screen ask limit reached. Upgrade to continue.",
   };
 }
 
@@ -226,7 +226,7 @@ export async function consumeAiEntitlement(
       return {
         ok: false,
         status: 402,
-        error: "Free question limit reached. Upgrade to continue.",
+        error: "Free screen ask limit reached. Upgrade to continue.",
       };
     }
     return {
@@ -269,7 +269,7 @@ export async function consumeAiEntitlement(
     return {
       ok: false,
       status: 402,
-      error: "Free question limit reached. Upgrade to continue.",
+      error: "Free screen ask limit reached. Upgrade to continue.",
     };
   }
 

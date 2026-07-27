@@ -48,8 +48,7 @@ export function DownloadInstallGuide() {
           right-click Landed in Applications, choose <strong>Open</strong>, then confirm once.
         </p>
         <p className="mt-2 text-[13px] text-amber-900/70">
-          You can also double-click <strong>Install Landed.command</strong> in the DMG to install and
-          open the app automatically.
+          Drag Landed into Applications, then open it from there.
         </p>
       </div>
 
@@ -61,8 +60,7 @@ export function DownloadInstallGuide() {
           <li>
             Download and open <strong>{filename}</strong>
           </li>
-          <li>Drag Landed into Applications (or run Install Landed.command)</li>
-          <li>If macOS asks for confirmation, right-click Landed and choose Open</li>
+          <li>Drag Landed into Applications, then open it from there</li>
           <li>Open Landed — allow Screen Recording when prompted</li>
           <li>
             Click <strong>Start Landed</strong> and ask about the problem on your screen

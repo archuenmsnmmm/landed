@@ -19,9 +19,9 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
 });
 
-const title = "Landed — Invisible AI for technical interviews";
+const title = "Landed — Never have to debug again";
 const description =
-  "Invisible AI for technical interviews. Landed sees the problem on your screen, answers when you type, and stays hidden from screen share — no mic needed.";
+  "Never have to debug alone. Landed sees what’s on your screen, answers when you type, and stays hidden from screen share. Optional mic or call audio for live transcription.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -44,5 +44,5 @@ export async function fetchPriorCallContext(
     return `- ${date} (${m.title || "session"}): ${summary || "No summary"}. Open items: ${nextSteps || "none"}. Difficult questions: ${objections || "none"}. Outcome: ${m.deal_outcome ?? "open"}.`;
   });
 
-  return `PRIOR TECHNICAL INTERVIEWS WITH ${company.trim().toUpperCase()}:\n${lines.join("\n")}`;
+  return `PRIOR SESSIONS WITH ${company.trim().toUpperCase()}:\n${lines.join("\n")}`;
 }

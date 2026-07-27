@@ -25,6 +25,11 @@ export const legalLinks = {
   acceptableUse: `${baseUrl}/legal/acceptable-use`,
   cookies: `${baseUrl}/legal/cookies`,
   dpa: `${baseUrl}/legal/dpa`,
+  refund: `${baseUrl}/legal/refund`,
+  eula: `${baseUrl}/legal/eula`,
+  subprocessors: `${baseUrl}/legal/subprocessors`,
+  legalNotice: `${baseUrl}/legal/legal-notice`,
+  security: `${baseUrl}/security`,
 } as const;
 
 export function openLegalLink(url: string) {

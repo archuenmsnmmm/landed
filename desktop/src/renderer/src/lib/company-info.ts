@@ -7,9 +7,9 @@ import {
 import { BUNDLED_SALES_KNOWLEDGE } from "./sales-knowledge-base";
 import { DEFAULT_OBJECTIONS, DEFAULT_PRODUCT } from "./prompts";
 
-/** Compact candidate / interview context — stored locally per account. */
+/** Compact session context — stored locally per account. */
 export interface CompanyInfo {
-  /** Target company for the technical interview. */
+  /** Company or account name for context. */
   companyName: string;
   /** Role, stack, or problem types you want Landed to prioritise. */
   productDescription: string;
@@ -50,7 +50,7 @@ export function clampCompanyInfo(info: Partial<CompanyInfo>): CompanyInfo {
 export function getEffectiveProduct(info: CompanyInfo): string {
   const parts: string[] = [];
   if (info.companyName.trim()) {
-    parts.push(`Interviewing at ${info.companyName.trim()}`);
+    parts.push(`Working with ${info.companyName.trim()}`);
   }
   if (info.productDescription.trim()) {
     parts.push(info.productDescription.trim());
@@ -121,7 +121,7 @@ export function buildAiCoachingContext(
     uploadedBlock,
     companyBlock,
     includeBundled
-      ? `TECHNICAL INTERVIEW CONTEXT:\n${BUNDLED_SALES_KNOWLEDGE}`
+      ? `SESSION CONTEXT:\n${BUNDLED_SALES_KNOWLEDGE}`
       : "",
   ].filter(Boolean);
 

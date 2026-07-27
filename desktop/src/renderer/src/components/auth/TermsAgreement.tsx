@@ -1,4 +1,27 @@
+import type { ReactNode } from "react";
 import { legalLinks, openLegalLink } from "../../lib/legal-urls";
+
+function LegalDocButton({
+  href,
+  children,
+}: {
+  href: string;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openLegalLink(href);
+      }}
+      className="font-medium text-zinc-800 underline decoration-zinc-300 hover:decoration-zinc-500"
+    >
+      {children}
+    </button>
+  );
+}
 
 export function TermsAgreement({
   checked,
@@ -24,41 +47,18 @@ export function TermsAgreement({
       />
       <span className="text-[12px] leading-relaxed text-zinc-600">
         I agree to the{" "}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            openLegalLink(legalLinks.terms);
-          }}
-          className="font-medium text-zinc-800 underline decoration-zinc-300 hover:decoration-zinc-500"
-        >
-          Terms of Service
-        </button>
+        <LegalDocButton href={legalLinks.terms}>Terms of Service</LegalDocButton>
         ,{" "}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            openLegalLink(legalLinks.privacy);
-          }}
-          className="font-medium text-zinc-800 underline decoration-zinc-300 hover:decoration-zinc-500"
-        >
-          Privacy Policy
-        </button>
-        , and{" "}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            openLegalLink(legalLinks.acceptableUse);
-          }}
-          className="font-medium text-zinc-800 underline decoration-zinc-300 hover:decoration-zinc-500"
-        >
+        <LegalDocButton href={legalLinks.eula}>EULA</LegalDocButton>,{" "}
+        <LegalDocButton href={legalLinks.privacy}>Privacy Policy</LegalDocButton>
+        ,{" "}
+        <LegalDocButton href={legalLinks.acceptableUse}>
           Acceptable Use Policy
-        </button>
+        </LegalDocButton>
+        , and{" "}
+        <LegalDocButton href={legalLinks.refund}>
+          Refund and Cancellation Policy
+        </LegalDocButton>
         . I confirm I am at least 18 years old and understand that Landed is an{" "}
         <span className="font-medium text-zinc-800">
           AI-powered conversation, not a human

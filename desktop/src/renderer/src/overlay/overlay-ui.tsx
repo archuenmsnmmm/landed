@@ -8,8 +8,14 @@ import {
 import { legalLinks, openLegalLink } from "../lib/legal-urls";
 import { copyToClipboard } from "../lib/clipboard";
 import { parseCodingAnswer, type CodingSection } from "../lib/coding-answer";
-import type { QuickAction } from "../services/ai";
-import type { PillThemeStyles } from "../hooks/usePillBackdrop";
+type QuickAction =
+  | "say"
+  | "followup"
+  | "objection"
+  | "who"
+  | "recap"
+  | "custom"
+  | "assist";
 
 export type OverlayChatTurn = {
   id: string;
@@ -19,7 +25,6 @@ export type OverlayChatTurn = {
   viewedScreen?: boolean;
 };
 
-export { pickAutoAction } from "../services/transcript";
 export type { PillThemeStyles } from "../hooks/usePillBackdrop";
 
 export const QUICK_ACTIONS: {
@@ -180,7 +185,7 @@ export function ListeningPill({
   const statusText = (() => {
     if (error === "mic-optional") return "Listening…";
     if (error === "screen-blocked") return "Call audio blocked";
-    if (error === "no-api-key") return "AI key missing";
+    if (error === "no-api-key") return "Pro required for call audio";
     if (error) return "Mic blocked";
     if (!listening) return "Paused";
     return "Listening…";
@@ -269,7 +274,7 @@ export function ListeningPill({
                 Security → Screen Recording (needed so Landed can see your screen), then restart your session.
               </>
             ) : error === "no-api-key" ? (
-              <>Landed needs an OpenAI API key to transcribe speech. Add it in desktop/.env and restart.</>
+              <>Live call-audio transcription requires Pro. Upgrade in Settings → Billing, or use mic mode with free Web Speech captions.</>
             ) : (
               <>
                 System Settings → Privacy &amp; Security → Microphone → turn on{" "}
@@ -359,7 +364,7 @@ export function SuggestionPill({
 
   return (
     <div
-      className={`overlay-glass overlay-pill-text no-drag w-full overflow-hidden rounded-[20px] transition-opacity duration-700 ease-out ${
+      className={`overlay-glass overlay-pill-text no-drag w-full overflow-hidden rounded-[8px] transition-opacity duration-700 ease-out ${
         fading ? "opacity-40" : "opacity-100"
       }`}
       style={pillTheme.glass}
@@ -480,11 +485,30 @@ const USER_PILL_BLUE =
 
 function formatCodingHeading(raw: string): string {
   const key = raw.trim().toLowerCase();
-  if (key === "problem") return "Problem Statement";
+  if (key === "problem") return "Analyzing Problem";
   if (key === "my thoughts") return "My Thoughts";
-  if (key === "solution") return "Solution";
+  if (key === "solution" || key === "code") return "Code";
   if (key === "complexity") return "Complexity";
   return raw.trim();
+}
+
+type CodingBlock = { title: string; body: CodingSection[] };
+
+function groupCodingBlocks(sections: CodingSection[]): CodingBlock[] {
+  const blocks: CodingBlock[] = [];
+  for (const section of sections) {
+    if (section.type === "heading") {
+      blocks.push({ title: section.text, body: [] });
+    } else if (blocks.length > 0) {
+      blocks[blocks.length - 1].body.push(section);
+    }
+  }
+  return blocks;
+}
+
+function isCodeBlockTitle(title: string): boolean {
+  const key = title.trim().toLowerCase();
+  return key === "solution" || key === "code";
 }
 
 /** Render `**bold**` and `Label: rest` cleanly — no raw markdown. */
@@ -622,46 +646,24 @@ function highlightCodeLine(line: string): ReactNode {
   });
 }
 
-function CodingAnswerView({
-  sections,
-  loading,
+function CodingSectionBody({
+  body,
 }: {
-  sections: CodingSection[];
-  loading?: boolean;
+  body: CodingSection[];
 }) {
-  const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
-
   return (
-    <div
-      className="overlay-pill-copy space-y-5 text-[14px] font-medium leading-[1.55] tracking-[-0.01em]"
-      style={{ color: ASK_TEXT, WebkitTextFillColor: ASK_TEXT }}
-    >
-      {sections.map((section, idx) => {
-        if (section.type === "heading") {
-          return (
-            <h3
-              key={idx}
-              className={`${idx === 0 ? "pt-0" : "pt-0.5"} text-[15px] font-bold tracking-[-0.015em]`}
-              style={{ color: ASK_TEXT, WebkitTextFillColor: ASK_TEXT }}
-            >
-              {formatCodingHeading(section.text)}
-            </h3>
-          );
-        }
+    <div className="space-y-2">
+      {body.map((section, idx) => {
         if (section.type === "paragraph") {
           return (
-            <p
-              key={idx}
-              className="-mt-3"
-              style={{ color: "rgba(255,255,255,0.88)" }}
-            >
+            <p key={idx} style={{ color: "rgba(255,255,255,0.88)" }}>
               {renderAnswerText(section.text)}
             </p>
           );
         }
         if (section.type === "bullets") {
           return (
-            <ul key={idx} className="-mt-3 space-y-1.5 pl-0.5">
+            <ul key={idx} className="space-y-1.5 pl-0.5">
               {section.items.map((item, i) => (
                 <li
                   key={i}
@@ -680,50 +682,155 @@ function CodingAnswerView({
             </ul>
           );
         }
-        const lines = section.code.split("\n");
-        return (
-          <div
-            key={idx}
-            className="group relative -mt-2 overflow-hidden rounded-[12px]"
-            style={{ background: "rgba(12, 12, 16, 0.72)" }}
+        return null;
+      })}
+    </div>
+  );
+}
+
+function CodingCodePanel({
+  language,
+  code,
+  loading,
+}: {
+  language: string;
+  code: string;
+  loading?: boolean;
+}) {
+  const [copied, setCopied] = useState(false);
+  const lines = code.split("\n");
+  const langLabel =
+    language && language !== "text"
+      ? language === "cpp"
+        ? "C++"
+        : language === "csharp"
+          ? "C#"
+          : language === "javascript"
+            ? "JavaScript"
+            : language === "typescript"
+              ? "TypeScript"
+              : language === "python" || language === "py"
+                ? "Python3"
+                : language.charAt(0).toUpperCase() + language.slice(1)
+      : "Code";
+
+  return (
+    <div
+      className="group flex min-h-0 flex-col overflow-hidden rounded-[6px]"
+      style={{ background: "rgba(12, 12, 16, 0.78)" }}
+    >
+      <div
+        className="flex shrink-0 items-center justify-between border-b border-white/[0.08] px-3 py-2"
+      >
+        <div className="flex items-center gap-2">
+          <span
+            className="text-[13px] font-semibold tracking-[-0.01em]"
+            style={{ color: ASK_TEXT, WebkitTextFillColor: ASK_TEXT }}
           >
-            {!loading ? (
-              <button
-                type="button"
-                data-no-drag
-                onClick={() => {
-                  void copyToClipboard(section.code).then((ok) => {
-                    if (!ok) return;
-                    setCopiedIdx(idx);
-                    window.setTimeout(() => setCopiedIdx(null), 1600);
-                  });
-                }}
-                className="absolute right-2 top-2 z-10 cursor-pointer rounded-md px-2 py-0.5 text-[11px] font-semibold opacity-0 transition-opacity group-hover:opacity-100"
-                style={{
-                  color: ASK_TEXT,
-                  WebkitTextFillColor: ASK_TEXT,
-                  background: "rgba(255,255,255,0.10)",
-                }}
-              >
-                {copiedIdx === idx ? "Copied" : "Copy"}
-              </button>
-            ) : null}
-            <pre className="m-0 overflow-x-auto px-3.5 py-3.5 font-mono text-[12.5px] leading-[1.65]">
-              {lines.map((line, i) => (
-                <div key={i} className="flex gap-3.5">
-                  <span
-                    className="w-5 shrink-0 select-none text-right"
-                    style={{ color: CODE_GUTTER }}
-                  >
-                    {i + 1}
-                  </span>
-                  <code className="min-w-0 whitespace-pre">
-                    {highlightCodeLine(line || " ")}
-                  </code>
-                </div>
-              ))}
-            </pre>
+            Code
+          </span>
+          <span
+            className="text-[11px] font-medium"
+            style={{ color: "rgba(255,255,255,0.45)" }}
+          >
+            {langLabel}
+          </span>
+        </div>
+        {!loading ? (
+          <button
+            type="button"
+            data-no-drag
+            onClick={() => {
+              void copyToClipboard(code).then((ok) => {
+                if (!ok) return;
+                setCopied(true);
+                window.setTimeout(() => setCopied(false), 1600);
+              });
+            }}
+            className="cursor-pointer rounded-[4px] px-2 py-0.5 text-[11px] font-semibold transition-colors hover:bg-white/10"
+            style={{
+              color: ASK_TEXT,
+              WebkitTextFillColor: ASK_TEXT,
+              background: "rgba(255,255,255,0.08)",
+            }}
+          >
+            {copied ? "Copied" : "Copy"}
+          </button>
+        ) : null}
+      </div>
+      <pre className="m-0 min-h-0 flex-1 overflow-auto px-3 py-3 font-mono text-[12.5px] leading-[1.65]">
+        {lines.map((line, i) => (
+          <div key={i} className="flex gap-3.5">
+            <span
+              className="w-5 shrink-0 select-none text-right"
+              style={{ color: CODE_GUTTER }}
+            >
+              {i + 1}
+            </span>
+            <code className="min-w-0 whitespace-pre">
+              {highlightCodeLine(line || " ")}
+            </code>
           </div>
+        ))}
+      </pre>
+    </div>
+  );
+}
+
+function CodingTextSection({
+  title,
+  body,
+}: {
+  title: string;
+  body: CodingSection[];
+}) {
+  return (
+    <section className="space-y-2">
+      <h3
+        className="text-[14px] font-bold tracking-[-0.015em]"
+        style={{ color: ASK_TEXT, WebkitTextFillColor: ASK_TEXT }}
+      >
+        {formatCodingHeading(title)}
+      </h3>
+      <CodingSectionBody body={body} />
+    </section>
+  );
+}
+
+function CodingAnswerView({
+  sections,
+  loading,
+}: {
+  sections: CodingSection[];
+  loading?: boolean;
+}) {
+  const blocks = groupCodingBlocks(sections);
+
+  return (
+    <div
+      className="overlay-pill-copy space-y-4 text-[14px] font-medium leading-[1.55] tracking-[-0.01em]"
+      style={{ color: ASK_TEXT, WebkitTextFillColor: ASK_TEXT }}
+    >
+      {blocks.map((block) => {
+        const codeSection = block.body.find(
+          (s): s is Extract<CodingSection, { type: "code" }> => s.type === "code",
+        );
+        if (isCodeBlockTitle(block.title) && codeSection) {
+          return (
+            <CodingCodePanel
+              key={block.title}
+              language={codeSection.language}
+              code={codeSection.code}
+              loading={loading}
+            />
+          );
+        }
+        return (
+          <CodingTextSection
+            key={block.title}
+            title={block.title}
+            body={block.body}
+          />
         );
       })}
       {loading ? (
@@ -806,7 +913,7 @@ export function AskCommandBar({
   pendingQuestion = "",
   pendingAnswer = "",
   onOpenSettings,
-  interviewOpen = true,
+  sessionOpen = true,
 }: {
   value: string;
   onChange: (value: string) => void;
@@ -820,9 +927,9 @@ export function AskCommandBar({
   onScreenshot?: () => void;
   /** @deprecated */
   onStartOver?: () => void;
-  interviewOpen?: boolean;
+  sessionOpen?: boolean;
   /** @deprecated */
-  onStartInterview?: () => void;
+  onStartSession?: () => void;
   /** @deprecated */
   modLabel?: string;
   loading?: boolean;
@@ -853,13 +960,7 @@ export function AskCommandBar({
   const canSubmit = !!value.trim() && !loading;
   const hasPending = !!pendingQuestion.trim() || loading || !!pendingAnswer.trim();
   const showThread = chatTurns.length > 0 || hasPending;
-  const hasCoding = useMemo(() => {
-    if (pendingAnswer.trim() && parseCodingAnswer(pendingAnswer)) return true;
-    return chatTurns.some((t) => !!parseCodingAnswer(t.answer));
-  }, [chatTurns, pendingAnswer]);
-  const boxWidth = hasCoding
-    ? "w-[min(640px,calc(100vw-48px))]"
-    : "w-[min(560px,calc(100vw-48px))]";
+  const boxWidth = "w-[min(560px,calc(100vw-48px))]";
 
   // Reset manual height when the thread goes away.
   useEffect(() => {
@@ -883,10 +984,10 @@ export function AskCommandBar({
   }, [chatTurns.length, pendingQuestion]);
 
   useEffect(() => {
-    if (!interviewOpen) return;
+    if (!sessionOpen) return;
     const id = window.setTimeout(() => inputRef.current?.focus(), 40);
     return () => window.clearTimeout(id);
-  }, [interviewOpen]);
+  }, [sessionOpen]);
 
   const clampReplyHeight = (h: number) =>
     Math.round(
@@ -928,13 +1029,13 @@ export function AskCommandBar({
     }
   };
 
-  if (!interviewOpen) return null;
+  if (!sessionOpen) return null;
 
   return (
     <div className="no-drag flex w-max max-w-[calc(100vw-32px)] flex-col items-start gap-2">
       {/* Ask box — same width as reply, slightly thinner */}
       <div
-        className={`overlay-glass relative z-20 ${boxWidth} overflow-visible rounded-[20px]`}
+        className={`overlay-glass relative z-20 ${boxWidth} overflow-visible rounded-[8px]`}
         style={{ ...COMMAND_BAR_GLASS, color: ASK_TEXT }}
       >
         <form
@@ -968,7 +1069,7 @@ export function AskCommandBar({
             title="Ask"
             disabled={!canSubmit}
             data-no-drag
-            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-[10px] border transition-colors"
+            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-[6px] border transition-colors"
             style={{
               color: canSubmit ? ASK_TEXT : ASK_MUTED,
               borderColor: canSubmit
@@ -989,7 +1090,7 @@ export function AskCommandBar({
               title="Settings"
               data-no-drag
               onClick={onOpenSettings}
-              className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-[10px] border transition-colors"
+              className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-[6px] border transition-colors"
               style={{
                 color: ASK_MUTED,
                 borderColor: "rgba(255,255,255,0.10)",
@@ -1012,7 +1113,7 @@ export function AskCommandBar({
       {/* Answer reply box — same width as ask */}
       {showThread ? (
         <div
-          className={`overlay-glass relative ${boxWidth} overflow-hidden rounded-[20px]`}
+          className={`overlay-glass relative ${boxWidth} overflow-hidden rounded-[8px]`}
           style={{ ...REPLY_BOX_GLASS, color: ASK_TEXT }}
         >
           <div

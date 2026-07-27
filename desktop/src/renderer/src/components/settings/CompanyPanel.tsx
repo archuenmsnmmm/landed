@@ -86,17 +86,17 @@ export function CompanyPanel() {
 
       <section className="mb-8">
         <label
-          htmlFor="interview-context"
+          htmlFor="session-context"
           className="text-[13px] font-medium text-zinc-700"
         >
-          Technical interview context
+          Session context
         </label>
         <Textarea
-          id="interview-context"
+          id="session-context"
           className="mt-2 min-h-[220px] resize-y text-[13px] leading-relaxed"
           value={contextDraft}
           onChange={(e) => setContextDraft(e.target.value)}
-          placeholder="Describe how Landed should help in technical interviews — your stack, target roles, tone, and what to prioritise when answering about the problem on screen."
+          placeholder="Describe how Landed should help — your stack, goals, tone, and what to prioritise when answering about the problem on screen."
         />
       </section>
 

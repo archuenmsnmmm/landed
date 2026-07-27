@@ -4,6 +4,10 @@ import { getStripe } from "@/lib/stripe";
 import { subscriptionIdFromInvoice } from "@/lib/stripe-invoice";
 import { planFromStripePriceId } from "@/lib/stripe-plans";
 import {
+  subscriptionCustomerId,
+  subscriptionGrantsPaidAccess,
+} from "@/lib/stripe-subscription-access";
+import {
   recordCheckoutSessionPayment,
   recordInvoicePayment,
   recordPaymentEvent,
@@ -23,6 +27,11 @@ async function getProfilePlan(userId: string): Promise<string | null> {
   return data?.plan ?? null;
 }
 
+/**
+ * Persist plan + Stripe ids.
+ * Always keep `stripe_customer_id` when known so canceled users can still open the portal.
+ * Clear `stripe_subscription_id` when the sub no longer grants paid access → free limits.
+ */
 async function setUserPlan(
   userId: string,
   plan: string,
@@ -35,15 +44,23 @@ async function setUserPlan(
     return;
   }
 
-  const { error } = await supabase
-    .from("profiles")
-    .update({
-      plan,
-      stripe_customer_id: stripeCustomerId ?? null,
-      stripe_subscription_id: stripeSubscriptionId ?? null,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", userId);
+  const patch: {
+    plan: string;
+    stripe_subscription_id: string | null;
+    updated_at: string;
+    stripe_customer_id?: string | null;
+  } = {
+    plan,
+    stripe_subscription_id: stripeSubscriptionId ?? null,
+    updated_at: new Date().toISOString(),
+  };
+
+  // Only write customer id when we have one — never wipe it on downgrade.
+  if (stripeCustomerId) {
+    patch.stripe_customer_id = stripeCustomerId;
+  }
+
+  const { error } = await supabase.from("profiles").update(patch).eq("id", userId);
 
   if (error) console.error("[stripe] profile update failed:", error);
 }
@@ -53,33 +70,68 @@ function userIdFromMeta(meta: Stripe.Metadata | null | undefined): string | null
   return id || null;
 }
 
-async function syncSubscriptionPlan(_stripe: Stripe, sub: Stripe.Subscription) {
-  const userId = userIdFromMeta(sub.metadata);
-  if (!userId) return;
+async function userIdFromCustomerId(
+  customerId: string | null,
+): Promise<string | null> {
+  if (!customerId) return null;
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return null;
+  const { data } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("stripe_customer_id", customerId)
+    .maybeSingle();
+  return data?.id ?? null;
+}
 
-  if (sub.status === "active" || sub.status === "trialing") {
+async function resolveSubscriptionUserId(
+  sub: Stripe.Subscription,
+): Promise<string | null> {
+  return (
+    userIdFromMeta(sub.metadata) ??
+    (await userIdFromCustomerId(subscriptionCustomerId(sub)))
+  );
+}
+
+/**
+ * Sync profile from Stripe subscription state.
+ *
+ * Cancel-at-period-end: status stays `active` until period end → keep Pro.
+ * After period end / hard cancel: status no longer grants access → free limits.
+ */
+async function syncSubscriptionPlan(_stripe: Stripe, sub: Stripe.Subscription) {
+  const userId = await resolveSubscriptionUserId(sub);
+  if (!userId) {
+    console.warn(
+      "[stripe] subscription sync skipped — no userId metadata or customer match",
+      sub.id,
+    );
+    return;
+  }
+
+  const customerId = subscriptionCustomerId(sub);
+
+  if (subscriptionGrantsPaidAccess(sub)) {
     const priceId = sub.items.data[0]?.price?.id ?? "";
     const plan = planFromStripePriceId(priceId);
     await setUserPlan(
       userId,
       plan === "free" ? sub.metadata?.plan ?? "pro" : plan,
-      typeof sub.customer === "string" ? sub.customer : sub.customer?.id,
+      customerId,
       sub.id,
     );
-  } else {
-    // Lifetime is a one-time purchase — never wipe it when a subscription ends.
-    const existing = await getProfilePlan(userId);
-    if (existing === "lifetime") {
-      await setUserPlan(
-        userId,
-        "lifetime",
-        typeof sub.customer === "string" ? sub.customer : sub.customer?.id,
-        null,
-      );
-      return;
-    }
-    await setUserPlan(userId, "free", null, null);
+    return;
   }
+
+  // Lifetime is a one-time purchase — never wipe it when a subscription ends.
+  const existing = await getProfilePlan(userId);
+  if (existing === "lifetime") {
+    await setUserPlan(userId, "lifetime", customerId, null);
+    return;
+  }
+
+  // Billing period over / canceled / unpaid → free plan limits.
+  await setUserPlan(userId, "free", customerId, null);
 }
 
 export async function POST(request: Request) {
@@ -143,7 +195,7 @@ export async function POST(request: Request) {
         const subscriptionId = subscriptionIdFromInvoice(invoice);
         if (!subscriptionId) break;
         const sub = await stripe.subscriptions.retrieve(subscriptionId);
-        const userId = userIdFromMeta(sub.metadata);
+        const userId = await resolveSubscriptionUserId(sub);
         const planMeta = sub.metadata?.plan ?? "pro";
         await recordInvoicePayment(invoice, event.type, event.id, userId, planMeta);
         await syncSubscriptionPlan(stripe, sub);
@@ -171,13 +223,10 @@ export async function POST(request: Request) {
         const subscriptionId = subscriptionIdFromInvoice(invoice);
         if (!subscriptionId) break;
         const sub = await stripe.subscriptions.retrieve(subscriptionId);
-        if (sub.status !== "active" && sub.status !== "trialing") {
-          const userId = userIdFromMeta(sub.metadata);
-          if (userId) {
-            const existing = await getProfilePlan(userId);
-            if (existing === "lifetime") break;
-            await setUserPlan(userId, "free", null, null);
-          }
+        // Keep Pro during past_due / active / trialing. Only drop to free when
+        // Stripe has fully ended entitlement (canceled, unpaid, etc.).
+        if (!subscriptionGrantsPaidAccess(sub)) {
+          await syncSubscriptionPlan(stripe, sub);
         }
         break;
       }

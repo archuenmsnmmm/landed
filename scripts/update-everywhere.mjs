@@ -82,6 +82,16 @@ function hasReleaseSecrets() {
 if (!skipPackage) {
   const packageScript = hasReleaseSecrets() ? "package:mac:release" : "package:mac";
   runNpm(["run", packageScript], desktopRoot, `Build Mac installer (${packageScript})`);
+
+  const dmgPath = path.join(desktopRoot, "release", "Landed.dmg");
+  if (existsSync(dmgPath)) {
+    const verifyArgs = hasReleaseSecrets()
+      ? [dmgPath, "--notarized"]
+      : [dmgPath];
+    run("node", ["scripts/verify-mac-dmg.mjs", ...verifyArgs], {
+      label: "Verify Mac DMG signature",
+    });
+  }
 } else {
   runNpm(["run", "build"], desktopRoot, "Build desktop app");
 }
@@ -90,7 +100,17 @@ run("node", ["scripts/sync-downloads.mjs"], repoRoot, "Sync web download files")
 syncDesktopRenderer();
 
 if (!skipPackage && process.env.BLOB_READ_WRITE_TOKEN?.trim()) {
-  run("node", ["scripts/upload-download.mjs"], repoRoot, "Upload Mac DMG to Vercel Blob");
+  const blobUpload = spawnSync("node", ["scripts/upload-download.mjs"], {
+    cwd: repoRoot,
+    stdio: "inherit",
+    env: process.env,
+  });
+  if (blobUpload.status !== 0) {
+    console.warn("[update] Blob upload failed — publishing to GitHub Releases instead.");
+    run("node", ["scripts/upload-github-release.mjs"], repoRoot, "Upload Mac DMG to GitHub Releases");
+  }
+} else if (!skipPackage) {
+  run("node", ["scripts/upload-github-release.mjs"], repoRoot, "Upload Mac DMG to GitHub Releases");
 }
 
 const packagedApp = path.join(desktopRoot, "release", "mac-arm64", "Landed.app");
@@ -116,11 +136,7 @@ if (process.platform === "darwin" && existsSync(packagedApp)) {
 
 console.log("[update] Done.");
 console.log("  • Web dev downloads: public/downloads/Landed.dmg");
-if (process.env.BLOB_READ_WRITE_TOKEN?.trim()) {
-  console.log("  • Site download:     Vercel Blob (notarized DMG uploaded)");
-} else {
-  console.log("  • Site download:     run npm run upload-download after packaging");
-}
+console.log("  • Site download:     GitHub Releases (primary) + Vercel Blob when available");
 console.log("  • Static renderer:   index.html + assets/");
 console.log(`  • GitHub release:    push tag v${appVersion} to publish installers`);
 

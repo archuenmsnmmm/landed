@@ -1,10 +1,10 @@
-# Landed — AI that sees your screen (desktop app + marketing site)
+# Landed — Never have to debug again (desktop app + marketing site)
 
 ## What it does
 
-Landed is a **desktop application** that sees your screen so you can ask questions in text:
+Landed is a **desktop application** that sees your screen so you never have to debug alone:
 
-- **Ask overlay** — type about what’s on screen; no mic needed
+- **Ask overlay** — type about what’s on screen (screen-aware answers, no mic required)
 - **Settings & billing** — overlay display, Starter / Pro / Lifetime
 - **Hide from screen share** — Pro keeps the overlay private when you share
 
@@ -41,7 +41,7 @@ Or from the repo root: `npm run desktop:dev`
 | 1 | Welcome |
 | 2 | Auth (email or Google via Supabase) |
 | 3 | Soft paywall (continue free → settings) |
-| 4 | Hard paywall after 15 free AI questions |
+| 4 | Hard paywall after 10 free AI questions |
 
 ### Overlay shortcuts
 
@@ -60,6 +60,7 @@ Required for production:
 - **Supabase** — URL, anon key, service role; run `supabase db push`
 - **Stripe** — live secret key, webhook secret, and price IDs on Vercel
 - **Google OAuth** — see comments in `.env.example`
+- **Contact form** — Gmail SMTP (`SMTP_USER` + `SMTP_PASS` app password on Vercel)
 
 ## Release
 
@@ -109,7 +110,7 @@ Windows installers ship from Desktop Release (`Landed-Setup.exe`) or local `npm 
 **Smoke test**
 
 - [ ] Sign up (email + Google) → soft paywall → start session
-- [ ] Ask about a problem on screen (Starter: 15 free questions, then hard paywall)
+- [ ] Ask about a problem on screen (Starter: 10 free questions, then hard paywall)
 - [ ] Overlay shows AI disclaimer + Learn More
 - [ ] Pro / Lifetime checkout + billing portal
 - [ ] Overlay stays hidden from screen share on Pro

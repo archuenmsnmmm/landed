@@ -1,12 +1,12 @@
-/** Map HTTP failures to short overlay-safe messages (never include secrets). */
+/** Map HTTP failures to short overlay-safe messages (never include secrets or env var names). */
 export function describeOpenAIHttpFailure(status: number, body = ""): string {
   const lower = body.toLowerCase();
 
   if (status === 401 || lower.includes("incorrect api key") || lower.includes("invalid_api_key")) {
-    return "OpenAI API key is invalid or expired. Update OPENAI_API_KEY and rebuild.";
+    return "AI service authentication failed. Please try again later or contact support.";
   }
   if (status === 429 || lower.includes("rate_limit")) {
-    return "OpenAI rate limit hit. Wait a moment and try again.";
+    return "AI service is busy. Wait a moment and try again.";
   }
   if (status === 402) {
     return "Free questions used up. Upgrade to continue.";
@@ -16,7 +16,7 @@ export function describeOpenAIHttpFailure(status: number, body = ""): string {
     /openai/i.test(lower) &&
     /not configured|missing/i.test(lower)
   ) {
-    return "AI service is not configured on the server (missing OPENAI_API_KEY).";
+    return "AI service is temporarily unavailable. Please try again later.";
   }
   if (status >= 500) {
     return "AI service error. Try again in a moment.";
@@ -47,13 +47,13 @@ export function describeAiRouteFailure(status: number, body = ""): string {
       combined,
     )
   ) {
-    return "AI service is not configured on the server (missing OPENAI_API_KEY).";
+    return "AI service is temporarily unavailable. Please try again later.";
   }
   if (/incorrect api key|invalid_api_key/i.test(combined)) {
-    return "OpenAI API key is invalid or expired. Update OPENAI_API_KEY on Vercel.";
+    return "AI service authentication failed. Please try again later or contact support.";
   }
   if (status === 503 && /not configured/i.test(parsedError)) {
-    return parsedError || "A server service is not configured. Try again later.";
+    return "A server service is temporarily unavailable. Try again later.";
   }
 
   return describeOpenAIHttpFailure(status, combined);

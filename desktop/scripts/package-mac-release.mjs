@@ -95,4 +95,20 @@ const result = spawnSync("npm", ["run", "package:mac"], {
   shell: true,
 });
 
-process.exit(result.status ?? 1);
+if (result.status !== 0) {
+  const signedApp = path.join(desktopRoot, "release", "mac-arm64", "Landed.app");
+  if (existsSync(signedApp)) {
+    console.warn(
+      "[landed] electron-builder failed after signing — finishing notarization manually…\n",
+    );
+    const finalize = spawnSync("node", ["scripts/notarize-mac-app.mjs", signedApp], {
+      cwd: desktopRoot,
+      stdio: "inherit",
+      env: process.env,
+    });
+    process.exit(finalize.status ?? 1);
+  }
+  process.exit(result.status ?? 1);
+}
+
+process.exit(0);

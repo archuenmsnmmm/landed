@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LEGAL, LEGAL_ROUTES } from "@/content/legal/config";
+import {
+  LEGAL,
+  LEGAL_ROUTES,
+  legalRelatedLinks,
+} from "@/content/legal/config";
 import { subprocessors } from "@/content/legal/subprocessors";
 
 export const metadata: Metadata = {
@@ -57,15 +61,26 @@ export default function SubprocessorsPage() {
         </div>
 
         <footer className="mt-12 border-t border-[#ececef] pt-8">
-          <p className="text-[14px] text-[#71717a]">
-            Questions about subprocessors? Contact{" "}
+          <p className="text-[15px] font-semibold text-[#0a0a0a]">
+            Related policies
+          </p>
+          <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-3">
+            {legalRelatedLinks(LEGAL_ROUTES.subprocessors).map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-[14px] font-medium text-[#4b8bf5] transition-colors hover:text-[#3d7de8]"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-[14px] text-[#71717a]">
+            Questions? Contact{" "}
             <a href={`mailto:${LEGAL.contact.privacy}`} className="text-[#4b8bf5]">
               {LEGAL.contact.privacy}
             </a>
-            . See also our{" "}
-            <Link href={LEGAL_ROUTES.privacy} className="text-[#4b8bf5]">
-              Privacy Policy
-            </Link>
             .
           </p>
         </footer>

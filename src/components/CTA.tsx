@@ -24,11 +24,11 @@ export function CTA({
       <div className="relative mx-auto flex max-w-[1200px] items-center justify-between gap-12 px-6 py-24 md:py-32">
         <div className="max-w-[560px]">
           <h2 className="text-[2rem] font-semibold leading-[1.15] tracking-[-0.03em] text-[#0a0a0a] md:text-[2.5rem]">
-            Invisible AI for technical interviews.
+            Never have to debug again.
           </h2>
           <p className="mt-4 text-[16px] text-[#6b7c93] md:text-[17px]">
-            See the problem. Type the question. Stay off screen share. Download
-            Landed and walk into the next round ready.
+            See the bug. Type the question. Get the fix. Download Landed and
+            stay in flow.
           </p>
           <div className="mt-8">
             <DownloadButtons

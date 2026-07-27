@@ -1,7 +1,7 @@
 import { getSupabase } from "./supabase";
 
-/** Keep in sync with src/content/legal/config.ts */
-export const TERMS_VERSION = "2026-06-18";
+/** Keep in sync with src/content/legal/config.ts TERMS_VERSION */
+export const TERMS_VERSION = "2026-07-20";
 
 export function termsAcceptanceMetadata() {
   const acceptedAt = new Date().toISOString();

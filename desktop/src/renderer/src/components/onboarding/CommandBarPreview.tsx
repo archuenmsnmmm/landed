@@ -12,7 +12,7 @@ export function CommandBarPreview({
       }`}
     >
       <div
-        className="overflow-hidden rounded-[22px] border border-white/12 shadow-[0_12px_40px_rgba(0,0,0,0.28)]"
+        className="overflow-hidden rounded-[8px] border border-white/12 shadow-[0_12px_40px_rgba(0,0,0,0.28)]"
         style={{
           background: "#767879",
           backdropFilter: "blur(28px)",
@@ -23,7 +23,7 @@ export function CommandBarPreview({
             <span className="mr-0.5 inline-block h-[17px] w-[2px] animate-pulse bg-white/50" />
             Ask anything about your screen
           </span>
-          <span className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-white/10 bg-white/[0.04] text-[13px] text-white/30">
+          <span className="flex h-8 w-8 items-center justify-center rounded-[6px] border border-white/10 bg-white/[0.04] text-[13px] text-white/30">
             ↵
           </span>
         </div>

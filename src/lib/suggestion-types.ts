@@ -11,7 +11,6 @@ export type ContentHint =
   | "math"
   | "mcq"
   | "email"
-  | "interview"
   | "sales"
   | "general";
 
@@ -39,8 +38,8 @@ const MCQ_PATTERN =
 const EMAIL_PATTERN =
   /\b(dear |hi |hello |subject:|thanks for your email|following up on|hope this email|best regards)\b/i;
 
-const INTERVIEW_PATTERN =
-  /\b(interview|role|position|team|experience|strength|weakness|hire|cv|resume|job description|culture fit|tell me about yourself|why this company|salary)\b/i;
+const CONVERSATION_PATTERN =
+  /\b(role|position|team|experience|strength|weakness|hire|cv|resume|job description|culture fit|tell me about yourself|why this company|salary)\b/i;
 
 const SCREEN_DEV_PATTERN =
   /(?:function|const |import |export |class |def |typescript|javascript|\.tsx|\.ts|\.py|cursor|vscode|github|npm|error:|warning:|console\.|async |return |interface )/i;
@@ -61,25 +60,30 @@ export function hasReadableScreenContext(screenContent: string): boolean {
   return t.length >= 80;
 }
 
-export function hasInterviewSignal(text: string): boolean {
+export function hasConversationSignal(text: string): boolean {
   const t = normalizeTranscriptText(text);
   return (
     BEHAVIOURAL_PATTERN.test(t) ||
-    INTERVIEW_PATTERN.test(t) ||
+    CONVERSATION_PATTERN.test(t) ||
     hasObjectionSignal(t) ||
     BUYING_SIGNAL_PATTERN.test(t)
   );
 }
 
-/** @deprecated Use hasInterviewSignal */
+/** @deprecated Use hasConversationSignal */
+export function hasInterviewSignal(text: string): boolean {
+  return hasConversationSignal(text);
+}
+
+/** @deprecated Use hasConversationSignal */
 export function hasSalesSignal(text: string): boolean {
-  return hasInterviewSignal(text);
+  return hasConversationSignal(text);
 }
 
 export function detectContentHint(
   text: string,
   screenContent = "",
-  preferInterview = true,
+  preferConversation = true,
 ): ContentHint {
   const t = normalizeTranscriptText(text);
   const combined = `${t}\n${screenContent}`;
@@ -90,9 +94,9 @@ export function detectContentHint(
   }
   if (MATH_PATTERN.test(combined)) return "math";
   if (MCQ_PATTERN.test(combined)) return "mcq";
-  if (EMAIL_PATTERN.test(combined) && !preferInterview) return "email";
-  if (hasInterviewSignal(t) || isDirectQuestion(t) || preferInterview) {
-    return "interview";
+  if (EMAIL_PATTERN.test(combined) && !preferConversation) return "email";
+  if (hasConversationSignal(t) || isDirectQuestion(t) || preferConversation) {
+    return "sales";
   }
   return "general";
 }
@@ -104,14 +108,11 @@ export function maxTokensForHint(hint: ContentHint): number {
     case "math":
       return 900;
     case "behavioural":
-    case "interview":
     case "sales":
     case "mcq":
       return 700;
     case "email":
       return 500;
-    case "sales":
-      return 128;
     default:
       return 600;
   }
@@ -168,7 +169,7 @@ export function evaluateSuggestionTrigger(
   const question = isDirectQuestion(text);
   const strong = hasStrongIntent(text, input.screenContent);
   const screenUsable = hasReadableScreenContext(input.screenContent);
-  const preferInterview =
+  const preferConversation =
     input.hasSystemAudio &&
     (input.line?.speaker === "Interviewer" ||
       input.line?.speaker === "Prospect" ||
@@ -177,7 +178,7 @@ export function evaluateSuggestionTrigger(
   if (question || strong) {
     return {
       kind: "generate",
-      hint: detectContentHint(text, input.screenContent, preferInterview),
+      hint: detectContentHint(text, input.screenContent, preferConversation),
     };
   }
 

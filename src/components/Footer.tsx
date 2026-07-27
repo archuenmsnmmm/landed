@@ -20,8 +20,8 @@ type Founder = {
 };
 
 const founders: Founder[] = [
-  { role: "CEO & Founder", name: "Archie Runnicles" },
-  { role: "CFO & Co-founder", name: "Dylan Williams" },
+  { role: "Founder", name: "Archie Runnicles" },
+  { role: "Advisor", name: "Dylan Williams" },
 ];
 
 const columns: FooterColumn[] = [
@@ -45,9 +45,13 @@ const columns: FooterColumn[] = [
       { label: "Privacy Policy", href: LEGAL_ROUTES.privacy },
       { label: "Cookie Policy", href: LEGAL_ROUTES.cookies },
       { label: "Terms of Service", href: LEGAL_ROUTES.terms },
+      { label: "EULA", href: LEGAL_ROUTES.eula },
+      { label: "Refund Policy", href: LEGAL_ROUTES.refund },
       { label: "Acceptable Use", href: LEGAL_ROUTES.acceptableUse },
       { label: "Data Processing", href: LEGAL_ROUTES.dpa },
       { label: "Subprocessors", href: LEGAL_ROUTES.subprocessors },
+      { label: "Legal Notice", href: LEGAL_ROUTES.legalNotice },
+      { label: "Security", href: "/security" },
     ],
   },
 ];
@@ -100,7 +104,7 @@ export function Footer({ className = "bg-[#f7f8fa]" }: { className?: string }) {
 
               {col.title === "Resources" ? (
                 <div className="mt-8">
-                  <p className="text-[14px] font-semibold text-[#0a0a0a]">Founders</p>
+                  <p className="text-[14px] font-semibold text-[#0a0a0a]">Team</p>
                   <ul className="mt-4 space-y-3">
                     {founders.map((founder) => (
                       <li key={founder.name}>

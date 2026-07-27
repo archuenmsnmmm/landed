@@ -3,7 +3,7 @@ export function MeetingHelp() {
     <section id="product" className="border-t border-[#f0f0f2] bg-white">
       <div className="mx-auto max-w-[1080px] px-6 pb-20 pt-14 md:pb-28 md:pt-20">
         <h2 className="text-[1.85rem] font-semibold leading-[1.15] tracking-[-0.03em] text-[#0a0a0a] md:text-[2.25rem]">
-          Sees the technical interview. Answers before you freeze.
+          Sees the bug on your screen. Answers before you stall.
         </h2>
 
         <div className="mt-10 grid gap-4 lg:grid-cols-2">
@@ -25,11 +25,11 @@ function SeesCard() {
             <EyeIcon className="h-3 w-3 text-white" />
             sees
           </span>{" "}
-          the problem on your screen
+          the bug on your screen
         </h3>
         <p className="mt-2.5 max-w-[340px] text-[13px] leading-[1.55] text-white/75">
-          LeetCode, system design, docs, take-homes — Landed reads what&apos;s on
-          screen when you ask, so answers stay grounded in the round you&apos;re in.
+          Stack traces, IDEs, docs, browsers — Landed reads what&apos;s on
+          screen when you ask, so fixes stay grounded in what you&apos;re looking at.
         </p>
       </div>
 
@@ -37,7 +37,7 @@ function SeesCard() {
         <div className="flex h-20 w-28 items-center justify-center rounded-2xl border border-white/25 bg-white/10 backdrop-blur-sm">
           <EyeIcon className="h-10 w-10 text-white" />
         </div>
-        <p className="mt-4 text-[13px] font-medium text-white/85">Technical interview context on ask</p>
+        <p className="mt-4 text-[13px] font-medium text-white/85">Screen context on ask</p>
         <p className="mt-1 text-[11px] text-white/65">Frames only leave your machine when you send a question</p>
       </div>
     </div>
@@ -52,13 +52,13 @@ function AskCard() {
           Type a question and Landed{" "}
           <span className="mx-1 inline-flex items-center gap-1.5 rounded-full border border-[#e4e4e7] bg-white px-2.5 py-0.5 align-middle text-[0.9rem] font-medium text-[#0a0a0a] shadow-sm md:text-[0.95rem]">
             <PlusIcon className="h-3 w-3 text-[#4b8bf5]" />
-            answers
+            fixes
           </span>{" "}
           instantly
         </h3>
         <p className="mt-2.5 max-w-[340px] text-[13px] leading-[1.55] text-[#71717a]">
-          No microphone. Ask for the approach, the bug, or what to say next —
-          press ↵ or ⌘ Enter anytime. Stay invisible on the call.
+          Ask for the root cause, the patch, or what to try next —
+          press ↵ or ⌘ Enter anytime. Stay invisible on screen share.
         </p>
       </div>
 

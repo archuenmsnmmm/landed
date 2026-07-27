@@ -2,7 +2,7 @@
   "name": "landed-desktop",
   "version": "0.1.4",
   "private": true,
-  "description": "Landed — invisible AI for technical interviews",
+  "description": "Landed — never have to debug again",
   "main": "./out/main/index.js",
   "scripts": {
     "dev": "node scripts/prepare-dev-app.mjs && node scripts/dev.mjs",
@@ -16,6 +16,7 @@
     "package": "node scripts/ensure-icon.mjs && npm run build && electron-builder --mac --dir",
     "package:mac": "node scripts/prepare-ci-build.mjs && node scripts/ensure-icon.mjs && npm run build && electron-builder --mac",
     "package:mac:release": "node scripts/package-mac-release.mjs",
+    "notarize:mac": "node scripts/notarize-mac-app.mjs",
     "package:win": "node scripts/prepare-ci-build.mjs && node scripts/ensure-icon.mjs && npm run build && electron-builder --win",
     "fix:installed": "node scripts/sign-mac-app.mjs /Applications/Landed.app",
     "test:audio": "node scripts/test-audio-suggestions.mjs",
@@ -77,18 +78,6 @@
           "y": 220,
           "type": "link",
           "path": "/Applications"
-        },
-        {
-          "x": 130,
-          "y": 360,
-          "type": "file",
-          "path": "build/Install Landed.command"
-        },
-        {
-          "x": 410,
-          "y": 360,
-          "type": "file",
-          "path": "build/Open Landed.command"
         }
       ]
     },

@@ -181,13 +181,12 @@ if (process.defaultApp) {
 
 let dashboardWindow: BrowserWindow | null = null;
 let overlayWindow: BrowserWindow | null = null;
-let micHelperWindow: BrowserWindow | null = null;
 let isOverlayHidden = false;
 let overlayPendingShow = false;
 let contentProtection = false;
 let sessionActive = false;
 
-const FREE_QUESTION_LIMIT = 15;
+const FREE_QUESTION_LIMIT = 10;
 const FREE_OVERLAY_LIMIT_SECONDS = 10 * 60;
 const PLAN_STATE_PATH = () => path.join(app.getPath("userData"), "plan-state.json");
 
@@ -279,37 +278,6 @@ function canDisableContentProtection(state: PlanLimitsState): boolean {
     state.plan === "solo" ||
     state.plan === "undetectable"
   );
-}
-
-function consumeCallAudioSetupFlag(): boolean {
-  const flagPath = path.join(app.getPath("userData"), "use-call-audio.flag");
-  if (!fs.existsSync(flagPath)) return false;
-  try {
-    fs.unlinkSync(flagPath);
-  } catch {
-    // ignore
-  }
-  return true;
-}
-
-function runLandedAudioSetup(): boolean {
-  if (process.platform !== "darwin") return true;
-
-  const candidates = [
-    path.join(app.getAppPath(), "scripts/setup-landed-audio.swift"),
-    path.join(__dirname, "../../scripts/setup-landed-audio.swift"),
-  ];
-  const scriptPath = candidates.find((p) => fs.existsSync(p));
-  if (!scriptPath) return false;
-
-  const result = spawnSync("swift", [scriptPath], { encoding: "utf8" });
-  if (result.status === 0) {
-    console.log("[landed] Audio routing ready");
-    return true;
-  }
-
-  console.warn("[landed] Audio setup:", result.stderr || result.stdout);
-  return false;
 }
 
 function getRendererIndexPath(): string {
@@ -744,7 +712,6 @@ async function fixMicAccess(): Promise<boolean> {
   if (!granted) return false;
   dashboardWindow?.webContents.send("landed:mic-granted");
   overlayWindow?.webContents.send("landed:mic-granted");
-  micHelperWindow?.webContents.send("landed:mic-granted");
   return true;
 }
 
@@ -1117,10 +1084,6 @@ async function captureActiveScreenJpeg(): Promise<string | null> {
   const overlay = overlayWindow;
   const display = displayForCapture();
   let snapshot: OverlayCaptureSnapshot | null = null;
-  const micWasVisible =
-    !!micHelperWindow &&
-    !micHelperWindow.isDestroyed() &&
-    micHelperWindow.isVisible();
 
   try {
     if (overlay && !overlay.isDestroyed()) {
@@ -1146,9 +1109,6 @@ async function captureActiveScreenJpeg(): Promise<string | null> {
       overlay.setIgnoreMouseEvents(true, { forward: false });
       overlay.setBounds({ x: -20000, y: -20000, width: 120, height: 56 });
       overlay.hide();
-    }
-    if (micWasVisible) {
-      micHelperWindow?.hide();
     }
 
     await sleep(300);
@@ -1196,9 +1156,6 @@ async function captureActiveScreenJpeg(): Promise<string | null> {
         }
         overlay.setIgnoreMouseEvents(false);
       }
-    }
-    if (micWasVisible) {
-      micHelperWindow?.showInactive();
     }
   }
 }
@@ -1340,10 +1297,6 @@ async function withOverlayHiddenForCapture<T>(
 ): Promise<T> {
   const overlay = overlayWindow;
   let snapshot: OverlayCaptureSnapshot | null = null;
-  const micWasVisible =
-    !!micHelperWindow &&
-    !micHelperWindow.isDestroyed() &&
-    micHelperWindow.isVisible();
 
   try {
     if (overlay && !overlay.isDestroyed()) {
@@ -1367,7 +1320,6 @@ async function withOverlayHiddenForCapture<T>(
       overlay.setBounds({ x: -20000, y: -20000, width: 120, height: 56 });
       overlay.hide();
     }
-    if (micWasVisible) micHelperWindow?.hide();
 
     // Also hide the assistant dashboard so we capture the user's real screen.
     const dashboardWasVisible =
@@ -1406,7 +1358,6 @@ async function withOverlayHiddenForCapture<T>(
         overlay.setIgnoreMouseEvents(false);
       }
     }
-    if (micWasVisible) micHelperWindow?.showInactive();
   }
 }
 
@@ -1472,47 +1423,6 @@ async function sampleBackdropLuminanceAsync(rect: {
 
 function micAppDisplayName(): string {
   return "Landed";
-}
-
-function createMicHelperWindow(): BrowserWindow {
-  if (micHelperWindow) return micHelperWindow;
-
-  micHelperWindow = new BrowserWindow({
-    width: 420,
-    height: 320,
-    show: false,
-    skipTaskbar: true,
-    title: "Landed Microphone",
-    backgroundColor: "#09090b",
-    webPreferences: {
-      preload: path.join(__dirname, "../preload/index.js"),
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: false,
-      backgroundThrottling: false,
-    },
-  });
-
-  micHelperWindow.webContents.setBackgroundThrottling(false);
-
-  loadRoute(micHelperWindow, "/mic-helper");
-
-  micHelperWindow.on("closed", () => {
-    micHelperWindow = null;
-  });
-
-  return micHelperWindow;
-}
-
-function showMicHelperWindow(): void {
-  const win = createMicHelperWindow();
-  win.show();
-  win.focus();
-  win.webContents.send("landed:request-mic-permission");
-}
-
-function hideMicHelperWindow(): void {
-  micHelperWindow?.hide();
 }
 
 type PermissionKey = "accessibility" | "microphone" | "screen";
@@ -1671,48 +1581,17 @@ app.whenReady().then(async () => {
 
   ipcMain.handle("landed:get-mic-app-name", () => micAppDisplayName());
 
-  ipcMain.handle("landed:show-mic-helper", () => {
-    showMicHelperWindow();
-    return true;
-  });
+  ipcMain.handle("landed:show-mic-helper", () => true);
 
-  ipcMain.handle("landed:hide-mic-helper", () => {
-    hideMicHelperWindow();
-    return true;
-  });
+  ipcMain.handle("landed:hide-mic-helper", () => true);
 
   ipcMain.on("landed:trigger-mock", () => {
-    micHelperWindow?.webContents.send("landed:trigger-mock");
     dashboardWindow?.webContents.send("landed:trigger-mock");
   });
 
-  ipcMain.on("landed:request-live-transcript", () => {
-    micHelperWindow?.webContents.send("landed:request-live-transcript");
-    dashboardWindow?.webContents.send("landed:request-live-transcript");
-  });
-
-  /** Prefer mic-helper as transcription source; dashboard only as fallback. */
-  ipcMain.on("landed:live-transcript-push", (event, payload) => {
-    const fromMicHelper =
-      micHelperWindow &&
-      !micHelperWindow.isDestroyed() &&
-      event.sender.id === micHelperWindow.webContents.id;
-    if (!fromMicHelper && micHelperWindow && !micHelperWindow.isDestroyed()) {
-      return;
-    }
-    overlayWindow?.webContents.send("landed:live-transcript", payload);
-    dashboardWindow?.webContents.send("landed:live-transcript", payload);
-  });
-
   ipcMain.on("landed:session-listening", (_event, listening: boolean) => {
-    micHelperWindow?.webContents.send("landed:session-listening", listening);
     dashboardWindow?.webContents.send("landed:session-listening", listening);
     overlayWindow?.webContents.send("landed:session-listening", listening);
-  });
-
-  ipcMain.on("landed:clear-live-transcript", () => {
-    micHelperWindow?.webContents.send("landed:clear-live-transcript");
-    dashboardWindow?.webContents.send("landed:clear-live-transcript");
   });
 
   ipcMain.on("landed:generate-meeting-summary", (_event, payload) => {
@@ -1724,7 +1603,7 @@ app.whenReady().then(async () => {
     contentProtection,
     platform: process.platform,
     sessionActive,
-    useCallAudio: consumeCallAudioSetupFlag(),
+    useCallAudio: false,
   }));
 
   ipcMain.handle(
@@ -1773,7 +1652,6 @@ app.whenReady().then(async () => {
     if (overlayPendingShow) revealOverlay();
     if (sessionActive) {
       sendWhenReady(overlayWindow, "landed:session-started");
-      sendWhenReady(micHelperWindow, "landed:session-started");
     }
   });
 
@@ -1841,30 +1719,16 @@ app.whenReady().then(async () => {
       return false;
     }
 
-    const isDemo = Boolean(opts?.demo);
-    // Mic helper is optional until permission is granted.
-    const micGranted = isDemo ? true : false;
     sessionActive = true;
     createDashboardWindow();
-    createMicHelperWindow();
     createOverlayWindow();
-    // Stay in pill mode until the overlay renderer activates listening and
-    // switches to active mode — fullscreen transparent windows with no UI
-    // corrupt macOS compositing.
     showOverlay();
-    sendWhenReady(micHelperWindow, "landed:session-started");
     sendWhenReady(dashboardWindow, "landed:session-started");
     sendWhenReady(overlayWindow, "landed:session-started");
     sendWhenReady(dashboardWindow, "landed:navigate", "/");
-    micHelperWindow?.webContents.setBackgroundThrottling(false);
     dashboardWindow?.webContents.setBackgroundThrottling(false);
-    // Host window is settings-only; hide it while the overlay runs — unless
-    // settings was just opened (gear click racing auto-session start).
     if (!settingsVisible) {
       dashboardWindow?.hide();
-    }
-    if (micGranted) {
-      showMicHelperWindow();
     }
     return true;
   });
@@ -1873,8 +1737,6 @@ app.whenReady().then(async () => {
     sessionActive = false;
     overlayMode = "pill";
     closeOverlay();
-    hideMicHelperWindow();
-    micHelperWindow?.webContents.send("landed:session-stopped");
     dashboardWindow?.webContents.send("landed:session-stopped");
     return true;
   });
@@ -2046,7 +1908,6 @@ app.whenReady().then(async () => {
   );
 
   createDashboardWindow();
-  createMicHelperWindow();
   registerShortcuts();
 
   app.on("activate", () => {

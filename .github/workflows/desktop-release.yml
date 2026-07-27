@@ -76,7 +76,16 @@ jobs:
           fi
 
       - name: Verify Mac artifact
-        run: test -f desktop/release/Landed.dmg
+        run: |
+          test -f desktop/release/Landed.dmg
+          if [ -n "$MAC_CERT_P12_BASE64" ]; then
+            node ../scripts/verify-mac-dmg.mjs release/Landed.dmg --notarized
+          else
+            node ../scripts/verify-mac-dmg.mjs release/Landed.dmg
+          fi
+        working-directory: desktop
+        env:
+          MAC_CERT_P12_BASE64: ${{ secrets.MAC_CERT_P12_BASE64 }}
 
       - name: Upload Mac artifact
         uses: actions/upload-artifact@v4

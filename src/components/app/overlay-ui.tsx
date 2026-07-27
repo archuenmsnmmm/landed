@@ -20,32 +20,12 @@ export function LandedMark({ className = "h-5 w-5" }: { className?: string }) {
 }
 
 export function ListeningPill({
-  listening,
-  callTime,
-  isDemo = false,
-  tabSharing = false,
-  hasMic = false,
-  micError = null,
+  statusText,
   theme,
 }: {
-  listening: boolean;
-  callTime?: string;
-  isDemo?: boolean;
-  tabSharing?: boolean;
-  hasMic?: boolean;
-  micError?: string | null;
+  statusText: string;
   theme: PillThemeStyles;
 }) {
-  const statusText = (() => {
-    if (!listening) return "Paused";
-    if (micError === "not-allowed") return "Mic blocked";
-    if (isDemo) return callTime ? `Demo · ${callTime}` : "Listening…";
-    if (tabSharing && hasMic) return callTime ? `Live · ${callTime}` : "Listening…";
-    if (tabSharing) return callTime ? `Call audio · ${callTime}` : "Listening…";
-    if (hasMic) return callTime ? `Mic on · ${callTime}` : "Listening…";
-    return callTime ? `Listening · ${callTime}` : "Listening…";
-  })();
-
   return (
     <div className="overflow-hidden rounded-full" style={theme.glass}>
       <div className="flex min-w-[340px] max-w-[520px] items-center gap-3 px-3.5 py-2.5">
@@ -194,16 +174,12 @@ export function ControlButtons({
   onAssist,
   onFollowUp,
   onEndSession,
-  listening,
-  onToggleListening,
   followUpLoading,
   theme,
 }: {
   onAssist: () => void;
   onFollowUp: () => void;
   onEndSession: () => void;
-  listening: boolean;
-  onToggleListening: () => void;
   followUpLoading?: boolean;
   theme: PillThemeStyles;
 }) {
@@ -214,11 +190,10 @@ export function ControlButtons({
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="rounded-full" style={{ minWidth: 320, ...(theme.glass as CSSProperties) }}>
-        <div className="flex items-center justify-between gap-4 px-5 py-2">
+        <div className="flex items-center justify-center gap-4 px-5 py-2">
           <SideIconButton title="End session" onClick={onEndSession} bg={sideBg} border={sideBorder}>
             <svg className={`h-[18px] w-[18px] ${iconClass}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </SideIconButton>
 
@@ -238,24 +213,6 @@ export function ControlButtons({
               <LandedMark className="h-5 w-5" />
             </button>
           </div>
-
-          <SideIconButton
-            title={listening ? "Pause" : "Resume"}
-            onClick={onToggleListening}
-            bg={sideBg}
-            border={sideBorder}
-          >
-            {listening ? (
-              <svg className={`h-[18px] w-[18px] ${iconClass}`} viewBox="0 0 24 24" fill="currentColor">
-                <rect x="6" y="5" width="4.5" height="14" rx="1" />
-                <rect x="13.5" y="5" width="4.5" height="14" rx="1" />
-              </svg>
-            ) : (
-              <svg className={`h-[18px] w-[18px] translate-x-[1px] ${iconClass}`} viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l10.04-6.86a1 1 0 0 0 0-1.72L9.5 4.28A1 1 0 0 0 8 5.14z" />
-              </svg>
-            )}
-          </SideIconButton>
         </div>
       </div>
       <button
@@ -304,40 +261,7 @@ export function FollowUpPanel({
   );
 }
 
-export function TabSharePrompt({
-  onShare,
-  error,
-  theme,
-}: {
-  onShare: () => void;
-  error?: string | null;
-  theme: PillThemeStyles;
-}) {
-  return (
-    <div className="w-[340px] max-w-[520px] rounded-2xl px-4 py-3" style={theme.glass}>
-      <p className={`text-[13px] leading-snug ${theme.body}`}>
-        Share your Zoom or Meet tab with audio so Landed can hear the interviewer.
-      </p>
-      {error === "no-audio" ? (
-        <p className="mt-2 text-[12px] text-amber-700">
-          No audio in that share — pick a tab and check &quot;Share tab audio&quot;.
-        </p>
-      ) : null}
-      {error === "denied" ? (
-        <p className="mt-2 text-[12px] text-red-600">Screen share was cancelled.</p>
-      ) : null}
-      <button
-        type="button"
-        onClick={onShare}
-        className="mt-3 rounded-full bg-zinc-900 px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-zinc-800"
-      >
-        Share interview tab
-      </button>
-    </div>
-  );
-}
-
-export function MeetingBackground({ mode = "live" }: { mode?: "live" | "demo" }) {
+export function MeetingBackground() {
   return (
     <div className="absolute inset-0 bg-[#1a1a1f]">
       <div className="absolute inset-0 opacity-40">
@@ -353,7 +277,7 @@ export function MeetingBackground({ mode = "live" }: { mode?: "live" | "demo" })
       </div>
       <div className="absolute bottom-6 left-6 flex items-center gap-2 rounded-lg bg-black/40 px-3 py-1.5 text-[11px] text-white/50">
         <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
-        {mode === "demo" ? "Demo interview" : "Live interview"} · Landed overlay
+        Demo session · Landed overlay
       </div>
     </div>
   );

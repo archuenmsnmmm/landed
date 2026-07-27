@@ -6,10 +6,10 @@ import { priceForInterval, priceForLifetime } from "@/lib/pricing";
 import { useRegionalPricing } from "@/hooks/useRegionalPricing";
 
 const STARTER_FEATURES = [
-  "15 AI questions",
-  "Ask about the problem on your screen",
-  "No microphone required",
-  "Works over any technical interview app",
+  "10 screen asks",
+  "Ask about the bug on your screen",
+  "Type-first (mic optional for transcription)",
+  "Works over any app on your screen",
 ];
 
 const PRO_FEATURES = [
@@ -143,7 +143,7 @@ export function LandingPricing() {
               </div>
               <DownloadLink className={PRIMARY_BUTTON_CLASS}>Download to subscribe</DownloadLink>
               <p className="mt-4 text-[13px] text-zinc-500">
-                Unlimited technical interview assist — invisible on share.
+                Unlimited screen-aware assist — invisible on share.
               </p>
               <FeatureList
                 features={PRO_FEATURES}
@@ -169,7 +169,7 @@ export function LandingPricing() {
               </div>
               <DownloadLink className={LIFETIME_BUTTON_CLASS}>Download for Lifetime</DownloadLink>
               <p className="mt-4 text-[13px] text-white/70">
-                Pay once. Unlimited technical interview AI forever.
+                Pay once. Unlimited screen-aware AI forever.
               </p>
               <FeatureList
                 features={LIFETIME_FEATURES}

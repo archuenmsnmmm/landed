@@ -19,7 +19,7 @@ export function getMissedQualifierInsight(meeting: MeetingRecord): string | null
     return missed.text;
   }
   if (meeting.objections.length > 0) {
-    return `Interviewer asked: "${meeting.objections[0]}" — worth preparing a stronger answer for next time.`;
+    return `They asked: "${meeting.objections[0]}" — worth preparing a stronger answer for next time.`;
   }
   const improvement = meeting.summarySections?.find((s) =>
     /improve|miss|gap|follow.?up|qualif/i.test(s.heading),
@@ -31,7 +31,7 @@ export function getMissedQualifierInsight(meeting: MeetingRecord): string | null
 }
 
 export function getDealScoreLabel(score: number): string {
-  if (score >= 80) return "Strong interview";
+  if (score >= 80) return "Strong session";
   if (score >= 60) return "Solid performance";
   if (score >= 40) return "Room to improve";
   return "Keep practicing";
@@ -40,12 +40,12 @@ export function getDealScoreLabel(score: number): string {
 export function getWarmUpgradeMessage(meeting: MeetingRecord): string {
   const uses = meeting.suggestionUses ?? meeting.suggestions?.length ?? 0;
   if (uses >= 3) {
-    return `You used ${uses} suggestions in that technical interview — Pro unlocks unlimited live help every session.`;
+    return `You used ${uses} suggestions in that session — Pro unlocks unlimited live help every session.`;
   }
   if ((meeting.dealScore ?? 0) >= 60) {
-    return "Pro unlocks unlimited live help every technical interview.";
+    return "Pro unlocks unlimited live help every session.";
   }
-  return "Landed is working in your technical interviews — Pro unlocks unlimited sessions and live help.";
+  return "Landed is working in your sessions — Pro unlocks unlimited sessions and live help.";
 }
 
 export function shouldShowWarmUpgrade(

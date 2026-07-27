@@ -1,7 +1,7 @@
 {
   "name": "Landed",
   "short_name": "Landed",
-  "description": "AI that sees your screen — ask anything, no mic needed",
+  "description": "Never have to debug alone — AI that sees your screen",
   "start_url": "/app",
   "display": "standalone",
   "background_color": "#0a0a0b",

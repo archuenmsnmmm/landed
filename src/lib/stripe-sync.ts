@@ -1,5 +1,6 @@
 import type Stripe from "stripe";
 import { planFromStripePriceId } from "@/lib/stripe-plans";
+import { subscriptionGrantsPaidAccess } from "@/lib/stripe-subscription-access";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 export type StripeBillingSyncResult = {
@@ -23,7 +24,7 @@ export function isMissingBillingColumnError(error: {
 }
 
 async function planFromSubscription(sub: Stripe.Subscription): Promise<string> {
-  if (sub.status !== "active" && sub.status !== "trialing") return "free";
+  if (!subscriptionGrantsPaidAccess(sub)) return "free";
   const priceId = sub.items.data[0]?.price?.id ?? "";
   const plan = planFromStripePriceId(priceId);
   return plan === "free" ? sub.metadata?.plan ?? "pro" : plan;
@@ -73,12 +74,14 @@ export async function syncFromStripeCustomer(
     limit: 5,
   });
 
-  const active = subs.data.find((s) => s.status === "active" || s.status === "trialing");
-  if (active) {
+  // Prefer any sub that still grants Pro (active, trialing, or past_due grace),
+  // including cancel-at-period-end while Stripe status remains active.
+  const entitled = subs.data.find((s) => subscriptionGrantsPaidAccess(s));
+  if (entitled) {
     return {
-      plan: await planFromSubscription(active),
+      plan: await planFromSubscription(entitled),
       customerId,
-      subscriptionId: active.id,
+      subscriptionId: entitled.id,
     };
   }
 
@@ -87,6 +90,7 @@ export async function syncFromStripeCustomer(
 
   const canceled = subs.data[0];
   if (canceled) {
+    // Period ended / canceled → free limits, but keep customer id for portal.
     return { plan: "free", customerId, subscriptionId: null };
   }
 
@@ -139,7 +143,7 @@ export async function syncFromRecentCheckout(
     return {
       plan: await planFromSubscription(sub),
       customerId,
-      subscriptionId: sub.status === "active" || sub.status === "trialing" ? sub.id : null,
+      subscriptionId: subscriptionGrantsPaidAccess(sub) ? sub.id : null,
     };
   }
 
@@ -188,7 +192,7 @@ export async function syncFromCheckoutSession(
       userId,
       plan: await planFromSubscription(sub),
       customerId,
-      subscriptionId: sub.status === "active" || sub.status === "trialing" ? sub.id : null,
+      subscriptionId: subscriptionGrantsPaidAccess(sub) ? sub.id : null,
     };
   }
 

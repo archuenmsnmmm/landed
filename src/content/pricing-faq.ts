@@ -4,11 +4,12 @@ import {
   paidPlanPricing,
   priceForLifetime,
 } from "@/lib/pricing";
+import { LEGAL, LEGAL_ROUTES } from "@/content/legal/config";
 
 export const PRICING_FAQS = [
   {
     q: "What's included in the free Starter plan?",
-    a: "Starter includes 15 AI questions on gpt-4o-mini so you can try Landed in a practice round or real technical interview — ask about what’s on your screen. No credit card required.",
+    a: "Starter includes 10 screen asks on gpt-4o-mini so you can try Landed — ask about what’s on your screen. No credit card required.",
   },
   {
     q: "What's included in Pro?",
@@ -16,7 +17,7 @@ export const PRICING_FAQS = [
   },
   {
     q: "What's included in Lifetime?",
-    a: "Lifetime includes everything in Pro — unlimited technical interview overlay, invisible on screen share, and 24/7 support — for a one-time payment. No renewals.",
+    a: "Lifetime includes everything in Pro — unlimited overlay asks, invisible on screen share, and 24/7 support — for a one-time payment. No renewals.",
   },
   {
     q: "How does annual billing work?",
@@ -24,7 +25,7 @@ export const PRICING_FAQS = [
   },
   {
     q: "Can I upgrade or downgrade my plan?",
-    a: "Yes. Upgrade to Pro or Lifetime anytime from the Landed desktop app (Settings → Billing). Subscriptions and Lifetime cannot be purchased on the website. If you downgrade from Pro, you'll keep access until the end of your current billing period, then move back to Starter.",
+    a: "Yes. Upgrade to Pro or Lifetime anytime from the Landed desktop app (Settings → Billing). Subscriptions and Lifetime cannot be purchased on the website. If you cancel or downgrade from Pro, you'll keep Pro until the end of your current billing period, then move back to Starter free limits.",
   },
   {
     q: "What payment methods do you accept?",
@@ -32,7 +33,7 @@ export const PRICING_FAQS = [
   },
   {
     q: "Do you offer refunds?",
-    a: "If you're not satisfied within the first 14 days of a Pro subscription or Lifetime purchase, contact us at landed.support@gmail.com and we'll issue a full refund — no questions asked.",
+    a: `Yes. New Pro and Lifetime purchases include a 14-day satisfaction guarantee — email ${LEGAL.contact.support} for a full refund. See our Refund and Cancellation Policy (${LEGAL.website}${LEGAL_ROUTES.refund}) for full details.`,
   },
 ] as const;
 

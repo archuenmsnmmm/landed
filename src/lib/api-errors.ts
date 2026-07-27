@@ -19,14 +19,14 @@ export function apiErrorResponse(
     lower.includes("invalid api key")
   ) {
     return {
-      message: "OpenAI API key is invalid or expired. Update OPENAI_API_KEY.",
+      message: "AI service authentication failed. Please try again later.",
       status: 503,
     };
   }
 
   if (lower.includes("openai_api_key is not configured")) {
     return {
-      message: "OpenAI is not configured on the server.",
+      message: "AI service is temporarily unavailable. Please try again later.",
       status: 503,
     };
   }

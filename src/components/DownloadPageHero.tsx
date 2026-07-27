@@ -14,8 +14,8 @@ export function DownloadPageHero() {
         Run Landed on your Mac
       </h1>
       <p className="mt-4 text-[15px] leading-relaxed text-zinc-500">
-        The full native app for macOS — invisible AI for technical interviews.
-        Sees the problem on your screen, answers when you type, stays off screen
+        The full native app for macOS — never have to debug alone again.
+        Sees what’s on your display, answers when you type, stays off screen
         share. Or try the web app in your browser.
       </p>
 

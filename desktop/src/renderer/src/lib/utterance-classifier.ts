@@ -13,7 +13,7 @@ export type UtteranceClass =
   | "filler"
   | "rep_monologue"
   | "general"
-  /** @deprecated Legacy interview classes still accepted from API */
+  /** @deprecated Legacy utterance classes still accepted from API */
   | "difficult_question"
   | "behavioural_probe"
   | "technical_question"
@@ -139,7 +139,7 @@ export function heuristicClassifyUtterance(
 
 export const SUBPROMPTS: Record<string, string> = {
   question:
-    "Answer the interviewer's question directly for a technical interview. Max 2 short sentences the candidate can say.",
+    "Answer the question directly. Max 2 short sentences the user can say.",
   objection:
     "Acknowledge the hard part briefly, clarify constraints if needed, then give a concise technical reframe.",
   discovery_opener:
@@ -152,7 +152,7 @@ export const SUBPROMPTS: Record<string, string> = {
     "Compare approaches calmly with honest tradeoffs — never invent facts.",
   follow_up:
     "Deepen the previous answer with one concrete detail, complexity note, or example. Under 20 words.",
-  general: "Exact words or scaffold the candidate uses next — keep it tight.",
+  general: "Exact words or scaffold the user uses next — keep it tight.",
 };
 
 export function subpromptForClass(utteranceClass: UtteranceClass): string {

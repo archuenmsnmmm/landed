@@ -18,13 +18,21 @@ import {
 import { hasLocalAccountProfile } from "../../services/account-sync";
 import { useAppStore } from "../../store/useAppStore";
 import { OnboardingShell } from "../../components/onboarding/OnboardingShell";
+import { TermsAgreement } from "../../components/auth/TermsAgreement";
 import { PillButton, LandedLogo } from "../../components/ui";
 import { legalLinks, openLegalLink } from "../../lib/legal-urls";
 import { getOAuthRedirectTo } from "../../lib/oauth-redirect";
 import { LANDED_MARKETING_ORIGIN } from "../../lib/landed-urls";
 
 type Mode = "signin" | "signup";
-type Step = "welcome" | "email";
+type Step = "welcome" | "email" | "google-terms";
+
+type PendingOAuthUser = {
+  email: string;
+  name?: string;
+  id: string;
+  avatar?: string;
+};
 
 const AUTH_NOT_CONFIGURED_MESSAGE = import.meta.env.DEV
   ? "Sign-in is not configured. Add Supabase credentials to desktop/.env and restart the app."
@@ -41,6 +49,9 @@ export function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [pendingOAuthUser, setPendingOAuthUser] =
+    useState<PendingOAuthUser | null>(null);
 
   const configured = isSupabaseConfigured();
 
@@ -121,9 +132,17 @@ export function AuthPage() {
             data.user.created_at === data.user.last_sign_in_at;
           const isNew = oauthLooksNew && !hasLocalAccountProfile(u.id);
           if (isNew) {
-            await recordTermsAcceptance(u.id);
+            setTermsAccepted(false);
+            setPendingOAuthUser({
+              email: u.email,
+              name: u.name,
+              id: u.id,
+              avatar: u.avatar,
+            });
+            setStep("google-terms");
+            return;
           }
-          await afterAuth(u.email, u.name, isNew, u.id, u.avatar);
+          await afterAuth(u.email, u.name, false, u.id, u.avatar);
           return;
         }
 
@@ -147,9 +166,17 @@ export function AuthPage() {
           data.user.created_at === data.user.last_sign_in_at;
         const isNew = oauthLooksNew && !hasLocalAccountProfile(u.id);
         if (isNew) {
-          await recordTermsAcceptance(u.id);
+          setTermsAccepted(false);
+          setPendingOAuthUser({
+            email: u.email,
+            name: u.name,
+            id: u.id,
+            avatar: u.avatar,
+          });
+          setStep("google-terms");
+          return;
         }
-        await afterAuth(u.email, u.name, isNew, u.id, u.avatar);
+        await afterAuth(u.email, u.name, false, u.id, u.avatar);
       } catch (e) {
         setError(e instanceof Error ? e.message : "OAuth callback failed");
       } finally {
@@ -164,6 +191,34 @@ export function AuthPage() {
       void handleOAuthCallback(url);
     });
   }, [handleOAuthCallback]);
+
+  const handleGoogleTermsContinue = async () => {
+    if (!pendingOAuthUser) return;
+    if (!termsAccepted) {
+      setError(
+        "Please agree to the Terms, EULA, Privacy Policy, Acceptable Use Policy, and Refund Policy to continue.",
+      );
+      return;
+    }
+
+    setError(null);
+    setLoading(true);
+    try {
+      await recordTermsAcceptance(pendingOAuthUser.id);
+      await afterAuth(
+        pendingOAuthUser.email,
+        pendingOAuthUser.name,
+        true,
+        pendingOAuthUser.id,
+        pendingOAuthUser.avatar,
+      );
+      setPendingOAuthUser(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGoogle = async () => {
     setError(null);
@@ -216,6 +271,11 @@ export function AuthPage() {
         throw new Error("Enter your email address.");
       }
       if (mode === "signup") {
+        if (!termsAccepted) {
+          throw new Error(
+            "Please agree to the Terms, EULA, Privacy Policy, Acceptable Use Policy, and Refund Policy to continue.",
+          );
+        }
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -253,21 +313,45 @@ export function AuthPage() {
 
   const legalFooter = (
     <p className="min-w-0 break-words text-center text-[11px] leading-relaxed text-zinc-400">
-      By signing in, you agree to our{" "}
+      By continuing, you agree to our{" "}
       <button
         type="button"
         onClick={() => openLegalLink(legalLinks.terms)}
         className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-700"
       >
-        Terms of Service
-      </button>{" "}
-      and{" "}
+        Terms
+      </button>
+      ,{" "}
+      <button
+        type="button"
+        onClick={() => openLegalLink(legalLinks.eula)}
+        className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-700"
+      >
+        EULA
+      </button>
+      ,{" "}
       <button
         type="button"
         onClick={() => openLegalLink(legalLinks.privacy)}
         className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-700"
       >
         Privacy Policy
+      </button>
+      ,{" "}
+      <button
+        type="button"
+        onClick={() => openLegalLink(legalLinks.acceptableUse)}
+        className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-700"
+      >
+        Acceptable Use
+      </button>
+      , and{" "}
+      <button
+        type="button"
+        onClick={() => openLegalLink(legalLinks.refund)}
+        className="text-zinc-500 underline decoration-zinc-300 hover:text-zinc-700"
+      >
+        Refund Policy
       </button>
       .
     </p>
@@ -296,6 +380,42 @@ export function AuthPage() {
         >
           ← Back
         </button>
+      </OnboardingShell>
+    );
+  }
+
+  if (step === "google-terms" && pendingOAuthUser) {
+    return (
+      <OnboardingShell footer={legalFooter}>
+        <LandedLogo variant="mark" className="h-14 w-14" />
+        <h1 className="mt-5 text-[24px] font-semibold leading-tight tracking-[-0.025em] text-zinc-900">
+          One last step
+        </h1>
+        <p className="mt-2 text-[14px] text-zinc-500">
+          Review and accept our policies to finish creating your account
+        </p>
+
+        <div className="mt-7 flex w-full flex-col gap-3">
+          <TermsAgreement
+            checked={termsAccepted}
+            onChange={setTermsAccepted}
+            id="auth-google-terms"
+          />
+
+          {error ? (
+            <p className="rounded-xl bg-red-50 px-3 py-2 text-[12px] text-red-600">
+              {error}
+            </p>
+          ) : null}
+
+          <PillButton
+            type="button"
+            disabled={loading || !termsAccepted}
+            onClick={() => void handleGoogleTermsContinue()}
+          >
+            {loading ? "Please wait…" : "Continue"}
+          </PillButton>
+        </div>
       </OnboardingShell>
     );
   }
@@ -335,13 +455,25 @@ export function AuthPage() {
             className="h-[46px] w-full rounded-xl border border-zinc-200 bg-white px-4 text-[14px] text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
           />
 
+          {mode === "signup" ? (
+            <TermsAgreement
+              checked={termsAccepted}
+              onChange={setTermsAccepted}
+              id="auth-email-terms"
+            />
+          ) : null}
+
           {error ? (
             <p className="rounded-xl bg-red-50 px-3 py-2 text-[12px] text-red-600">
               {error}
             </p>
           ) : null}
 
-          <PillButton type="submit" disabled={loading} className="mt-1">
+          <PillButton
+            type="submit"
+            disabled={loading || (mode === "signup" && !termsAccepted)}
+            className="mt-1"
+          >
             {loading
               ? "Please wait…"
               : mode === "signup"
@@ -435,6 +567,8 @@ export function AuthPage() {
           type="button"
           onClick={() => {
             setStep("email");
+            setMode("signin");
+            setTermsAccepted(false);
             setError(null);
           }}
           disabled={loading}

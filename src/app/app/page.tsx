@@ -3,9 +3,9 @@ import { Suspense } from "react";
 import { LandedApp } from "@/components/app/LandedApp";
 
 export const metadata: Metadata = {
-  title: "Landed App — Invisible AI for technical interviews",
+  title: "Landed App — Never have to debug again",
   description:
-    "Invisible AI for technical interviews — type questions about what’s on your screen. No mic needed.",
+    "Never have to debug alone. Landed sees what's on your screen and answers when you type. Download the desktop app for the full experience.",
 };
 
 export default function AppPage() {

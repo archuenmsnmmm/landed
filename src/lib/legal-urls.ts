@@ -23,4 +23,10 @@ export const legalLinks = {
   privacy: legalUrl(LEGAL_ROUTES.privacy),
   acceptableUse: legalUrl(LEGAL_ROUTES.acceptableUse),
   cookies: legalUrl(LEGAL_ROUTES.cookies),
+  refund: legalUrl(LEGAL_ROUTES.refund),
+  eula: legalUrl(LEGAL_ROUTES.eula),
+  dpa: legalUrl(LEGAL_ROUTES.dpa),
+  subprocessors: legalUrl(LEGAL_ROUTES.subprocessors),
+  legalNotice: legalUrl(LEGAL_ROUTES.legalNotice),
+  security: legalUrl("/security"),
 } as const;

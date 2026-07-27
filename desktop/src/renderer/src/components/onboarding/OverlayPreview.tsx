@@ -40,7 +40,7 @@ export function OverlayPreview({
         </span>
       </div>
 
-      <div className="mt-2 w-full overflow-hidden rounded-[20px] border border-black/[0.07] bg-white/92 shadow-[0_8px_40px_rgba(0,0,0,0.10)] backdrop-blur-xl">
+      <div className="mt-2 w-full overflow-hidden rounded-[8px] border border-black/[0.07] bg-white/92 shadow-[0_8px_40px_rgba(0,0,0,0.10)] backdrop-blur-xl">
         <div className="flex flex-wrap items-center gap-x-1 px-3 py-2.5">
           {QUICK_ACTIONS.map((action, i) => (
             <span key={action.id} className="flex items-center gap-1">
@@ -74,7 +74,7 @@ export function OverlayPreview({
         </div>
 
         <div className="px-3 pb-3">
-          <div className="relative flex min-h-[88px] flex-col rounded-[14px] bg-gray-50 px-3.5 pb-2.5 pt-3 border border-black/[0.05]">
+          <div className="relative flex min-h-[88px] flex-col rounded-[6px] bg-gray-50 px-3.5 pb-2.5 pt-3 border border-black/[0.05]">
             <p className="text-[12px] leading-[1.55] text-gray-400">
               Suggestions appear automatically — or type to override,{" "}
               <KeyHint>⌘</KeyHint>

@@ -1,5 +1,5 @@
 export const DEFAULT_PRODUCT =
-  "AI screen assistant that answers questions about what’s visible on the user’s display";
+  "Never have to debug alone — AI that sees your screen and answers about what’s visible";
 
 export const DEFAULT_OBJECTIONS =
   "unclear error, missing context, wrong file open, ambiguous question";

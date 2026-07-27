@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LegalDocument } from "@/components/legal/LegalDocument";
-import { LEGAL, LEGAL_ROUTES } from "@/content/legal/config";
+import { LEGAL, LEGAL_ROUTES, legalRelatedLinks } from "@/content/legal/config";
 import { privacySections } from "@/content/legal/privacy-sections";
 
 export const metadata: Metadata = {
@@ -49,22 +49,21 @@ export default function PrivacyPage() {
       }
       highlight={
         <>
-          Landed does not sell your data or train on your data. You can email{" "}
+          We do not sell Personal Information. We do not use your content to train
+          Landed models or public third-party foundation models. Third-party AI
+          providers process content to generate outputs under their terms and our{" "}
+          <a href={LEGAL_ROUTES.subprocessors} className="font-medium underline">
+            Subprocessors
+          </a>{" "}
+          list. Email{" "}
           <a href={`mailto:${LEGAL.contact.privacy}`} className="font-medium underline">
             {LEGAL.contact.privacy}
           </a>{" "}
-          to request deletion of your account data or to ask privacy questions at
-          any time.
+          to request deletion or ask privacy questions anytime.
         </>
       }
       sections={privacySections}
-      relatedLinks={[
-        { href: LEGAL_ROUTES.terms, label: "Terms of Service" },
-        { href: LEGAL_ROUTES.cookies, label: "Cookie Policy" },
-        { href: LEGAL_ROUTES.acceptableUse, label: "Acceptable Use Policy" },
-        { href: LEGAL_ROUTES.dpa, label: "Data Processing Addendum" },
-        { href: LEGAL_ROUTES.subprocessors, label: "Subprocessors" },
-      ]}
+      relatedLinks={legalRelatedLinks(LEGAL_ROUTES.privacy)}
     />
   );
 }

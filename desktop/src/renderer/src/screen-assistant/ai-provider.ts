@@ -2,7 +2,7 @@ import { apiFetch, hasAuthenticatedApiAccess } from "../lib/api-client";
 import { codingSystemPrompt } from "../lib/coding-answer";
 import { OPENAI_LIMITS, OPENAI_MODELS } from "../lib/openai-config";
 import { describeAiRouteFailure } from "../lib/openai-failures";
-import { getOpenAIKey } from "../services/whisper";
+import { getOpenAIKey } from "../services/openai-key";
 import { useAppStore } from "../store/useAppStore";
 import type { AIResponse, AnalyzeScreenInput } from "./types";
 

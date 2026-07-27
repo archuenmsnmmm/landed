@@ -1,14 +1,14 @@
 const features = [
   {
-    title: "Sees the problem",
+    title: "Sees the bug",
     description:
-      "When you ask, Landed captures the coding pad or prompt so answers stay grounded in the technical interview.",
+      "When you ask, Landed captures the stack trace, IDE, or error so fixes stay grounded in what’s on your screen.",
     icon: "👁",
   },
   {
-    title: "No microphone needed",
+    title: "Type to ask",
     description:
-      "Type silently in the overlay. Screen Recording is the permission that matters — not a mic.",
+      "Ask in the overlay by typing. Screen Recording is required; microphone is optional for live transcription.",
     icon: "⌨",
   },
   {
@@ -31,11 +31,11 @@ export function Features() {
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl">
-            Built for technical interviews
+            Built so you never have to debug alone
           </h2>
           <div className="mx-auto my-5 h-px w-12 bg-zinc-300" />
           <p className="text-[15px] leading-relaxed text-zinc-500">
-            Invisible AI that sees the problem on your screen — and stays off theirs.
+            AI that sees the bug on your screen — and stays off theirs.
           </p>
         </div>
 
@@ -72,7 +72,7 @@ export function Stats() {
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl">
-            Built for the technical interview
+            Built to stay invisible on screen share
           </h2>
         </div>
 

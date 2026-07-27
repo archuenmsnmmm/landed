@@ -79,7 +79,7 @@ export const SUGGESTION_TAG_LABELS: Record<SuggestionTag, string> = {
   competitive: "Competitive",
   question: "Question",
   general: "General",
-  // Legacy interview tags — kept so old persisted suggestions still render a label.
+  // Legacy tags — kept so old persisted suggestions still render a label.
   star: "STAR",
   structure: "Structure",
   difficult_question: "Difficult question",

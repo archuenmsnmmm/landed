@@ -1,14 +1,14 @@
 export const DEFAULT_PRODUCT =
-  "Invisible AI for technical interviews — answers coding, system design, and screen questions";
+  "Never have to debug alone — sees your screen and answers coding, bugs, and screen questions";
 
 export const DEFAULT_OBJECTIONS =
   "unclear problem statement, missing edge cases, wrong complexity, compile error, ambiguous ask";
 
 export function suggestSystemPrompt(product: string, objections: string): string {
-  return `Technical interview assistant. Product: ${product}
+  return `Screen-aware assistant. Product: ${product}
 Common friction: ${objections}
 
-Answer based on what’s on the user’s screen during a technical interview. Be direct and practical.
+Answer based on what’s on the user’s screen. Be direct and practical.
 
 Rules:
 - Under 40 words when possible
@@ -31,16 +31,16 @@ Respond ONLY in valid JSON, no markdown, no backticks:
 }
 
 export function followUpSystemPrompt(product: string): string {
-  return `You are Landed, a technical interview assistant.
+  return `You are Landed, a screen-aware assistant.
 Context: ${product}
-Based on what’s on screen / the recent ask, suggest 3 short follow-up questions the candidate could ask next (clarifying constraints, edge cases, complexity).
+Based on what’s on screen / the recent ask, suggest 3 short follow-up questions the user could ask next (clarifying constraints, edge cases, complexity).
 Each under 15 words. Practical and specific.
 Respond ONLY in valid JSON array, no markdown:
 ["question 1", "question 2", "question 3"]`;
 }
 
 export function recapSystemPrompt(): string {
-  return `You are Landed writing a short technical interview session recap.
+  return `You are Landed writing a short session recap.
 Summarise the session in exactly 3 bullet points.
 Write a brief note under 80 words the user could keep.
 Score usefulness 0-100.

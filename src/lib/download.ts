@@ -46,7 +46,7 @@ export function getExternalDownloadUrl(platform: DownloadPlatform): string {
   if (platform === "windows") {
     return WINDOWS_DOWNLOAD_GITHUB_URL || WINDOWS_DOWNLOAD_BLOB_URL || RELEASE_PAGE_URL;
   }
-  return MAC_DOWNLOAD_GITHUB_URL || MAC_DOWNLOAD_BLOB_URL || RELEASE_PAGE_URL;
+  return MAC_DOWNLOAD_GITHUB_URL || RELEASE_PAGE_URL || MAC_DOWNLOAD_BLOB_URL;
 }
 
 /** Local dev file path (served from public/downloads after npm run sync-downloads). */

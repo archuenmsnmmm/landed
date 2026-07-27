@@ -4,7 +4,7 @@ const columns = [
   {
     title: "Screen-aware answers",
     description:
-      "Ask about the technical interview problem on your display and get a direct answer.",
+      "Ask about the problem on your display and get a direct answer.",
     icon: BoltIcon,
   },
   {
@@ -32,7 +32,7 @@ export function TeamPerformance() {
     <section id="use-cases" className="border-t border-[#f0f0f2] bg-[#fafafa]">
       <div className="mx-auto max-w-[1100px] px-6 py-24 md:py-32">
         <h2 className="mx-auto max-w-[640px] text-center text-[2rem] font-semibold leading-[1.15] tracking-[-0.03em] text-[#0a0a0a] md:text-[2.5rem]">
-          Ask about the problem. Stay in the technical interview.
+          Ask about the problem. Stay in flow.
         </h2>
 
         <div className="mt-14">

@@ -112,14 +112,15 @@ export const acceptableUseSections: LegalSection[] = [
     ),
   },
   {
-    id: "enterprise",
-    title: "Enterprise and Team Accounts",
+    id: "organization-accounts",
+    title: "Organization Accounts",
     content: (
       <>
         <LegalP>
-          Administrators of team or enterprise accounts are responsible for user
-          provisioning, permission management, and ensuring team members comply
-          with this AUP and applicable workplace policies.
+          If we offer multi-seat or organization accounts in the future,
+          administrators will be responsible for user provisioning, permission
+          management, and ensuring authorized users comply with this AUP and
+          applicable workplace policies. Until then, each account is individual.
         </LegalP>
       </>
     ),
@@ -173,9 +174,10 @@ export const cookieSections: LegalSection[] = [
           appropriate consent where required.
         </LegalP>
         <LegalP>
-          <LegalStrong>Marketing.</LegalStrong> May be used to measure campaign
-          performance. We do not use invasive cross-site tracking without
-          consent.
+          <LegalStrong>Marketing.</LegalStrong> Used only with consent to measure
+          how visitors reach our own website (for example campaign or referral
+          performance). We do not use invasive cross-site advertising trackers
+          or sell Personal Information.
         </LegalP>
       </>
     ),

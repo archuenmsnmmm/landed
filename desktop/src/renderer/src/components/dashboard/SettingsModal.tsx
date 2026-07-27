@@ -273,7 +273,7 @@ function LanguagePanel() {
           className="flex items-center justify-between gap-4 rounded-2xl px-4 py-3.5"
           style={{ background: PANEL_BG, border: `1px solid ${PANEL_BORDER}` }}
         >
-          <span className="text-[13px] text-zinc-800">Interview audio language</span>
+          <span className="text-[13px] text-zinc-800">Audio language</span>
           <select
             value={settings.meetingLanguage}
             onChange={(e) => updateSettings({ meetingLanguage: e.target.value })}
@@ -388,7 +388,12 @@ function AboutPanel() {
           [
             ["Privacy Policy", "How we handle your data", legalLinks.privacy],
             ["Terms of Service", "Rules for using Landed", legalLinks.terms],
+            ["EULA", "Desktop software license", legalLinks.eula],
+            ["Refund Policy", "Cancellations and 14-day guarantee", legalLinks.refund],
             ["Acceptable Use", "What is and isn’t allowed", legalLinks.acceptableUse],
+            ["Cookie Policy", "Cookies on the Landed website", legalLinks.cookies],
+            ["Legal Notice", "Operator and contact details", legalLinks.legalNotice],
+            ["Subprocessors", "Third parties that process data", legalLinks.subprocessors],
           ] as const
         ).map(([title, description, href]) => (
           <SettingsRow

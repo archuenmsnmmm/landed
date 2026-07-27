@@ -30,12 +30,27 @@ export const termsSections: LegalSection[] = [
           downloading the application, clicking &ldquo;Continue,&rdquo;
           &ldquo;Sign up,&rdquo; or otherwise accessing or using the Service,
           you acknowledge that you have read, understood, and agree to be bound
-          by these Terms and our{" "}
+          by these Terms, our{" "}
           <a href={LEGAL_ROUTES.privacy} className="text-landed-600 underline">
             Privacy Policy
           </a>
-          , which is incorporated by reference. If you do not agree, do not use
-          the Service.
+          , our{" "}
+          <a href={LEGAL_ROUTES.eula} className="text-landed-600 underline">
+            End User License Agreement
+          </a>
+          , our{" "}
+          <a
+            href={LEGAL_ROUTES.acceptableUse}
+            className="text-landed-600 underline"
+          >
+            Acceptable Use Policy
+          </a>
+          , and our{" "}
+          <a href={LEGAL_ROUTES.refund} className="text-landed-600 underline">
+            Refund and Cancellation Policy
+          </a>
+          , each incorporated by reference. If you do not agree, do not use the
+          Service.
         </LegalP>
         <LegalP>
           If you use the Service on behalf of a company or other legal entity,
@@ -90,11 +105,15 @@ export const termsSections: LegalSection[] = [
             grounded in what is visible on your display;
           </LegalLi>
           <LegalLi>
+            Optionally capture microphone and/or system (call) audio for live
+            transcription when you enable those features;
+          </LegalLi>
+          <LegalLi>
             Display answers and related outputs through an on-screen overlay;
           </LegalLi>
           <LegalLi>
-            Process your questions and screen context using third-party artificial
-            intelligence services to generate answers;
+            Process your questions, screen context, and audio/transcripts using
+            third-party artificial intelligence services to generate answers;
           </LegalLi>
           <LegalLi>
             Store session history, settings, and related data
@@ -120,9 +139,14 @@ export const termsSections: LegalSection[] = [
       <>
         <LegalP>
           The Service may require system permissions including accessibility,
-          screen capture, and related OS-level access. You are
-          solely responsible for granting, revoking, and managing those
-          permissions.
+          screen capture, microphone access, system/call audio access, and
+          related OS-level access. You are solely responsible for granting,
+          revoking, and managing those permissions. Audio capture is optional and
+          controlled by your settings; see our{" "}
+          <a href={LEGAL_ROUTES.privacy} className="text-landed-600 underline">
+            Privacy Policy
+          </a>{" "}
+          for how recordings and transcripts are processed.
         </LegalP>
         <LegalP>
           The Service is designed to operate alongside third-party communication
@@ -133,8 +157,8 @@ export const termsSections: LegalSection[] = [
         </LegalP>
         <LegalP>
           You are solely responsible for ensuring your use of {LEGAL.productName}
-          complies with the policies of your employer, interviewers, regulators,
-          and any platform you use during technical interviews.
+          complies with the policies of your employer, counterparts, regulators,
+          and any platform you use alongside the Service.
         </LegalP>
       </>
     ),
@@ -151,7 +175,7 @@ export const termsSections: LegalSection[] = [
             AI-GENERATED OUTPUTS MAY BE INACCURATE, INCOMPLETE, BIASED, OUTDATED,
             OR INAPPROPRIATE.
           </LegalStrong>{" "}
-          Nothing in the Service is a live human coach, interviewer, lawyer, or
+          Nothing in the Service is a live human coach, advisor, lawyer, or
           other professional. You must independently review, verify, and approve
           all suggestions before relying on or communicating them to any person.
         </LegalP>
@@ -159,12 +183,12 @@ export const termsSections: LegalSection[] = [
           Landed does not provide legal, financial, tax, medical, compliance,
           investment, or other professional advice. AI outputs are informational
           tools only. You bear full responsibility for statements made during
-          technical interviews, coding rounds, negotiations, contracts, disclosures,
+          calls, coding sessions, negotiations, contracts, disclosures,
           and regulatory communications.
         </LegalP>
         <LegalP>
-          We make no warranty that AI outputs will improve interview performance,
-          hiring outcomes, compliance, or any business result.
+          We make no warranty that AI outputs will improve performance,
+          outcomes, compliance, or any business result.
         </LegalP>
       </>
     ),
@@ -186,7 +210,7 @@ export const termsSections: LegalSection[] = [
           and contractual obligations with your employer or customers.
         </LegalP>
         <LegalP>
-          Before using {LEGAL.productName} during any technical interview or call,
+          Before using {LEGAL.productName} during any call or session,
           you must obtain all required consents and provide all required notices to
           participants. Landed does not obtain consent on your behalf.
         </LegalP>
@@ -216,10 +240,16 @@ export const termsSections: LegalSection[] = [
           applicable taxes.
         </LegalP>
         <LegalP>
-          Except where required by law, all fees are non-refundable. Downgrades
-          and cancellations take effect at the end of the current billing period
-          unless stated otherwise. Free trials, if offered, convert to paid plans
-          unless canceled before the trial ends.
+          Refunds and cancellations are governed by our{" "}
+          <a href={LEGAL_ROUTES.refund} className="text-landed-600 underline">
+            Refund and Cancellation Policy
+          </a>
+          , including a 14-day satisfaction guarantee for new Pro and Lifetime
+          purchases. Outside that guarantee (and except where required by law),
+          fees are non-refundable. Downgrades and cancellations take effect at
+          the end of the current billing period unless a refund is issued under
+          that policy. If we offer a free trial for a paid plan, it converts to
+          a paid subscription unless canceled before the trial ends.
         </LegalP>
         <LegalP>
           We may change pricing upon reasonable notice. Continued use after a
@@ -347,7 +377,7 @@ export const termsSections: LegalSection[] = [
         <LegalP>
           The Service integrates with third-party providers including, without
           limitation, authentication providers (e.g., Supabase), AI providers
-          (e.g., OpenAI), speech recognition services, cloud infrastructure,
+          (e.g., OpenAI), cloud infrastructure,
           payment processors, and OAuth providers (e.g., Google). Your use of
           those services is subject to their terms and privacy policies.
         </LegalP>
@@ -443,7 +473,7 @@ export const termsSections: LegalSection[] = [
       <>
         <LegalP>
           You will defend, indemnify, and hold harmless the Landed operator and
-          its contractors, agents, affiliates, and licensors from and against any claims, damages, losses, liabilities, costs, and expenses
+          its contractors, agents, and licensors from and against any claims, damages, losses, liabilities, costs, and expenses
           (including reasonable attorneys&apos; fees) arising out of or related
           to:
         </LegalP>
@@ -458,7 +488,7 @@ export const termsSections: LegalSection[] = [
             or AI-assisted communications;
           </LegalLi>
           <LegalLi>
-            Disputes with employers, interviewers, or conversation
+            Disputes with employers, counterparts, or conversation
             participants relating to your use of the Service.
           </LegalLi>
         </LegalUl>
@@ -581,7 +611,9 @@ export const termsSections: LegalSection[] = [
     content: (
       <>
         <LegalP>
-          These Terms, together with the Privacy Policy, Acceptable Use Policy,
+          These Terms, together with the Privacy Policy, End User License
+          Agreement, Acceptable Use Policy, Refund and Cancellation Policy,
+          Cookie Policy (for the Site), any applicable Data Processing Addendum,
           and any order forms or supplemental terms, constitute the entire
           agreement between you and Landed regarding the Service.
         </LegalP>

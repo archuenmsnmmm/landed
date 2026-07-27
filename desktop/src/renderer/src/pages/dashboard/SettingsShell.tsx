@@ -91,11 +91,6 @@ export function SettingsShell() {
       void rehydrateAppStoreFromStorage().then(() => {
         syncPlanLimitsToMain();
       });
-      void window.landed?.getSettings?.().then((settings) => {
-        if (settings.useCallAudio) {
-          useAppStore.getState().setAudioCaptureMode("auto");
-        }
-      });
     })();
 
     return () => {

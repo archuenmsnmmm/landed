@@ -1,4 +1,7 @@
 import {
+  ARCHIVED_STRIPE_LIFETIME_PRICE_IDS,
+  ARCHIVED_STRIPE_PRO_ANNUAL_PRICE_IDS,
+  ARCHIVED_STRIPE_PRO_MONTHLY_PRICE_IDS,
   stripeLifetimePriceId,
   stripeProAnnualPriceId,
   stripeProMonthlyPriceId,
@@ -13,12 +16,17 @@ function allProPriceIds(): string[] {
   const annual = stripeProAnnualPriceId();
   if (monthly) ids.add(monthly);
   if (annual) ids.add(annual);
+  for (const id of ARCHIVED_STRIPE_PRO_MONTHLY_PRICE_IDS) ids.add(id);
+  for (const id of ARCHIVED_STRIPE_PRO_ANNUAL_PRICE_IDS) ids.add(id);
   return [...ids];
 }
 
 function allLifetimePriceIds(): string[] {
+  const ids = new Set<string>();
   const lifetime = stripeLifetimePriceId();
-  return lifetime ? [lifetime] : [];
+  if (lifetime) ids.add(lifetime);
+  for (const id of ARCHIVED_STRIPE_LIFETIME_PRICE_IDS) ids.add(id);
+  return [...ids];
 }
 
 /** Resolve the GBP Stripe Price ID for a plan. */

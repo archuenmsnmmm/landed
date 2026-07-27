@@ -2,6 +2,7 @@
   "name": "landed",
   "version": "0.1.4",
   "private": true,
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -16,6 +17,7 @@
     "desktop:update": "node scripts/update-everywhere.mjs",
     "sync-downloads": "node scripts/sync-downloads.mjs",
     "upload-download": "node scripts/upload-download.mjs",
+    "upload-github-release": "node scripts/upload-github-release.mjs",
     "sync-renderer": "node scripts/sync-desktop-renderer.mjs",
     "local:app": "npm run sync-downloads && npm run sync-renderer && npm run desktop:open",
     "local:setup": "node scripts/update-everywhere.mjs",
@@ -27,14 +29,15 @@
     "framer-motion": "^12.40.0",
     "katex": "^0.16.47",
     "next": "^15.1.0",
+    "nodemailer": "^9.0.3",
     "openai": "^6.42.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "resend": "^6.17.2",
     "stripe": "^22.2.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.16.0",

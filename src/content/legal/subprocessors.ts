@@ -7,7 +7,7 @@ export const subprocessors = [
   },
   {
     name: "OpenAI",
-    purpose: "AI inference, transcription, and coaching outputs",
+    purpose: "AI inference and transcription (Whisper)",
     location: "United States",
     website: "https://openai.com/policies/privacy-policy",
   },
@@ -19,7 +19,7 @@ export const subprocessors = [
   },
   {
     name: "Google",
-    purpose: "OAuth sign-in and speech recognition services",
+    purpose: "OAuth sign-in (Google Identity)",
     location: "United States",
     website: "https://policies.google.com/privacy",
   },

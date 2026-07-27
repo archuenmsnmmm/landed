@@ -37,7 +37,7 @@ const preferenceOptions: {
   {
     key: "marketing",
     title: "Marketing",
-    description: "Measure campaign performance and improve relevance.",
+    description: "Measure how visitors reach our own website (campaign/referral). Not used for cross-site ad profiles.",
   },
 ];
 
@@ -199,7 +199,8 @@ export function CookieConsent() {
           <div className="flex gap-3">
             <InfoIcon />
             <p className="text-[14px] leading-relaxed text-[#1a1f2c]">
-              We use cookies to improve your experience and for marketing. Read
+              We use cookies to run the site and, with your consent, for analytics
+              and campaign measurement on our own website. Read
               our{" "}
               <Link
                 href={LEGAL_ROUTES.cookies}

@@ -275,11 +275,15 @@ async function syncPlanFromStripeApi(userId: string): Promise<Plan | null> {
   return null;
 }
 
-/** Read plan from Supabase, falling back to a server-side Stripe sync when needed. */
+/** Read plan from Supabase, reconciling with Stripe so canceled/expired subs drop to free. */
 export async function resolvePlanForUser(userId: string): Promise<Plan | null> {
   const localPlan = await syncPlanFromProfile(userId);
-  if (localPlan && localPlan !== "free") return localPlan;
-  return (await syncPlanFromStripeApi(userId)) ?? localPlan;
+  // Always hit Stripe sync when the profile claims paid access. A missed
+  // subscription.deleted webhook would otherwise leave stale Pro until restart.
+  // Free users still sync so a completed checkout can promote them.
+  const synced = await syncPlanFromStripeApi(userId);
+  if (synced) return synced;
+  return localPlan;
 }
 
 /** Pull plan from Supabase and apply it locally (also unlocks dashboard for paid users). */

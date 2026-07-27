@@ -1,0 +1,5 @@
+Contact: mailto:landed.support@gmail.com
+Preferred-Languages: en
+Canonical: https://landed-ai.com/.well-known/security.txt
+Policy: https://landed-ai.com/security
+Expires: 2027-07-20T00:00:00.000Z

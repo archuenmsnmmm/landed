@@ -42,9 +42,9 @@ export const dpaSections: LegalSection[] = [
     content: (
       <>
         <LegalP>
-          <LegalStrong>Subject matter.</LegalStrong> Provision of real-time
-          coaching, transcription, technical interview summaries, knowledge
-          retrieval, and related product features.
+          <LegalStrong>Subject matter.</LegalStrong> Provision of AI-assisted
+          screen and audio context features, transcription, session
+          summaries, knowledge retrieval, and related product features.
         </LegalP>
         <LegalP>
           <LegalStrong>Duration.</LegalStrong> For the term of your subscription
@@ -58,11 +58,11 @@ export const dpaSections: LegalSection[] = [
         </LegalP>
         <LegalP>
           <LegalStrong>Types of Personal Data.</LegalStrong> May include names,
-          email addresses, audio/transcript content, interview metadata, uploaded
+          email addresses, audio/transcript content, session metadata, uploaded
           knowledge documents, and other content you submit.
         </LegalP>
         <LegalP>
-          <LegalStrong>Data subjects.</LegalStrong> Your personnel, interviewers,
+          <LegalStrong>Data subjects.</LegalStrong> Your personnel, counterparts,
           and other individuals whose information appears in Customer Content.
         </LegalP>
       </>

@@ -5,10 +5,9 @@ import { useAuthCallback } from "./hooks/useAuthCallback";
 import { useBillingReturn } from "./hooks/useBillingReturn";
 import { usePaywallEnforcement } from "./hooks/usePaywallEnforcement";
 import { useStoreHydrated } from "./hooks/useStoreHydrated";
-import { bootstrapOpenAIKey } from "./services/whisper";
+import { bootstrapOpenAIKey } from "./services/openai-key";
 import { resolveApiBase } from "./lib/billing-api-base";
 import { funnelStateFromStore, getOnboardingFunnelRoute } from "./lib/onboarding-flow";
-import { MicHelperApp } from "./mic/MicHelperApp";
 import { useAppStore } from "./store/useAppStore";
 import { AuthPage } from "./pages/auth/AuthPage";
 import { FunnelRedirect } from "./pages/onboarding/OnboardingGuard";
@@ -44,7 +43,6 @@ function AppRoutes() {
   const hydrated = useStoreHydrated();
   const raw = window.location.hash.replace(/^#/, "") || "/";
   const hash = raw.startsWith("/") ? raw : `/${raw}`;
-  if (hash.startsWith("/mic-helper")) return <MicHelperApp />;
   if (hash.startsWith("/overlay")) return <OverlayApp />;
 
   // Wait for persist so returning users never flash auth/onboarding.

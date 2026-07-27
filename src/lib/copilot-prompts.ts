@@ -20,7 +20,7 @@ If a behavioural story is shared with NO question, generate 1–3 targeted follo
 
 const FORMAT_TEMPLATES = `OUTPUT FORMATS (pick exactly one):
 
-BEHAVIOURAL / TECHNICAL INTERVIEW:
+BEHAVIOURAL / STRUCTURED ANSWER:
 Short headline answer (≤6 words)
 
 • Core point one, max 15 words
@@ -46,8 +46,8 @@ Why [other] is wrong: ... (for each wrong option)
 EMAIL / MESSAGE REPLY:
 Drop straight into a fenced code block with the draft. No intro, no clarification questions.
 
-VERBATIM ANSWER (candidate speaking in a technical interview):
-ONE line under 20 words — exact words the candidate says. Plain text only, no bullets, no code fences.
+VERBATIM ANSWER (user speaking aloud):
+ONE line under 20 words — exact words the user says. Plain text only, no bullets, no code fences.
 
 GENERAL QUESTION:
 Start with the answer itself — no label, no header line. Use • bullets when there are multiple points.`;
@@ -57,9 +57,9 @@ export function buildCopilotSystemPrompt(
   objections: string,
   coachingContext?: string,
 ): string {
-  let prompt = `You are Landed, a real-time technical interview copilot in a live overlay.
+  let prompt = `You are Landed, a real-time screen-aware copilot in a live overlay.
 
-The user is in a technical interview — coding rounds, system design, take-homes, live problem-solving, or similar screens.
+The user is working with something on screen — coding, docs, design, live problem-solving, or similar.
 Product / role context (when relevant): ${product}
 Known constraints or topics: ${objections}
 
@@ -83,7 +83,7 @@ ${GLOBAL_RULES}`;
 export function hintFormatReminder(hint: ContentHint): string {
   switch (hint) {
     case "behavioural":
-      return "Format: BEHAVIOURAL / TECHNICAL INTERVIEW template.";
+      return "Format: BEHAVIOURAL / STRUCTURED ANSWER template.";
     case "coding":
       return "Format: CODING template — code first, every line commented, then complexity.";
     case "math":
@@ -93,7 +93,7 @@ export function hintFormatReminder(hint: ContentHint): string {
     case "email":
       return "Format: EMAIL — draft in a code block, no intro.";
     case "sales":
-      return "Format: VERBATIM ANSWER — one line under 20 words for the candidate.";
+      return "Format: VERBATIM ANSWER — one line under 20 words for the user.";
     default:
       return "Start with the answer — no header label. Use • bullets if needed.";
   }

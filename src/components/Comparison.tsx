@@ -11,7 +11,7 @@ type Feature = {
 
 const features: Feature[] = [
   {
-    label: "Built for technical interviews",
+    label: "Built for what’s on your screen",
     icon: "desktop",
     values: ["yes", "yes", "yes", "yes"],
   },
@@ -21,7 +21,7 @@ const features: Feature[] = [
     values: ["yes", "yes", "yes", "yes"],
   },
   {
-    label: "Type questions — no mic needed",
+    label: "Type questions about what’s on screen",
     icon: "mic",
     values: ["yes", "partial", "partial", "partial"],
   },
@@ -36,7 +36,7 @@ const features: Feature[] = [
     values: ["yes", "yes", "partial", "no"],
   },
   {
-    label: "Works over any technical interview app",
+    label: "Works over any app on your screen",
     icon: "apps",
     values: ["yes", "yes", "yes", "yes"],
   },
@@ -69,8 +69,8 @@ export function Comparison() {
             The proof is in the comparison
           </h2>
           <p className="max-w-[400px] text-[15px] leading-[1.55] text-[#71717a] md:pb-1 md:text-right md:text-[16px]">
-            Invisible AI for technical interviews — Landed sees your screen, answers
-            when you type, and stays off screen share.
+            Never have to debug again — Landed sees the bug, answers when you
+            type, and stays off screen share.
           </p>
         </div>
 

@@ -5,7 +5,12 @@ import { signOutLanded } from "../../lib/sign-out-landed";
 import { getSupabase } from "../../lib/supabase";
 import { openStripeBillingPortal } from "../../services/billing";
 import { normalizeDisplayPlan } from "../../lib/pricing";
-import { isPaidPlan } from "../../store/types";
+import {
+  FREE_QUESTION_LIMIT,
+  formatFreeQuestionsRemaining,
+  getFreeQuestionsRemaining,
+  isPaidPlan,
+} from "../../store/types";
 import { useAppStore } from "../../store/useAppStore";
 
 const PANEL_BG = "#ffffff";
@@ -76,8 +81,13 @@ export function AccountPanel({
   const navigate = useNavigate();
   const user = useAppStore((s) => s.user);
   const plan = useAppStore((s) => s.plan);
+  const freeQuestionsUsed = useAppStore((s) => s.freeQuestionsUsed);
   const displayPlan = normalizeDisplayPlan(plan);
   const paid = isPaidPlan(plan);
+  const freeQuestionsRemaining = getFreeQuestionsRemaining(
+    plan,
+    freeQuestionsUsed,
+  );
 
   const [hasPasswordLogin, setHasPasswordLogin] = useState(true);
   const [authProviders, setAuthProviders] = useState<string[]>([]);
@@ -367,9 +377,16 @@ export function AccountPanel({
                 {paid
                   ? displayPlan === "lifetime"
                     ? "Lifetime is a one-time purchase. View plans anytime."
-                    : "Open Stripe to update payment method or cancel Pro."
-                  : "Upgrade or compare plans in Billing."}
+                    : "Cancel anytime in Stripe — you keep Pro until the billing period ends, then free limits apply."
+                  : freeQuestionsRemaining <= 0
+                    ? "You've used all free AI questions. Upgrade to Pro for unlimited."
+                    : `${formatFreeQuestionsRemaining(freeQuestionsRemaining)} on the free plan. Upgrade to Pro for unlimited.`}
               </p>
+              {!paid ? (
+                <p className="mt-2 text-[12px] font-medium text-zinc-800">
+                  {freeQuestionsUsed} of {FREE_QUESTION_LIMIT} free questions used
+                </p>
+              ) : null}
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <ActionButton
@@ -378,7 +395,7 @@ export function AccountPanel({
                     ? "Opening…"
                     : paid && displayPlan === "pro"
                       ? "Manage billing"
-                      : "View plans"
+                      : "Upgrade to Pro"
                 }
                 variant="primary"
                 disabled={portalLoading}

@@ -1,8 +1,8 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
-import { execSync, spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
 import { ensureNodePath, repoRoot } from "./ensure-node-path.mjs";
+import { verifyMacDmg } from "./verify-mac-dmg.mjs";
 
 ensureNodePath();
 
@@ -40,37 +40,7 @@ if (!token) {
   process.exit(1);
 }
 
-function verifyDmgIsNotarized(dmgPath) {
-  if (process.platform !== "darwin") {
-    console.warn("[upload-download] Skipping notarization check (not on macOS).");
-    return;
-  }
-
-  const mountPoint = `/tmp/landed-upload-verify-${Date.now()}`;
-  try {
-    execSync(`hdiutil attach "${dmgPath}" -nobrowse -mountpoint "${mountPoint}" -quiet`, {
-      stdio: "pipe",
-    });
-    const appPath = path.join(mountPoint, "Landed.app");
-    if (!existsSync(appPath)) {
-      throw new Error("Landed.app not found inside DMG");
-    }
-    execSync(`spctl -a -vv "${appPath}"`, { stdio: "pipe" });
-    const codesign = execSync(`codesign -dvv "${appPath}" 2>&1`, { encoding: "utf8" });
-    if (!codesign.includes("Authority=Developer ID Application")) {
-      throw new Error("DMG is not Developer ID signed");
-    }
-    console.log("[upload-download] Verified: notarized Developer ID build.");
-  } finally {
-    try {
-      execSync(`hdiutil detach "${mountPoint}" -quiet`, { stdio: "pipe" });
-    } catch {
-      // ignore
-    }
-  }
-}
-
-verifyDmgIsNotarized(dmgPath);
+verifyMacDmg(dmgPath, { requireNotarized: true });
 
 const size = statSync(dmgPath).size;
 console.log(

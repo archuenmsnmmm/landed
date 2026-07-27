@@ -2,19 +2,19 @@ const features = [
   {
     title: "Sees",
     description:
-      "Landed reads the technical interview problem on your display when you ask — coding pads, prompts, docs.",
+      "Landed reads what’s on your display when you ask — coding pads, prompts, docs.",
     icon: EyeIcon,
   },
   {
     title: "Answers",
     description:
-      "Type a question in the overlay and get a practical answer without leaving the round.",
+      "Type a question in the overlay and get a practical answer without leaving your flow.",
     icon: SparkleIcon,
   },
   {
-    title: "No mic",
+    title: "Type-first",
     description:
-      "Text-first by design so you stay silent on the call. Screen Recording is the permission that matters.",
+      "Ask by typing so you can stay focused. Microphone or call audio is optional for live transcription.",
     icon: BookIcon,
   },
   {
@@ -30,7 +30,7 @@ export function InTheMoment() {
     <section id="product" className="bg-white">
       <div className="mx-auto max-w-[720px] px-6 py-24 md:py-32">
         <h2 className="text-center text-[2rem] font-semibold leading-[1.15] tracking-[-0.03em] text-[#0a0a0a] md:text-[2.5rem]">
-          Invisible AI for the technical interview that decides the offer.
+          Never have to debug again when it matters.
         </h2>
 
         <ul className="mt-16 space-y-10">

@@ -10,26 +10,26 @@ export type FaqItem = {
 const defaultFaqs: FaqItem[] = [
   {
     q: "What is Landed?",
-    a: "Landed is invisible AI for technical interviews. It sees the problem on your screen, answers when you type, and can stay hidden from screen share — so you get help without leaving the round.",
+    a: "Landed is AI that sees your screen so you never have to debug alone. It reads what’s on your display, answers when you type, and can stay hidden from screen share — so you get the fix without leaving your flow.",
   },
   {
     q: "How does Landed see my screen?",
-    a: "When you ask a question, Landed captures what’s on your display (the coding pad, prompt, or doc) and uses that context to answer. Frames are only sent when you ask — not continuously recorded.",
+    a: "When you ask a question, Landed captures what’s on your display (the error, IDE, coding pad, or doc) and uses that context to answer. Frames are only sent when you ask — not continuously recorded.",
   },
   {
     q: "Do I need a microphone?",
-    a: "No. Landed is text-first: type into the overlay during the technical interview and get answers about what’s on screen. Screen Recording permission is what you need — not a mic.",
+    a: "No. Landed is text-first: type into the overlay and get answers about what’s on screen. Screen Recording permission is what you need — not a mic.",
   },
   {
     q: "Who is Landed for?",
-    a: "Candidates in technical interviews — coding rounds, system design, take-homes, and live problem-solving — who want screen-aware answers without switching windows or talking to a mic.",
+    a: "Anyone who wants to stop getting stuck debugging — screen-aware answers while coding, fixing bugs, or working on docs, without switching windows or talking to a mic.",
   },
   {
     q: "Is Landed free?",
-    a: "Yes. Free includes 15 AI questions on gpt-4o-mini. Pro and Lifetime unlock unlimited questions, a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
+    a: "Yes. Free includes 10 screen asks on gpt-4o-mini. Pro and Lifetime unlock unlimited questions, a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
   },
   {
-    q: "Can the interviewer see the overlay if I share my screen?",
+    q: "Can other people see the overlay if I share my screen?",
     a: "On Pro and Lifetime, you can hide the Landed overlay from screen share so only you see it — that’s the invisible part.",
   },
   {

@@ -21,10 +21,10 @@ function isDeveloperIdSigned(appPath) {
  * Strip quarantine and, for unsigned local builds only, ad-hoc sign so dev copies open.
  * Never re-sign Developer ID builds — that invalidates notarization and triggers Gatekeeper.
  */
-function hasAnySignature(appPath) {
+function hasValidSignature(appPath) {
   try {
-    const out = execSync(`codesign -dv "${appPath}" 2>&1`, { encoding: "utf8" });
-    return /Signature=|Authority=/.test(out);
+    execSync(`codesign --verify --deep --strict "${appPath}"`, { stdio: "ignore" });
+    return true;
   } catch {
     return false;
   }
@@ -42,8 +42,9 @@ export function signMacApp(appPath, { force = false } = {}) {
 
   // Re-signing ad-hoc on every `desktop:dev` changes the code identity and
   // silently breaks macOS Screen Recording permission for this binary.
-  if (!force && hasAnySignature(appPath)) {
-    console.log("[landed] Already ad-hoc signed — skipping re-sign (keeps Screen Recording TCC):", appPath);
+  // Unsigned CI builds often have a broken linker signature — verify before skipping.
+  if (!force && hasValidSignature(appPath)) {
+    console.log("[landed] Valid signature — skipping re-sign (keeps Screen Recording TCC):", appPath);
     return;
   }
 

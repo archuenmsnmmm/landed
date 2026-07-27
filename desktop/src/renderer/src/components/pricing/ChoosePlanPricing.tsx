@@ -2,7 +2,12 @@ import { useState } from "react";
 import type { BillingInterval, PricingTierId } from "../../lib/pricing";
 import { normalizeDisplayPlan } from "../../lib/pricing";
 import { useRegionalPricing } from "../../hooks/useRegionalPricing";
-import { isPaidPlan } from "../../store/types";
+import {
+  FREE_QUESTION_LIMIT,
+  formatFreeQuestionsRemaining,
+  getFreeQuestionsRemaining,
+  isPaidPlan,
+} from "../../store/types";
 import { useAppStore } from "../../store/useAppStore";
 import {
   BillingToggle,
@@ -28,12 +33,23 @@ export function ChoosePlanPricing({
   portalLoading?: boolean;
 }) {
   const plan = useAppStore((s) => s.plan);
+  const freeQuestionsUsed = useAppStore((s) => s.freeQuestionsUsed);
   const [interval, setInterval] = useState<BillingInterval>("annual");
   const currency = useRegionalPricing();
   const displayPlan = normalizeDisplayPlan(plan);
   const showManageBilling = isPaidPlan(plan) && displayPlan === "pro" && onManageBilling;
   const isLifetime = displayPlan === "lifetime";
   const isPaid = displayPlan !== "free";
+  const freeQuestionsRemaining = getFreeQuestionsRemaining(
+    plan,
+    freeQuestionsUsed,
+  );
+  const freePlanDetail =
+    displayPlan === "free"
+      ? freeQuestionsRemaining <= 0
+        ? `You've used all ${FREE_QUESTION_LIMIT} free AI questions. Upgrade to Pro for unlimited.`
+        : `${formatFreeQuestionsRemaining(freeQuestionsRemaining)} · ${freeQuestionsUsed} of ${FREE_QUESTION_LIMIT} used`
+      : undefined;
 
   return (
     <div>
@@ -96,11 +112,7 @@ export function ChoosePlanPricing({
                 ? `Free included in ${isLifetime ? "Lifetime" : "Pro"}`
                 : "Continue with Free"
           }
-          detail={
-            displayPlan === "free"
-              ? "Starter — 15 AI questions."
-              : undefined
-          }
+          detail={freePlanDetail}
         />
       </div>
 
@@ -109,7 +121,15 @@ export function ChoosePlanPricing({
         {showManageBilling
           ? " Manage or cancel Pro anytime from the Pro card above."
           : " Manage Pro anytime from this page after you upgrade."}{" "}
-        Payments are processed by Stripe. By upgrading you agree to our{" "}
+        New Pro and Lifetime purchases include a 14-day refund guarantee (
+        <button
+          type="button"
+          onClick={() => openLegalLink(legalLinks.refund)}
+          className="text-zinc-600 underline decoration-zinc-300 hover:text-zinc-900"
+        >
+          Refund Policy
+        </button>
+        ). Payments are processed by Stripe. By upgrading you agree to our{" "}
         <button
           type="button"
           onClick={() => openLegalLink(legalLinks.terms)}

@@ -11,6 +11,7 @@ const routes = [
   "/download",
   "/app",
   "/contact",
+  "/security",
   SUPPORT_ROUTES.helpCenter,
   LEGAL_ROUTES.terms,
   LEGAL_ROUTES.privacy,
@@ -18,6 +19,9 @@ const routes = [
   LEGAL_ROUTES.cookies,
   LEGAL_ROUTES.subprocessors,
   LEGAL_ROUTES.dpa,
+  LEGAL_ROUTES.refund,
+  LEGAL_ROUTES.eula,
+  LEGAL_ROUTES.legalNotice,
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -4,7 +4,7 @@ export type ConversationMode =
   | "demo"
   | "negotiation"
   | "enterprise"
-  /** @deprecated Legacy interview modes — migrated to sales on load. */
+  /** @deprecated Legacy mode id — migrated to sales on load. */
   | "interview"
   | "behavioural"
   | "technical"
@@ -16,8 +16,8 @@ export type SalesMode = ConversationMode;
 
 export type Plan = "free" | "solo" | "pro" | "undetectable" | "lifetime";
 
-/** Free tier: hard cap on AI asks. Paid plans are unlimited. */
-export const FREE_QUESTION_LIMIT = 15;
+/** Free tier: hard cap on screen asks. Paid plans are unlimited. */
+export const FREE_QUESTION_LIMIT = 10;
 
 /**
  * Legacy free overlay-on time (seconds). Kept for migrating old accounts that
@@ -201,7 +201,7 @@ export type SuggestionTag =
   | "competitive"
   | "question"
   | "general"
-  /** @deprecated Legacy interview tags */
+  /** @deprecated Legacy suggestion tags */
   | "star"
   | "structure"
   | "difficult_question"
@@ -261,7 +261,7 @@ export interface MeetingRecord {
   managerNotes?: string;
 }
 
-/** Legacy interview conversation modes → sales coaching modes. */
+/** Legacy conversation modes → sales coaching modes. */
 const LEGACY_MODE_MAP: Record<string, ConversationMode> = {
   interview: "sales",
   behavioural: "discovery",
@@ -344,15 +344,15 @@ export interface User {
 export const CONVERSATION_MODES: ConversationModeConfig[] = [
   {
     id: "sales",
-    name: "Technical interview assist",
-    description: "Ask about the coding or system-design problem on your screen during a technical interview.",
+    name: "Screen-aware assist",
+    description: "Ask about the bug or coding problem on your screen.",
     systemPrompt:
-      "You are Landed, invisible AI for technical interviews. Answer using what’s on the user’s screen. Be concise, practical, and specific. Prefer concrete next steps. No preamble.",
+      "You are Landed — AI that sees the user’s screen so they never have to debug alone. Answer using what’s visible. Be concise, practical, and specific. Prefer concrete next steps. No preamble.",
   },
   {
     id: "discovery",
     name: "Coding help",
-    description: "Debug errors, explain code, and suggest fixes from the technical interview screen.",
+    description: "Debug errors, explain code, and suggest fixes from what’s on screen.",
     systemPrompt:
       "You are Landed helping with coding. Use the screen context (errors, files, diffs). Explain briefly, then give the fix or next step. Prefer copy-pasteable answers.",
   },
@@ -373,9 +373,9 @@ export const CONVERSATION_MODES: ConversationModeConfig[] = [
   {
     id: "enterprise",
     name: "Work context",
-    description: "Docs, tickets, and tools open during take-homes or prep.",
+    description: "Docs, tickets, and tools open on your screen.",
     systemPrompt:
-      "You are Landed helping with docs and tools on screen during technical interview prep. Be practical and action-oriented.",
+      "You are Landed helping with docs and tools on screen. Be practical and action-oriented.",
   },
 ];
 

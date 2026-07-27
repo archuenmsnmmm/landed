@@ -20,7 +20,8 @@ export function SignupPage() {
     <div>
       <h1 className="text-2xl font-semibold text-zinc-900">Create your account</h1>
       <p className="mt-2 text-[14px] text-zinc-500">
-        Invisible AI for technical interviews — type to ask, no mic needed.
+        Never have to debug alone — type to ask about the bug on
+        screen. Microphone is optional for live transcription.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">

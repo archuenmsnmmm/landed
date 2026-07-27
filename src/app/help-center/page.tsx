@@ -6,7 +6,7 @@ import { LEGAL } from "@/content/legal/config";
 
 export const metadata: Metadata = {
   title: "Help Center — Landed",
-  description: `Get help with ${LEGAL.productName} — setup, technical interviews, billing, and troubleshooting.`,
+  description: `Get help with ${LEGAL.productName} — setup, screen-aware assist, billing, and troubleshooting.`,
 };
 
 export default function HelpCenterPage() {
