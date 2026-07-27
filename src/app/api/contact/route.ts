@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { rateLimit } from "@/lib/api-rate-limit";
 import { apiErrorResponse } from "@/lib/api-errors";
+import { saveContactSubmission } from "@/lib/save-contact-submission";
 import { getContactSmtpConfig, sendContactEmail } from "@/lib/send-contact-email";
 
 const TOPICS = new Set([
@@ -27,13 +28,6 @@ export async function POST(request: Request) {
       windowMs: 15 * 60_000,
     });
     if (limited) return limited;
-
-    if (!getContactSmtpConfig()) {
-      return NextResponse.json(
-        { error: "Contact form is not configured. Please email us directly." },
-        { status: 503 },
-      );
-    }
 
     const body = (await request.json()) as {
       name?: string;
@@ -63,14 +57,25 @@ export async function POST(request: Request) {
       );
     }
 
+    const submission = { name, email, topic, message };
+
     try {
-      await sendContactEmail({ name, email, topic, message });
+      await saveContactSubmission(submission);
     } catch (err) {
-      console.error("[contact] SMTP error:", err);
+      console.error("[contact] Supabase save error:", err);
       return NextResponse.json(
         { error: "Couldn't send your message. Please try again or email us directly." },
         { status: 502 },
       );
+    }
+
+    if (getContactSmtpConfig()) {
+      try {
+        await sendContactEmail(submission);
+      } catch (err) {
+        // Saved to Supabase — email is best-effort when SMTP is configured.
+        console.error("[contact] SMTP error:", err);
+      }
     }
 
     return NextResponse.json({ ok: true });
