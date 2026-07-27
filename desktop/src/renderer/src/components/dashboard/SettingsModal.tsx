@@ -249,7 +249,7 @@ function LanguagePanel() {
     <div>
       <SectionHeader
         title="Language"
-        subtitle="Language for answers, code solutions, and live transcription"
+        subtitle="Language for answers and code solutions"
       />
       <div className="space-y-3">
         <label

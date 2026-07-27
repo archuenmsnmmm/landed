@@ -14,7 +14,7 @@ const features = [
   {
     title: "Type-first",
     description:
-      "Ask by typing so you can stay focused. Microphone or call audio is optional for live transcription.",
+      "Ask by typing so you can stay focused — no microphone required.",
     icon: BookIcon,
   },
   {

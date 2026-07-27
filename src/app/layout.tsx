@@ -21,7 +21,7 @@ const instrumentSerif = Instrument_Serif({
 
 const title = "Landed — Never have to debug again";
 const description =
-  "Never have to debug alone. Landed sees what’s on your screen, answers when you type, and stays hidden from screen share. Optional mic or call audio for live transcription.";
+  "Never have to debug alone. Landed sees what’s on your screen, answers when you type, and stays hidden from screen share.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

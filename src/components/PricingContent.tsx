@@ -13,7 +13,7 @@ import { useRegionalPricing } from "@/hooks/useRegionalPricing";
 const STARTER_FEATURES = [
   "10 screen asks",
   "Ask about the bug on your screen",
-  "Type-first (mic optional for transcription)",
+  "Type-first — ask by typing",
   "Works over any app on your screen",
 ];
 

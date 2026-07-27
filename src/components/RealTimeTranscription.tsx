@@ -23,7 +23,7 @@ const askHighlights = [
 
 export function RealTimeTranscription() {
   return (
-    <section id="transcription" className="border-t border-[#f0f0f2] bg-white">
+    <section id="ask-overlay" className="border-t border-[#f0f0f2] bg-white">
       <div className="mx-auto max-w-[1200px] px-6 py-24 md:py-32">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <AskMockup />

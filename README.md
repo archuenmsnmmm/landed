@@ -4,7 +4,7 @@
 
 Landed is a **desktop application** that sees your screen so you never have to debug alone:
 
-- **Ask overlay** — type about what’s on screen (screen-aware answers, no mic required)
+- **Ask overlay** — type about what's on screen (screen-aware answers, no mic required)
 - **Settings & billing** — overlay display, Starter / Pro / Lifetime
 - **Hide from screen share** — Pro keeps the overlay private when you share
 
@@ -69,7 +69,7 @@ npm run package:mac:release --prefix desktop
 npm run sync-downloads && npm run upload-download
 
 # Publish GitHub Release (repo: archuenmsnmmm/landed)
-git tag v0.1.3 && git push origin v0.1.3
+git tag v0.1.5 && git push origin v0.1.5
 ```
 
 Windows installers ship from Desktop Release (`Landed-Setup.exe`) or local `npm run desktop:package:win`.
@@ -89,24 +89,25 @@ Windows installers ship from Desktop Release (`Landed-Setup.exe`) or local `npm 
 
 ### Launch checklist
 
-**Live (done)**
+**Live (ready)**
 
 - [x] `https://landed-ai.com` on Vercel
 - [x] Landed rebrand on `archuenmsnmmm/landed`
-- [x] Mac Blob installer (`Landed.dmg`) — macOS-only launch
+- [x] Mac installer (`Landed.dmg`) — macOS-only launch
 - [ ] Windows download (disabled until installer + permission parity are ready)
-- [x] Free-question Supabase RPC + `free_questions_used`
-- [x] AI disclaimer (“AI-powered… not human”) on site + Terms
+- [x] Free tier: 10 screen asks (`free_questions_used` + Supabase RPC)
+- [x] AI disclaimer ("AI-powered… not human") on site + Terms
 - [x] Pricing API GBP-only (`£24.99` / `£797`)
+- [x] Contact page — `landed.support@gmail.com`
+- [x] Legal pages (Terms, Privacy, EULA, Refund, Security)
 
 **Before each desktop ship**
 
-- [ ] Bump `package.json` + `desktop/package.json` version
-- [ ] Signed Mac DMG → `npm run upload-download`
-- [ ] Tag release (e.g. `v0.1.3`) with `Landed.dmg`
-- [ ] Confirm `/api/download?platform=mac` redirects to Blob
+- [x] Bump `package.json` + `desktop/package.json` version → **v0.1.5**
+- [ ] Signed Mac DMG → tag `v0.1.5` (GitHub Actions Desktop Release)
+- [ ] Confirm `/api/download?platform=mac` redirects to latest release
 
-**Smoke test**
+**Smoke test** (manual on a clean Mac)
 
 - [ ] Sign up (email + Google) → soft paywall → start session
 - [ ] Ask about a problem on screen (Starter: 10 free questions, then hard paywall)

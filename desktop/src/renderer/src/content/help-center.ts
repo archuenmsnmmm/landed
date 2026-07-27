@@ -113,7 +113,7 @@ export const HELP_QUICK_TIPS = [
   },
   {
     title: "Start Landed first",
-    body: "Allow Screen Recording. Microphone or call audio is optional for live transcription.",
+    body: "Allow Screen Recording so Landed can see what's on screen when you ask.",
   },
   {
     title: "Stay invisible on share",

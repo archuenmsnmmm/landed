@@ -84,8 +84,7 @@ function ResponsePanel() {
           <p className="font-semibold text-[#0a0a0a]">What is Landed?</p>
           <p className="mt-1">
             Landed is a desktop overlay that captures screen context when you
-            ask, then answers in place. Type to ask; microphone is optional for
-            live transcription.
+            ask, then answers in place. Type to ask — no microphone required.
           </p>
         </div>
 

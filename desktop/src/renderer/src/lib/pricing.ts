@@ -74,7 +74,7 @@ export function proPriceLabel(currency: BillingCurrency = DEFAULT_BILLING_CURREN
 export const STARTER_FEATURES = [
   "10 screen asks",
   "Ask about the bug on your screen",
-  "Type-first (mic optional for transcription)",
+  "Type-first — ask by typing",
   "Works over any app on your screen",
 ] as const;
 
@@ -101,7 +101,7 @@ export type ProFeatureIcon = "infinity" | "check";
 export const STARTER_CARD_FEATURES: { icon: "check"; label: string }[] = [
   { icon: "check", label: "10 screen asks" },
   { icon: "check", label: "Ask about the bug on your screen" },
-  { icon: "check", label: "Type-first (mic optional for transcription)" },
+  { icon: "check", label: "Type-first — ask by typing" },
   { icon: "check", label: "Works over any app on your screen" },
 ];
 

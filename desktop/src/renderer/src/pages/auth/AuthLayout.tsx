@@ -12,8 +12,7 @@ export function AuthLayout() {
           </h2>
           <p className="mt-4 max-w-md text-[15px] leading-relaxed text-zinc-400">
             Sees the bug on your screen. Answers when you type. Stays
-            hidden from screen share. Optional mic or call audio for live
-            transcription.
+            hidden from screen share.
           </p>
         </div>
         <p className="text-[12px] text-zinc-600">© Landed · Never have to debug alone</p>

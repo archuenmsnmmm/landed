@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next";
 export const metadata: Metadata = {
   title: "Landed — Never have to debug again",
   description:
-    "Never have to debug alone. Landed sees what’s on your screen and answers when you type. Optional mic or call audio for live transcription.",
+    "Never have to debug alone. Landed sees what's on your screen and answers when you type.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

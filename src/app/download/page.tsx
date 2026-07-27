@@ -11,7 +11,7 @@ const SCREENS = [
   "Ask overlay — ask about the problem on screen",
   "Settings — overlay display, languages, shortcuts",
   "Billing — Free, Pro, and Lifetime plans",
-  "Invisible assist — type questions, optional mic, hide from share",
+  "Invisible assist — type questions, hide from share",
 ];
 
 export default function DownloadPage() {

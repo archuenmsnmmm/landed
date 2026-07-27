@@ -8,7 +8,7 @@ const features = [
   {
     title: "Type to ask",
     description:
-      "Ask in the overlay by typing. Screen Recording is required; microphone is optional for live transcription.",
+      "Ask in the overlay by typing. Screen Recording is required so Landed can see what’s on screen.",
     icon: "⌨",
   },
   {

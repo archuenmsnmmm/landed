@@ -12,7 +12,7 @@ const steps = [
   {
     title: "Stay invisible on screen share",
     description:
-      "Landed streams the answer in the overlay. On Pro, hide it from screen share so only you see it. Microphone or call audio is optional for live transcription.",
+      "Landed streams the answer in the overlay. On Pro, hide it from screen share so only you see it.",
   },
 ];
 
