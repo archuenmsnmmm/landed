@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { rateLimit } from "@/lib/api-rate-limit";
 import { apiErrorResponse } from "@/lib/api-errors";
 import { saveContactSubmission } from "@/lib/save-contact-submission";
-import { getContactSmtpConfig, sendContactEmail } from "@/lib/send-contact-email";
+import { notifyContactInbox } from "@/lib/notify-contact-email";
 
 const TOPICS = new Set([
   "General support",
@@ -69,13 +69,11 @@ export async function POST(request: Request) {
       );
     }
 
-    if (getContactSmtpConfig()) {
-      try {
-        await sendContactEmail(submission);
-      } catch (err) {
-        // Saved to Supabase — email is best-effort when SMTP is configured.
-        console.error("[contact] SMTP error:", err);
-      }
+    try {
+      await notifyContactInbox(submission);
+    } catch (err) {
+      // Saved to Supabase — inbox email is best-effort.
+      console.error("[contact] Inbox notify error:", err);
     }
 
     return NextResponse.json({ ok: true });
