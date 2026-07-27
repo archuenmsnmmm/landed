@@ -16,7 +16,7 @@ export type SalesMode = ConversationMode;
 
 export type Plan = "free" | "solo" | "pro" | "undetectable" | "lifetime";
 
-/** Free tier: hard cap on screen asks. Paid plans are unlimited. */
+/** Free tier: hard cap on screen asks. Paid plans include generous monthly fair use. */
 export const FREE_QUESTION_LIMIT = 10;
 
 /**

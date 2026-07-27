@@ -18,7 +18,7 @@ const STARTER_FEATURES = [
 ];
 
 const PRO_FEATURES = [
-  "Unlimited AI questions",
+  "Unlimited asks for normal daily use",
   "Stronger coding model",
   "Invisible overlay on screen share",
   "24/7 support",
@@ -26,7 +26,7 @@ const PRO_FEATURES = [
 ];
 
 const LIFETIME_FEATURES = [
-  "Unlimited AI questions",
+  "Unlimited asks for normal daily use",
   "Stronger coding model",
   "Invisible overlay on screen share",
   "24/7 support",
@@ -166,7 +166,7 @@ export function PricingContent() {
         Pricing
       </h1>
       <p className="mt-4 max-w-[520px] text-center text-[15px] leading-relaxed text-zinc-500">
-        Never have to debug alone. Free to start — Pro or Lifetime when you need unlimited and screen-share hide.
+        Never have to debug alone. Free to start — Pro or Lifetime when you need generous daily usage and screen-share hide.
       </p>
 
       <div className="mt-8">
@@ -209,7 +209,7 @@ export function PricingContent() {
               <span className="text-[14px] text-zinc-500">/ month</span>
             </div>
             <DownloadLink className={PRIMARY_BUTTON_CLASS}>Download to subscribe</DownloadLink>
-            <p className="mt-4 text-[13px] text-zinc-500">Unlimited screen-aware assist — invisible on share.</p>
+            <p className="mt-4 text-[13px] text-zinc-500">Generous daily screen-aware assist — invisible on share.</p>
             <FeatureList
               features={PRO_FEATURES}
               includesLabel="Everything in Starter, plus..."
@@ -233,7 +233,7 @@ export function PricingContent() {
               <span className="text-[14px] text-white/70">once</span>
             </div>
             <DownloadLink className={LIFETIME_BUTTON_CLASS}>Download for Lifetime</DownloadLink>
-            <p className="mt-4 text-[13px] text-white/70">Pay once. Unlimited screen-aware AI forever.</p>
+            <p className="mt-4 text-[13px] text-white/70">Pay once. Generous daily screen-aware AI forever.</p>
             <FeatureList
               features={LIFETIME_FEATURES}
               includesLabel="Everything in Pro, plus..."

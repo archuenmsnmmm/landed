@@ -2,8 +2,8 @@ import { useState } from "react";
 import type { BillingInterval, PricingTierId } from "../../lib/pricing";
 import { normalizeDisplayPlan } from "../../lib/pricing";
 import { useRegionalPricing } from "../../hooks/useRegionalPricing";
+import { FREE_QUESTION_LIMIT, PAID_ASKS_MARKETING } from "../../lib/ai-limits";
 import {
-  FREE_QUESTION_LIMIT,
   formatFreeQuestionsRemaining,
   getFreeQuestionsRemaining,
   isPaidPlan,
@@ -47,7 +47,7 @@ export function ChoosePlanPricing({
   const freePlanDetail =
     displayPlan === "free"
       ? freeQuestionsRemaining <= 0
-        ? `You've used all ${FREE_QUESTION_LIMIT} free AI questions. Upgrade to Pro for unlimited.`
+        ? `You've used all ${FREE_QUESTION_LIMIT} free AI questions. Upgrade to Pro for ${PAID_ASKS_MARKETING.toLowerCase()}.`
         : `${formatFreeQuestionsRemaining(freeQuestionsRemaining)} · ${freeQuestionsUsed} of ${FREE_QUESTION_LIMIT} used`
       : undefined;
 

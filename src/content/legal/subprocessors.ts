@@ -7,7 +7,7 @@ export const subprocessors = [
   },
   {
     name: "OpenAI",
-    purpose: "AI inference and transcription (Whisper)",
+    purpose: "AI inference (screen-aware assist)",
     location: "United States",
     website: "https://openai.com/policies/privacy-policy",
   },

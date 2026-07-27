@@ -26,8 +26,8 @@ export async function POST(request: Request) {
       });
     }
 
-    const limited = rateLimit(request, {
-      scope: `ai:suggest-stream:${auth.userId}`,
+    const limited = await rateLimit({
+      key: `ai:suggest-stream:${auth.userId}`,
       limit: 60,
       windowMs: 60_000,
     });

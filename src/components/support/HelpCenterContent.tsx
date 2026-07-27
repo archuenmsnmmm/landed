@@ -19,7 +19,7 @@ const categories = [
       },
       {
         q: "Is Landed free?",
-        a: "Landed offers a free starter tier with 10 screen asks on gpt-4o-mini. Pro and Lifetime unlock unlimited questions, a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
+        a: "Landed offers a free starter tier with 10 screen asks on gpt-4o-mini. Pro and Lifetime unlock unlimited screen asks for normal daily use (fair use applies), a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
       },
     ],
   },
@@ -77,7 +77,7 @@ const categories = [
       },
       {
         q: "What's the difference between Pro and Lifetime?",
-        a: "Pro is a subscription (monthly or annual) with unlimited overlay asks, invisible on screen share, and 24/7 support. Lifetime includes the same Pro features for a one-time payment — no renewals.",
+        a: "Pro is a subscription (monthly or annual) with unlimited screen asks for normal daily use (fair use applies), invisible on screen share, and 24/7 support. Lifetime includes the same Pro features for a one-time payment — no renewals.",
       },
       {
         q: "How do I cancel my subscription?",

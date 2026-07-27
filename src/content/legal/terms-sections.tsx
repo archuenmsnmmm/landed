@@ -7,6 +7,7 @@ import {
   type LegalSection,
 } from "@/components/legal/LegalDocument";
 import { LEGAL, LEGAL_ROUTES } from "@/content/legal/config";
+import { PAID_ASKS_LEGAL } from "@/lib/ai-limits";
 
 export const termsSections: LegalSection[] = [
   {
@@ -105,19 +106,15 @@ export const termsSections: LegalSection[] = [
             grounded in what is visible on your display;
           </LegalLi>
           <LegalLi>
-            Optionally capture microphone and/or system (call) audio for live
-            transcription when you enable those features;
-          </LegalLi>
-          <LegalLi>
             Display answers and related outputs through an on-screen overlay;
           </LegalLi>
           <LegalLi>
-            Process your questions, screen context, and audio/transcripts using
-            third-party artificial intelligence services to generate answers;
+            Process your questions and screen context using third-party
+            artificial intelligence services to generate answers;
           </LegalLi>
           <LegalLi>
-            Store session history, settings, and related data
-            locally on your device and/or in connected cloud services;
+            Store session history, settings, and related data locally on your
+            device and/or in connected cloud services;
           </LegalLi>
           <LegalLi>
             Offer optional features intended to reduce visibility of the overlay
@@ -133,20 +130,32 @@ export const termsSections: LegalSection[] = [
     ),
   },
   {
+    id: "usage-limits",
+    title: "Usage Limits and Fair Use",
+    content: (
+      <>
+        <LegalP>
+          To keep the Service sustainable, usage limits apply by plan. Free
+          Starter includes a fixed number of screen asks. {PAID_ASKS_LEGAL}
+        </LegalP>
+        <LegalP>
+          We may apply additional technical rate limits (for example, per-minute
+          request caps) to protect the Service from abuse. Attempting to
+          circumvent usage limits, entitlement checks, or billing controls is
+          prohibited.
+        </LegalP>
+      </>
+    ),
+  },
+  {
     id: "permissions",
     title: "Device Permissions and Third-Party Platforms",
     content: (
       <>
         <LegalP>
           The Service may require system permissions including accessibility,
-          screen capture, microphone access, system/call audio access, and
-          related OS-level access. You are solely responsible for granting,
-          revoking, and managing those permissions. Audio capture is optional and
-          controlled by your settings; see our{" "}
-          <a href={LEGAL_ROUTES.privacy} className="text-landed-600 underline">
-            Privacy Policy
-          </a>{" "}
-          for how recordings and transcripts are processed.
+          screen capture, and related OS-level access. You are solely responsible
+          for granting, revoking, and managing those permissions.
         </LegalP>
         <LegalP>
           The Service is designed to operate alongside third-party communication

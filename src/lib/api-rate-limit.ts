@@ -1,48 +1,55 @@
 import { NextResponse } from "next/server";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
-type RateLimitOptions = {
-  scope: string;
+export type RateLimitOptions = {
+  /** Unique key — use authenticated user id scopes, e.g. `ai:assist:${userId}`. */
+  key: string;
   limit: number;
   windowMs: number;
 };
 
-type Bucket = {
-  count: number;
-  resetAt: number;
+type RateLimitRpcRow = {
+  allowed: boolean;
+  retry_after_seconds: number;
 };
 
-const buckets = new Map<string, Bucket>();
-
-function getClientKey(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0]?.trim() || "unknown";
-  return request.headers.get("x-real-ip") ?? "unknown";
-}
-
-export function rateLimit(
-  request: Request,
+/**
+ * Distributed rate limit backed by Supabase (works across Vercel instances).
+ * Fails open if Supabase is unavailable so requests are not blocked by infra gaps.
+ */
+export async function rateLimit(
   options: RateLimitOptions,
-): NextResponse | null {
-  const key = `${options.scope}:${getClientKey(request)}`;
-  const now = Date.now();
-  const existing = buckets.get(key);
-
-  if (!existing || now >= existing.resetAt) {
-    buckets.set(key, { count: 1, resetAt: now + options.windowMs });
+): Promise<NextResponse | null> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase) {
+    console.warn("[rate-limit] Supabase admin unavailable — skipping limit check");
     return null;
   }
 
-  if (existing.count >= options.limit) {
-    const retryAfter = Math.max(1, Math.ceil((existing.resetAt - now) / 1000));
-    return NextResponse.json(
-      { error: "Too many requests. Please try again shortly." },
-      {
-        status: 429,
-        headers: { "Retry-After": String(retryAfter) },
-      },
-    );
+  const windowSeconds = Math.max(1, Math.ceil(options.windowMs / 1000));
+  const { data, error } = await supabase.rpc("check_rate_limit", {
+    p_rate_key: options.key,
+    p_limit: options.limit,
+    p_window_seconds: windowSeconds,
+  });
+
+  if (error) {
+    console.error("[rate-limit] check_rate_limit failed:", error);
+    return null;
   }
 
-  existing.count += 1;
-  return null;
+  const row = (Array.isArray(data) ? data[0] : data) as
+    | RateLimitRpcRow
+    | undefined;
+
+  if (!row || row.allowed) return null;
+
+  const retryAfter = Math.max(1, row.retry_after_seconds ?? windowSeconds);
+  return NextResponse.json(
+    { error: "Too many requests. Please try again shortly." },
+    {
+      status: 429,
+      headers: { "Retry-After": String(retryAfter) },
+    },
+  );
 }

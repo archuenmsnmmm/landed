@@ -4,7 +4,7 @@ import { PaywallPricing } from "../../components/pricing/PaywallPricing";
 import { BackButton } from "../../components/ui";
 import { usePricingCheckout } from "../../hooks/usePricingCheckout";
 import { useBillingSync } from "../../hooks/useBillingSync";
-import { requiresPaywallRoute } from "../../lib/paywall-enforcement";
+import { PAID_ASKS_MARKETING } from "../../lib/ai-limits";
 import {
   getFreeQuestionsRemaining,
   isFreeQuestionsExhausted,
@@ -93,7 +93,7 @@ export function PaywallPage() {
     ? "You've used your free questions"
     : "Simple and transparent pricing that works for you";
   const subheadline = hardPaywall
-    ? "Upgrade to Pro or Lifetime for unlimited questions, a stronger coding model, and invisible overlay on screen share."
+    ? `Upgrade to Pro or Lifetime for ${PAID_ASKS_MARKETING.toLowerCase()}, a stronger coding model, and invisible overlay on screen share.`
     : undefined;
 
   return (

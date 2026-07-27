@@ -1,3 +1,5 @@
+import { PAID_ASKS_DETAIL, PAID_ASKS_MARKETING } from "../lib/ai-limits";
+
 export interface HelpArticle {
   q: string;
   a: string;
@@ -24,7 +26,7 @@ export const HELP_CATEGORIES: HelpCategory[] = [
       },
       {
         q: "Is Landed free?",
-        a: "Landed offers a free starter tier with 10 screen asks on gpt-4o-mini. Pro and Lifetime unlock unlimited questions, a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
+        a: "Landed offers a free starter tier with 10 screen asks on gpt-4o-mini. Pro and Lifetime unlock unlimited screen asks for normal daily use (fair use applies), a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
       },
       {
         q: "How do I start my first session?",
@@ -86,7 +88,7 @@ export const HELP_CATEGORIES: HelpCategory[] = [
     articles: [
       {
         q: "What's included in Pro?",
-        a: "Unlimited AI questions, stronger coding model (gpt-4.1-mini), invisible overlay on screen share, 24/7 support, and everything in Starter. Lifetime includes the same Pro features for a one-time payment.",
+        a: `${PAID_ASKS_MARKETING}, stronger coding model (gpt-4.1-mini), invisible overlay on screen share, 24/7 support, and everything in Starter. ${PAID_ASKS_DETAIL} Lifetime includes the same Pro features for a one-time payment.`,
       },
     ],
   },

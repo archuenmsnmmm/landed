@@ -184,8 +184,8 @@ export function ListeningPill({
 
   const statusText = (() => {
     if (error === "mic-optional") return "Listening…";
-    if (error === "screen-blocked") return "Call audio blocked";
-    if (error === "no-api-key") return "Pro required for call audio";
+    if (error === "screen-blocked") return "Screen capture blocked";
+    if (error === "no-api-key") return "Sign in to use Landed";
     if (error) return "Mic blocked";
     if (!listening) return "Paused";
     return "Listening…";
@@ -274,7 +274,7 @@ export function ListeningPill({
                 Security → Screen Recording (needed so Landed can see your screen), then restart your session.
               </>
             ) : error === "no-api-key" ? (
-              <>Live call-audio transcription requires Pro. Upgrade in Settings → Billing, or use mic mode with free Web Speech captions.</>
+              <>Sign in to Landed in Settings so it can analyze your screen.</>
             ) : (
               <>
                 System Settings → Privacy &amp; Security → Microphone → turn on{" "}

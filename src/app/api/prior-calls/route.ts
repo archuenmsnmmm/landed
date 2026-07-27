@@ -11,8 +11,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
 
-    const limited = rateLimit(request, {
-      scope: `prior-calls:${auth.userId}`,
+    const limited = await rateLimit({
+      key: `prior-calls:${auth.userId}`,
       limit: 30,
       windowMs: 60_000,
     });

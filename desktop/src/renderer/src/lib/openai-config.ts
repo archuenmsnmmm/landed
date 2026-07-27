@@ -9,7 +9,6 @@ export const OPENAI_MODELS = {
    * Cheapest model that still writes solid coding solutions.
    */
   coding: "gpt-4.1-mini",
-  whisper: "whisper-1",
 } as const;
 
 export const OPENAI_LIMITS = {

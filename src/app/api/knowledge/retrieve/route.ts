@@ -14,8 +14,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
 
-    const limited = rateLimit(request, {
-      scope: `knowledge:retrieve:${auth.userId}`,
+    const limited = await rateLimit({
+      key: `knowledge:retrieve:${auth.userId}`,
       limit: 120,
       windowMs: 60_000,
     });

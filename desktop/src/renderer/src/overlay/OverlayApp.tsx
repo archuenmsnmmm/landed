@@ -169,7 +169,7 @@ export function OverlayApp() {
         if (controller.signal.aborted) return;
 
         useAppStore.getState().consumeFreeQuestion();
-        void syncQuestionUsageToServer(1);
+        void syncQuestionUsageToServer(useAppStore.getState().freeQuestionsUsed);
 
         commitTurn(question, text, viewedScreen);
       } catch (err) {

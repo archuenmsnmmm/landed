@@ -1,8 +1,16 @@
 import { NextResponse } from "next/server";
+import {
+  FREE_QUESTION_LIMIT,
+  PAID_FAIR_USE_MONTHLY_ASKS,
+  PAID_HARD_MONTHLY_CAP,
+} from "@/lib/ai-limits";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
-/** Free tier hard cap on screen asks / AI responses. */
-export const FREE_QUESTION_LIMIT = 10;
+export {
+  FREE_QUESTION_LIMIT,
+  PAID_FAIR_USE_MONTHLY_ASKS,
+  PAID_HARD_MONTHLY_CAP,
+} from "@/lib/ai-limits";
 
 /** Legacy overlay-minute cap — used only to migrate exhausted free trials. */
 export const FREE_OVERLAY_LIMIT_SECONDS = 10 * 60;
@@ -21,6 +29,9 @@ export type EntitlementResult =
       paid: boolean;
       freeQuestionsUsed: number;
       freeOverlaySecondsUsed: number;
+      /** Paid users over fair-use — use economy model/detail for this ask. */
+      throttled?: boolean;
+      paidAsksThisMonth?: number;
     }
   | { ok: false; status: number; error: string };
 
@@ -212,7 +223,7 @@ export async function consumeAiEntitlement(
   }
 
   // Prefer DB RPC when available (row lock + single round-trip).
-  const rpc = await supabase.rpc("consume_free_question", {
+  const rpc = await supabase.rpc("consume_ai_assist", {
     p_user_id: userId,
   });
   if (!rpc.error && rpc.data && Array.isArray(rpc.data) && rpc.data[0]) {
@@ -221,8 +232,18 @@ export async function consumeAiEntitlement(
       free_questions_used: number;
       paid: boolean;
       plan: string;
+      paid_asks_this_month?: number;
+      throttled?: boolean;
     };
     if (!row.ok) {
+      if (row.paid) {
+        return {
+          ok: false,
+          status: 429,
+          error:
+            "Monthly usage limit reached. Your allowance resets on the 1st of each month.",
+        };
+      }
       return {
         ok: false,
         status: 402,
@@ -238,6 +259,8 @@ export async function consumeAiEntitlement(
         Math.max(0, row.free_questions_used ?? 0),
       ),
       freeOverlaySecondsUsed: 0,
+      throttled: Boolean(row.throttled),
+      paidAsksThisMonth: Math.max(0, row.paid_asks_this_month ?? 0),
     };
   }
 

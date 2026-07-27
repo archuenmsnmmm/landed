@@ -40,12 +40,12 @@ export function getDealScoreLabel(score: number): string {
 export function getWarmUpgradeMessage(meeting: MeetingRecord): string {
   const uses = meeting.suggestionUses ?? meeting.suggestions?.length ?? 0;
   if (uses >= 3) {
-    return `You used ${uses} suggestions in that session — Pro unlocks unlimited live help every session.`;
+    return `You used ${uses} screen asks in that session — Pro unlocks generous daily usage and a stronger coding model.`;
   }
   if ((meeting.dealScore ?? 0) >= 60) {
-    return "Pro unlocks unlimited live help every session.";
+    return "Pro unlocks generous daily screen asks and a stronger coding model.";
   }
-  return "Landed is working in your sessions — Pro unlocks unlimited sessions and live help.";
+  return "Landed is working for you — Pro unlocks more daily asks and screen-share hide.";
 }
 
 export function shouldShowWarmUpgrade(

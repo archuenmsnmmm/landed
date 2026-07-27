@@ -26,7 +26,7 @@ const defaultFaqs: FaqItem[] = [
   },
   {
     q: "Is Landed free?",
-    a: "Yes. Free includes 10 screen asks on gpt-4o-mini. Pro and Lifetime unlock unlimited questions, a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
+    a: "Yes. Free includes 10 screen asks on gpt-4o-mini. Pro and Lifetime unlock unlimited screen asks for normal daily use (fair use applies), a stronger coding model, invisible overlay on screen share, and 24/7 support. Lifetime is a one-time purchase.",
   },
   {
     q: "Can other people see the overlay if I share my screen?",

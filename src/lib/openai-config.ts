@@ -1,7 +1,6 @@
 /** Server-side OpenAI model + token limits. */
 export const OPENAI_MODELS = {
   chat: "gpt-4o-mini",
-  whisper: "whisper-1",
   vision: "gpt-4o-mini",
   /** Paid coding answers — cheapest solid coding model. */
   coding: "gpt-4.1-mini",

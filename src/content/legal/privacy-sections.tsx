@@ -250,8 +250,7 @@ export const privacySections: LegalSection[] = [
             With third parties that perform services to support our core business
             functions and internal operations, which may include cloud hosting
             providers, payment processors, support providers, security and fraud
-            prevention providers, analytics providers, and AI / transcription
-            providers
+            prevention providers, analytics providers, and AI inference providers
           </LegalLi>
           <LegalLi>To support our audit, compliance, and corporate governance functions</LegalLi>
           <LegalLi>

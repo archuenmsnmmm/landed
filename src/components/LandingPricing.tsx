@@ -13,7 +13,7 @@ const STARTER_FEATURES = [
 ];
 
 const PRO_FEATURES = [
-  "Unlimited AI questions",
+  "Unlimited asks for normal daily use",
   "Stronger coding model",
   "Invisible overlay on screen share",
   "24/7 support",
@@ -21,7 +21,7 @@ const PRO_FEATURES = [
 ];
 
 const LIFETIME_FEATURES = [
-  "Unlimited AI questions",
+  "Unlimited asks for normal daily use",
   "Stronger coding model",
   "Invisible overlay on screen share",
   "24/7 support",
@@ -143,7 +143,7 @@ export function LandingPricing() {
               </div>
               <DownloadLink className={PRIMARY_BUTTON_CLASS}>Download to subscribe</DownloadLink>
               <p className="mt-4 text-[13px] text-zinc-500">
-                Unlimited screen-aware assist — invisible on share.
+                Generous daily screen-aware assist — invisible on share.
               </p>
               <FeatureList
                 features={PRO_FEATURES}
@@ -169,7 +169,7 @@ export function LandingPricing() {
               </div>
               <DownloadLink className={LIFETIME_BUTTON_CLASS}>Download for Lifetime</DownloadLink>
               <p className="mt-4 text-[13px] text-white/70">
-                Pay once. Unlimited screen-aware AI forever.
+                Pay once. Generous daily screen-aware AI forever.
               </p>
               <FeatureList
                 features={LIFETIME_FEATURES}

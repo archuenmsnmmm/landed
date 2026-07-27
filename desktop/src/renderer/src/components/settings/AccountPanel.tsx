@@ -4,6 +4,7 @@ import { apiJson } from "../../lib/api-client";
 import { signOutLanded } from "../../lib/sign-out-landed";
 import { getSupabase } from "../../lib/supabase";
 import { openStripeBillingPortal } from "../../services/billing";
+import { PAID_ASKS_MARKETING } from "../../lib/ai-limits";
 import { normalizeDisplayPlan } from "../../lib/pricing";
 import {
   FREE_QUESTION_LIMIT,
@@ -379,8 +380,8 @@ export function AccountPanel({
                     ? "Lifetime is a one-time purchase. View plans anytime."
                     : "Cancel anytime in Stripe — you keep Pro until the billing period ends, then free limits apply."
                   : freeQuestionsRemaining <= 0
-                    ? "You've used all free AI questions. Upgrade to Pro for unlimited."
-                    : `${formatFreeQuestionsRemaining(freeQuestionsRemaining)} on the free plan. Upgrade to Pro for unlimited.`}
+                    ? `You've used all free AI questions. Upgrade to Pro for ${PAID_ASKS_MARKETING.toLowerCase()}.`
+                    : `${formatFreeQuestionsRemaining(freeQuestionsRemaining)} on the free plan. Upgrade to Pro for ${PAID_ASKS_MARKETING.toLowerCase()}.`}
               </p>
               {!paid ? (
                 <p className="mt-2 text-[12px] font-medium text-zinc-800">

@@ -75,7 +75,7 @@ export function DashboardHeader({
                   ? "Starting…"
                   : canStartSession
                     ? "Open Landed"
-                    : "Upgrade for unlimited questions"
+                    : "Upgrade for generous daily usage"
             }
             className="flex h-9 items-center gap-2 rounded-full bg-gradient-to-b from-[#4d9cf8] to-[#3b82f6] px-4 text-[13px] font-medium text-white shadow-[0_2px_8px_rgba(59,130,246,0.3)] transition-opacity hover:opacity-95 disabled:cursor-wait disabled:opacity-70"
           >

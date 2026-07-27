@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { verifyAuthenticatedRequest } from "@/lib/api-auth";
 import { apiErrorResponse } from "@/lib/api-errors";
+import { AI_ASSIST_BURST_PER_MINUTE, API_RATE_LIMIT_WINDOW_MS } from "@/lib/ai-limits";
+import { recordAiUsage } from "@/lib/ai-usage";
 import { rateLimit } from "@/lib/api-rate-limit";
 import { codingSystemPrompt } from "@/lib/coding-answer";
 import {
@@ -24,16 +26,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
 
-    // Assist responses are metered — consume one free question up front.
-    const entitlement = await consumeAiEntitlement(auth.userId);
-    if (!entitlement.ok) return entitlementDeniedResponse(entitlement);
-
-    const limited = rateLimit(request, {
-      scope: `ai:assist:${auth.userId}`,
-      limit: 60,
-      windowMs: 60_000,
+    const limited = await rateLimit({
+      key: `ai:assist:${auth.userId}`,
+      limit: AI_ASSIST_BURST_PER_MINUTE,
+      windowMs: API_RATE_LIMIT_WINDOW_MS,
     });
     if (limited) return limited;
+
+    // Meter usage — free cap, paid fair-use, and monthly hard cap.
+    const entitlement = await consumeAiEntitlement(auth.userId);
+    if (!entitlement.ok) return entitlementDeniedResponse(entitlement);
 
     const body = (await request.json()) as {
       system?: string;
@@ -77,14 +79,14 @@ export async function POST(request: Request) {
         ? `${system}\nYou can see the user's screen via screenshot. Answer based on what is visibly on screen. Be specific about apps, windows, errors, and UI you observe. Never invent content that is not visible.`
         : system;
 
-    const detail: ImageDetail =
-      body.imageDetail === "low" ||
-      body.imageDetail === "auto" ||
-      body.imageDetail === "high"
+    const economyTier = Boolean(entitlement.throttled);
+    const detail: ImageDetail = economyTier
+      ? "auto"
+      : body.imageDetail === "low" ||
+          body.imageDetail === "auto" ||
+          body.imageDetail === "high"
         ? body.imageDetail
-        : entitlement.paid
-          ? "high"
-          : "auto";
+        : "auto";
 
     let userContent: string | ChatCompletionContentPart[] = prompt;
     if (imageBase64 && (mode === "vision" || mode === "coding")) {
@@ -105,8 +107,11 @@ export async function POST(request: Request) {
       { role: "user", content: userContent },
     ];
 
+    const usePremiumCodingModel =
+      mode === "coding" && entitlement.paid && !economyTier;
+
     const model =
-      mode === "coding" && entitlement.paid
+      usePremiumCodingModel
         ? OPENAI_MODELS.coding
         : mode === "vision" || mode === "coding"
           ? OPENAI_MODELS.vision
@@ -136,15 +141,28 @@ export async function POST(request: Request) {
         max_tokens: maxTokens,
         temperature,
         stream: true,
+        stream_options: { include_usage: true },
       });
 
       const encoder = new TextEncoder();
+      let usageRecorded = false;
+
       const stream = new ReadableStream({
         async start(controller) {
           try {
             for await (const chunk of completion) {
               const text = chunk.choices[0]?.delta?.content;
               if (text) controller.enqueue(encoder.encode(text));
+
+              if (!usageRecorded && chunk.usage) {
+                usageRecorded = true;
+                void recordAiUsage({
+                  userId: auth.userId,
+                  model,
+                  promptTokens: chunk.usage.prompt_tokens ?? 0,
+                  completionTokens: chunk.usage.completion_tokens ?? 0,
+                });
+              }
             }
           } catch (err) {
             console.error("[assist] stream error:", err);
@@ -174,6 +192,13 @@ export async function POST(request: Request) {
     if (!text) {
       return NextResponse.json({ error: "Empty model response" }, { status: 502 });
     }
+
+    void recordAiUsage({
+      userId: auth.userId,
+      model,
+      promptTokens: completion.usage?.prompt_tokens ?? 0,
+      completionTokens: completion.usage?.completion_tokens ?? 0,
+    });
 
     return NextResponse.json({
       text,

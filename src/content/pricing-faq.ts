@@ -1,23 +1,32 @@
 import {
+  FREE_QUESTION_LIMIT,
+  PAID_ASKS_LEGAL,
+  PAID_ASKS_MARKETING,
+} from "@/lib/ai-limits";
+import { LEGAL, LEGAL_ROUTES } from "@/content/legal/config";
+import {
   getAnnualDiscountPercent,
   formatPrice,
   paidPlanPricing,
   priceForLifetime,
 } from "@/lib/pricing";
-import { LEGAL, LEGAL_ROUTES } from "@/content/legal/config";
 
 export const PRICING_FAQS = [
   {
     q: "What's included in the free Starter plan?",
-    a: "Starter includes 10 screen asks on gpt-4o-mini so you can try Landed — ask about what’s on your screen. No credit card required.",
+    a: `Starter includes ${FREE_QUESTION_LIMIT} screen asks on gpt-4o-mini so you can try Landed — ask about what's on your screen. No credit card required.`,
   },
   {
     q: "What's included in Pro?",
-    a: "Pro unlocks unlimited AI questions, a stronger coding model (gpt-4.1-mini), invisible overlay on screen share, 24/7 support, and everything in Starter.",
+    a: `Pro unlocks ${PAID_ASKS_MARKETING.toLowerCase()}, a stronger coding model (gpt-4.1-mini), invisible overlay on screen share, 24/7 support, and everything in Starter.`,
   },
   {
     q: "What's included in Lifetime?",
-    a: "Lifetime includes everything in Pro — unlimited overlay asks, invisible on screen share, and 24/7 support — for a one-time payment. No renewals.",
+    a: `Lifetime includes everything in Pro — ${PAID_ASKS_MARKETING.toLowerCase()}, invisible overlay on screen share, and 24/7 support — for a one-time payment. No renewals.`,
+  },
+  {
+    q: "Are Pro and Lifetime truly unlimited?",
+    a: PAID_ASKS_LEGAL,
   },
   {
     q: "How does annual billing work?",

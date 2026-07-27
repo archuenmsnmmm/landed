@@ -1,4 +1,5 @@
 import type { Plan } from "../store/types";
+import { PAID_ASKS_MARKETING } from "./ai-limits";
 import {
   annualDiscountPercent,
   formatRegionalPrice,
@@ -79,7 +80,7 @@ export const STARTER_FEATURES = [
 ] as const;
 
 export const PRO_FEATURES = [
-  "Unlimited AI questions",
+  "Unlimited asks for normal daily use",
   "Stronger coding model",
   "Invisible overlay on screen share",
   "24/7 support",
@@ -87,7 +88,7 @@ export const PRO_FEATURES = [
 ] as const;
 
 export const LIFETIME_FEATURES = [
-  "Unlimited AI questions",
+  "Unlimited asks for normal daily use",
   "Stronger coding model",
   "Invisible overlay on screen share",
   "24/7 support",
@@ -107,7 +108,7 @@ export const STARTER_CARD_FEATURES: { icon: "check"; label: string }[] = [
 
 /** Pro plan card — icon mapping for the highlighted billing card. */
 export const PRO_CARD_FEATURES: { icon: ProFeatureIcon; label: string }[] = [
-  { icon: "infinity", label: "Unlimited AI questions" },
+  { icon: "infinity", label: "Unlimited asks for normal daily use" },
   { icon: "check", label: "Stronger coding model" },
   { icon: "check", label: "Invisible overlay on screen share" },
   { icon: "check", label: "24/7 support" },
@@ -116,7 +117,7 @@ export const PRO_CARD_FEATURES: { icon: ProFeatureIcon; label: string }[] = [
 
 /** Lifetime plan card — same Pro perks plus one-time ownership. */
 export const LIFETIME_CARD_FEATURES: { icon: ProFeatureIcon; label: string }[] = [
-  { icon: "infinity", label: "Unlimited AI questions" },
+  { icon: "infinity", label: "Unlimited asks for normal daily use" },
   { icon: "check", label: "Stronger coding model" },
   { icon: "check", label: "Invisible overlay on screen share" },
   { icon: "check", label: "24/7 support" },
@@ -151,7 +152,7 @@ export function buildPricingTiers(currency: BillingCurrency = DEFAULT_BILLING_CU
       name: "Pro",
       priceLabel: proPriceLabel(currency),
       priceSuffix: "/ month",
-      tagline: "Unlimited debug asks + invisible on screen share.",
+      tagline: `${PAID_ASKS_MARKETING} + invisible on screen share.`,
       cta: "Subscribe",
       includesLabel: "Everything in Starter, plus...",
       features: [...PRO_FEATURES],

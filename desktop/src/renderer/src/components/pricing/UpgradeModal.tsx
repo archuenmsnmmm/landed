@@ -1,3 +1,4 @@
+import { PAID_ASKS_MARKETING } from "../../lib/ai-limits";
 import { PaywallPricing } from "./PaywallPricing";
 import { useBillingSync } from "../../hooks/useBillingSync";
 import { usePricingCheckout } from "../../hooks/usePricingCheckout";
@@ -23,7 +24,7 @@ export function UpgradeModal({
       ? "Keep the momentum going"
       : undefined;
   const subheadline = hardPaywall
-    ? "Upgrade to Pro or Lifetime for unlimited questions and a stronger coding model."
+    ? `Upgrade to Pro or Lifetime for ${PAID_ASKS_MARKETING.toLowerCase()} and a stronger coding model.`
     : contextMessage;
 
   return (

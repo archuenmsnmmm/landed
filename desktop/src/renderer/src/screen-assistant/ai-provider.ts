@@ -52,7 +52,6 @@ async function analyzeViaApi(
         temperature: 0.2,
         mode: "coding",
         imageBase64: input.image,
-        imageDetail: "high",
         stream: false,
       }),
     });
@@ -66,8 +65,11 @@ async function analyzeViaApi(
         );
       }
       if (res.status === 429) {
+        const monthly = /monthly usage limit/i.test(detail);
         throw new ScreenAssistantError(
-          "Rate limited — wait a moment and try again.",
+          monthly
+            ? "Monthly usage limit reached. Resets on the 1st of each month."
+            : "Rate limited — wait a moment and try again.",
           "rate_limit",
         );
       }
@@ -130,7 +132,7 @@ async function analyzeViaDirectOpenAI(
                 type: "image_url",
                 image_url: {
                   url: `data:image/jpeg;base64,${input.image}`,
-                  detail: "high",
+                  detail: "auto",
                 },
               },
             ],

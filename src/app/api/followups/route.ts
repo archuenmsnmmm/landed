@@ -25,8 +25,8 @@ export async function POST(request: Request) {
     const entitlement = await checkAiEntitlement(auth.userId);
     if (!entitlement.ok) return entitlementDeniedResponse(entitlement);
 
-    const limited = rateLimit(request, {
-      scope: `ai:followups:${auth.userId}`,
+    const limited = await rateLimit({
+      key: `ai:followups:${auth.userId}`,
       limit: 30,
       windowMs: 60_000,
     });

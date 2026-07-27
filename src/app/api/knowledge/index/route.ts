@@ -13,8 +13,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
 
-    const limited = rateLimit(request, {
-      scope: `knowledge:index:${auth.userId}`,
+    const limited = await rateLimit({
+      key: `knowledge:index:${auth.userId}`,
       limit: 20,
       windowMs: 60_000,
     });
