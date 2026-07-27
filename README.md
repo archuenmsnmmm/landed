@@ -60,7 +60,6 @@ Required for production:
 - **Supabase** — URL, anon key, service role; run `supabase db push`
 - **Stripe** — live secret key, webhook secret, and price IDs on Vercel
 - **Google OAuth** — see comments in `.env.example`
-- **Contact form** — Gmail SMTP (`SMTP_USER` + `SMTP_PASS` app password on Vercel)
 
 ## Release
 
